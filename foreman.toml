@@ -1,0 +1,4 @@
+[tools]
+rojo = {github = "rojo-rbx/rojo", version = "x" }
+selene = {github = "Kampfkarren/selene", version = "x" }
+stylua = {github = "johnnymorganz/stylua", version = "x" }
