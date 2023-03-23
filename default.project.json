@@ -4,21 +4,59 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "Common": {
-        "$path": "src/shared"
+      "$className": "ReplicatedStorage",
+      "$ignoreUnknownInstances": true,
+      "Client": {
+        "$path": "src/ReplicatedStorage/Client"
+      }, 
+      "Configs": {
+        "$path": "src/ReplicatedStorage/Configs"
+      }, 
+      "PlayerData": {
+        "$path": "src/ReplicatedStorage/PlayerData"
       }
     },
 
     "ServerScriptService": {
-      "Server": {
-        "$path": "src/server"
+        "$path": "src/server",
+        "$ignoreUnknownInstances": true,
+      "PlayerData": {
+          "$className": "Folder",
+          "$path": "src/shared/PlayerData"
+      },  
+      "Classes": {
+        "$className": "Folder",
+        "$path": "src/shared/Classes"
+      },
+      "Cmdr": {
+        "$className": "Folder",
+        "Commands": {
+          "$className": "Folder", 
+          "$path": "src/shared/Cmdr/Commands"
+        }, 
+        "Hooks": {
+            "$path": "src/shared/Cmdr/Hooks"
+        },
+        "Types": {
+          "$path": "src/shared//Cmdr/Types"
+        },
+        "Cmdr": 
+        {
+          "$path": "src/shared/Cmdr/Cmdr.server.lua"
+        }
       }
     },
-
     "StarterPlayer": {
+      "$className": "StarterPlayer",
       "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/client"
+        "$className": "StarterPlayerScripts",
+        "Cmdr_": {
+          "$path" : "src/StarterPlayerScripts/Cmdr.client.lua"
+        },
+        
+        "Gui": {
+          "$className": "Folder",
+          "$path": "src/StarterPlayerScripts/Gui"
         }
       }
     },
