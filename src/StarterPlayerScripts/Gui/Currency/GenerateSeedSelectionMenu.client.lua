@@ -1,7 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Remotes = ReplicatedStorage.Remotes
-local Configs = ReplicatedStorage.Configs
 local player = game.Players.LocalPlayer
 
 local StateManager = require(ReplicatedStorage.Client.State)
@@ -19,12 +18,12 @@ local seedthing
 local plotId
 local MudPos
 
-local function loadStats(seed, plotId)
+local function loadStats(seed)
 	InformationFrame.SeedDescription.Text = seed.Description 
 	seedthing = seed
 end
 
-local function createSeedIcon(seed, plotId)
+local function createSeedIcon(seed)
 	local seedIcon = template:Clone()
 	seedIcon.Visible = true 
 	seedIcon.Parent = scrollingFrame.IconsFolder
@@ -33,7 +32,7 @@ local function createSeedIcon(seed, plotId)
 	seedIcon.Name = seed.Name
 	
 	seedIcon.TextButton.MouseButton1Down:Connect(function()
-		loadStats(seed, plotId)
+		loadStats(seed)
 	end)	
 end
 
@@ -69,7 +68,7 @@ local function updateSeedIcons(plotIdrcv, mudPosition)
 end
 
 local function generateSelectableSeeds()
-	for _,seed in (StateManager.GetData().Seeds) do
+	for _,seed in (Seeds) do
 		createSeedIcon(seed)
 	end
 end

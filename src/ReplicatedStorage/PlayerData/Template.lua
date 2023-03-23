@@ -1,7 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local PlotsConfig = require(ReplicatedStorage.Configs.PlotsConfig)
-local TreesConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local BackpackConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 
@@ -32,13 +31,6 @@ local Seeds = {
 		Description = "This will plant a Mythical Tree"
 	}
 }
-
-local Plots = {
-	Plot_1 = {
-		Occupied = true, 	
-	}
-}
-
 
 local Template = {
 	IsOwner =  false,
