@@ -182,7 +182,7 @@ end
 
 -- Client to Server Requests
 
-Remotes.GetData.OnServerInvoke = GetData
+Remotes.GetData.OnServerInvoke = GetData	
 Remotes.GetAllData.OnServerInvoke = GetAllData
 
 -- Client to Server Communication 
@@ -203,8 +203,9 @@ function Manager.ResetAllData(player: Player)
 	if not profile then return end
 	
 	Manager.Profiles[player].Data = template
+	local clientData = template
 	
-	Remotes.ResetData:FireClient(player)
+	Remotes.ResetData:FireClient(player, clientData)
 end
 
 return Manager

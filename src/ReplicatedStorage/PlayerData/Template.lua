@@ -43,10 +43,18 @@ local Template = {
 	Plots = PlotsConfig,
 	
 	EquippedWaterCan = WaterCanConfig.MiniWateringCan, 
-	OwnedWaterCans = {WaterCanConfig.MiniWateringCan},
+	OwnedWaterCans = {
+		WaterCanConfig.MiniWateringCan, 
+		WaterCanConfig.BasicWateringCan, 
+		WaterCanConfig.WideMouthWateringCan
+	},
 	
 	EquippedBackpack = BackpackConfig.BasicBackpack,
-	OwnedBackpacks = {BackpackConfig.BasicBackpack}
+	OwnedBackpacks = {
+		BackpackConfig.BasicBackpack, 
+		BackpackConfig.SmallPouch, 
+		BackpackConfig.DrawStringBag
+	}
 	
 }
 
