@@ -2,7 +2,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = game.Players.LocalPlayer
 
 local Remotes = ReplicatedStorage.Remotes
-local Configs = ReplicatedStorage.Configs
 
 local Backpacks = require(ReplicatedStorage.Configs.BackpacksConfig)
 local StateManager = require(ReplicatedStorage.Client.State)

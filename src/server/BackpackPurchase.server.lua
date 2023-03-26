@@ -14,5 +14,5 @@ local function changeEquippedBackpack(player: Player, backpack: string)
 	Manager.EquipBackpack(player, backpack)
 end
 
-Remotes.UpdateOwnedBackpacks.OnServerEvent:Connect(purchasePack)
+Remotes.UpdateOwnedBackpacks.OnServerEvent:Connect(purchasePack) 
 Remotes.ChangeEquippedBackpack.OnServerEvent:Connect(changeEquippedBackpack)

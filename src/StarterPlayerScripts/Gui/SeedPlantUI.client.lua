@@ -1,17 +1,13 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Remotes = ReplicatedStorage.Remotes
-local Configs = ReplicatedStorage.Configs
 local player = game.Players.LocalPlayer
 
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("PlotStats")
 local Template = UI.Template
 
-local SeedButtons = {}
-local WaterButtons = {}
-local CollectButtons = {}
-local FertilizerButtons = {} 
+
 local mud 
 
 local Plots = {

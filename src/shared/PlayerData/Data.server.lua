@@ -14,14 +14,17 @@ local function CreateLeaderstats(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end 
 	
-	local leaderstats = Instance.new("Folder", player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Parent = player
 	leaderstats.Name = "leaderstats"
 	
-	local coins = Instance.new("NumberValue", leaderstats)
+	local coins = Instance.new("NumberValue")
+	coins.Parent = leaderstats
 	coins.Name = "Coins"
 	coins.Value = profile.Data.Coins
 	
-	local gems = Instance.new("NumberValue", leaderstats)
+	local gems = Instance.new("NumberValue")
+	gems.Parent = leaderstats
 	gems.Name = "Gems"
 	gems.Value = profile.Data.Gems 	
 	

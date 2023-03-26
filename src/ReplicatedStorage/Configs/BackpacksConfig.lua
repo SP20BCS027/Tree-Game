@@ -16,7 +16,7 @@ local Backpacks: {[string]: BackpackConfig }= {
 		Price = 10, 
 	}, 
 	BasicBackpack = {
-		Name = "BasicBackPack", 
+		Name = "BasicBackpack", 
 		Capacity = 500, 
 		Price = 25
 	}, 

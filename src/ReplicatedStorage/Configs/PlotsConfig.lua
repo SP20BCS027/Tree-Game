@@ -9,10 +9,12 @@ type PlotsConfig = {
 
 local Config:{ [number] : PlotsConfig } = {
 	[1] = {
+		Id = "1",
 		Occupied = false, 
 		Tree = nil
 	},
 	[2] = {
+		Id = "2",
 		Occupied = false, 
 		Tree = nil
 	}

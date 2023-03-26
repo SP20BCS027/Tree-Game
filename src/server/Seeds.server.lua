@@ -19,9 +19,9 @@ local function selectTree(seed)
 end
 
 local function spawnTree(spawnPosition, tree, seed)
-	local tree: Model = TreeModels:FindFirstChild(seed):FindFirstChild(tree):FindFirstChild(tree.."_1"):Clone()
-	tree.Parent = workspace
-	tree:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
+	local treeModel: Model = TreeModels:FindFirstChild(seed):FindFirstChild(tree):FindFirstChild(tree.."_1"):Clone()
+	treeModel.Parent = workspace
+	treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
 end
 
 local function ChangeSeeds(player: Player, amount: number, seedName: string)	

@@ -3,7 +3,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Remotes = ReplicatedStorage.Remotes
 local player = game.Players.LocalPlayer
 
-local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("WaterRefill")
 local RefillIcon = UI.IconHolder
 

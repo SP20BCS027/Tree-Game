@@ -1,7 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local PlotsConfig = require(ReplicatedStorage.Configs.PlotsConfig)
-local TreesConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local BackpackConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 
@@ -33,13 +32,6 @@ local Seeds = {
 	}
 }
 
-local Plots = {
-	Plot_1 = {
-		Occupied = true, 	
-	}
-}
-
-
 local Template = {
 	IsOwner =  false,
 	Coins = 0, 
@@ -51,10 +43,18 @@ local Template = {
 	Plots = PlotsConfig,
 	
 	EquippedWaterCan = WaterCanConfig.MiniWateringCan, 
-	OwnedWaterCans = {WaterCanConfig.MiniWateringCan},
+	OwnedWaterCans = {
+		WaterCanConfig.MiniWateringCan, 
+		WaterCanConfig.BasicWateringCan, 
+		WaterCanConfig.WideMouthWateringCan
+	},
 	
 	EquippedBackpack = BackpackConfig.BasicBackpack,
-	OwnedBackpacks = {BackpackConfig.BasicBackpack}
+	OwnedBackpacks = {
+		BackpackConfig.BasicBackpack, 
+		BackpackConfig.SmallPouch, 
+		BackpackConfig.DrawStringBag
+	}
 	
 }
 
