@@ -120,7 +120,7 @@ function Manager.PurchaseBackpack(player: Player, backpackId: string)
 	if not profile then return end
 	
 	table.insert(profile.Data.OwnedBackpacks, Backpacks[backpackId])
-	Remotes.UpdateOwnedWaterCans:FireClient(player, profile.Data.OwnedBackpacks)	
+	Remotes.UpdateOwnedBackpacks:FireClient(player, profile.Data.OwnedBackpacks)	
 	
 end
 
@@ -203,9 +203,8 @@ function Manager.ResetAllData(player: Player)
 	if not profile then return end
 	
 	Manager.Profiles[player].Data = template
-	local clientData = template
 	
-	Remotes.ResetData:FireClient(player, clientData)
+	Remotes.ResetData:FireClient(player, profile.Data)
 end
 
 return Manager

@@ -14,10 +14,8 @@ local InformationFrame = InternalFrame.InformationFrame
 local EquipButton = InformationFrame.Frame.EquipButton
 local BackpackDescription = InformationFrame.Frame.BackpackDescription
 local ScrollingFrame = InternalFrame.ScrollingFrame
-local Template = ScrollingFrame.Template
+local Template = InternalFrame.Template
 local BackpackInventoryButton = BackpackUI.ButtonsHolder.BackpackButton.BackpackInventory
-
-local Backpacks = StateManager.GetData().OwnedBackpacks
 
 local selectedBackpack
 
@@ -36,6 +34,7 @@ end
 
 local function generateIcon(pack)
     local packIcon = Template:Clone()
+
     packIcon.Visible = true
     packIcon.Parent = ScrollingFrame
     packIcon.Capacity.Text = pack.Capacity
@@ -48,13 +47,11 @@ end
 
 local function generateSelectableBackpack()
     for _, item in (ScrollingFrame:GetChildren()) do 
-        if item.Name == "Template" or item.Name == "UIGridLayout" then 
-            continue 
+        if item.Name ~= "UIGridLayout" then 
+            item:Destroy()
         end
-        item:Destroy()
     end
-
-    for _, pack in (Backpacks) do 
+    for _, pack in (StateManager.GetData().OwnedBackpacks) do 
         generateIcon(pack)
     end 
 end
@@ -70,6 +67,6 @@ CloseButton.MouseButton1Down:Connect(function()
 end)
 
 Remotes.Bindables.GenerateBackpackInventory.Event:Connect(function()
-    print("We are binding lol")
+    generateSelectableBackpack()
 end) 
 

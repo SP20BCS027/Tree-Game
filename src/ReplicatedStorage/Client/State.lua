@@ -44,6 +44,7 @@ end)
 Remotes.ResetData.OnClientEvent:Connect(function(receivedData)
 	PlayerData = receivedData
 	Remotes.Bindables.GenerateBackpackInventory:Fire()
+	Remotes.Bindables.GenerateWaterCanInventory:Fire()
 end)
 
 Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotId: number)
@@ -83,6 +84,7 @@ end)
 
 Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(ownedCans)
 	PlayerData.OwnedWaterCans = ownedCans
+	Remotes.Bindables.GenerateWaterCanInventory:Fire()
 end)
 
 Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(ownedBackpacks)

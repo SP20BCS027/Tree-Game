@@ -14,10 +14,8 @@ local InformationFrame = InternalFrame.InformationFrame
 local WaterCanDescription = InformationFrame.Frame.WaterCanDescription
 local WaterCanEquipButton = InformationFrame.Frame.EquipButton
 local ScrollingFrame = InternalFrame.ScrollingFrame
-local Template = ScrollingFrame.Template
+local Template = InternalFrame.Template
 local WaterInventoryButton = WaterUI.ButtonsHolder.WaterCanButton.WaterCanInventoryButton
-
-local WaterCans = StateManager.GetData().OwnedWaterCans
 
 local selectedWateringCan
 
@@ -43,17 +41,16 @@ local function generateIcon(can)
     waterIcon.TextButton.MouseButton1Down:Connect(function()
         loadWateringCan(can)
     end)
-
 end
 
 local function generateSelectableWateringCan()
     for _, item in (ScrollingFrame:GetChildren()) do 
-        if item.Name ~= "Template" and item.Name ~= "UIGridLayout" then 
+        if item.Name ~= "UIGridLayout" then 
             item:Destroy()
         end
     end
 
-    for _, can in (WaterCans) do 
+    for _, can in (StateManager.GetData().OwnedWaterCans) do 
         generateIcon(can)
     end 
 end
@@ -68,3 +65,6 @@ CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
 end)
 
+Remotes.Bindables.GenerateWaterCanInventory.Event:Connect(function()
+    generateSelectableWateringCan()
+end)
