@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlotsConfig = require(ReplicatedStorage.Configs.PlotsConfig)
 local BackpackConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
+local DungeonConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 
 local Seeds = {
 	Basic = {
@@ -54,8 +55,10 @@ local Template = {
 		BackpackConfig.BasicBackpack, 
 		BackpackConfig.SmallPouch, 
 		BackpackConfig.DrawStringBag
-	}
+	},
 	
+	UnlockedDungeons = DungeonConfig, 
+
 }
 
 export type PlayerData = typeof(Template)

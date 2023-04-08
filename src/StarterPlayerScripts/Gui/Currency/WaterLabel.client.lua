@@ -10,9 +10,11 @@ local GUI = PlayerGUI:WaitForChild("Stats")
 local Outline = GUI.Frame
 local Moneyamount = Outline.WaterFrame.Amount
 
+local WATER_AMOUNT = "AMOUNT"
+local WATER_CAPACITY = "CAPACITY"
 
 local function UpdateWater()
-	Moneyamount.Text = StateManager.GetData().Water
+	Moneyamount.Text = WATER_AMOUNT:gsub("AMOUNT", StateManager.GetData().Water).." / "..WATER_CAPACITY:gsub("CAPACITY", StateManager.GetData().EquippedWaterCan.Capacity)
 end
 
 UpdateWater()

@@ -1,5 +1,4 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local runService = game:GetService("RunService")
 
 local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
@@ -19,6 +18,8 @@ local ScrollingFrame = InternalFrame.ScrollingFrame
 local Template = ScrollingFrame.Template
 
 local TIMER = "Time:  XYZ"
+local LEVEL = "Level:  AMOUNT"
+local CYCLE = "Cycle:  AMOUNT"
 
 local plotIcons = {}
 
@@ -59,6 +60,9 @@ local function createIcon(plot)
         local waterTime = plot["Tree"].TimeUntilWater
         plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(moneyTime - os.time()))
         plotIcon.WaterBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(waterTime - os.time()))
+        plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", plot["Tree"].CurrentLevel)
+
+        plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", plot["Tree"].CurrentCycle.." / "..plot["Tree"].MaxCycle) 
     end
 end
 
@@ -70,6 +74,20 @@ end
 
 generatePlotsUI()
 
+local function updateLevelLabel(plotIconId)
+    local plotIcon = plotIcons[plotIconId]
+    local currentPlot = StateManager.GetData().Plots[tonumber(plotIcon.Name)]
+
+    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", currentPlot["Tree"].CurrentLevel)
+end
+
+local function updateCycleLabel(plotIconId)
+    local plotIcon = plotIcons[plotIconId]
+    local currentPlot = StateManager.GetData().Plots[tonumber(plotIcon.Name)]
+
+    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", currentPlot["Tree"].CurrentCycle.." / "..currentPlot["Tree"].MaxCycle) 
+end
+
 TreeButton.MouseButton1Down:Connect(function()
     PlotsGui.Enabled = not PlotsGui.Enabled
 end)
@@ -77,6 +95,9 @@ end)
 CloseButton.MouseButton1Down:Connect(function()
     PlotsGui.Enabled = false
 end)
+
+Remotes.Bindables.UpdateTreeLevel.Event:Connect(updateLevelLabel)
+Remotes.Bindables.UpdateTreeCycle.Event:Connect(updateCycleLabel)
 
 while true do 
     for _, plotIcon in (plotIcons) do 

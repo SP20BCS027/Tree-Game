@@ -10,8 +10,11 @@ local GUI = PlayerGUI:WaitForChild("Stats")
 local Outline = GUI.Frame
 local Moneyamount = Outline.MoneyFrame.Amount
 
+local MONEY_AMOUNT_TEXT = "AMOUNT"
+local MONEY_CAPACITY_TEXT = "CAPACITY"
+
 local function UpdateCurrency()
-	Moneyamount.Text = StateManager.GetData().Money
+	Moneyamount.Text = MONEY_AMOUNT_TEXT:gsub("AMOUNT", StateManager.GetData().Money).." / "..MONEY_CAPACITY_TEXT:gsub("CAPACITY", StateManager.GetData().EquippedBackpack.Capacity)
 end
 
 UpdateCurrency()
