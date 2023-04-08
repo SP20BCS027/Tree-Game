@@ -5,6 +5,7 @@ local Players = game:GetService("Players")
 local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
+local TreeModels = ReplicatedStorage.Trees
 
 local House = {}
 
@@ -18,10 +19,12 @@ function House.new(houseFolder, allHouses)
 	houseObject.claimPart = houseFolder.Claim_Part
 	houseObject.well = houseFolder.Well
 	houseObject.owner = nil
+	houseObject.treeFolder = houseFolder.Trees
 	houseObject.signLabel = houseFolder.Claim_Part.BillboardGui.TextLabel
 	houseObject.allHouses = allHouses
-	houseObject.Plot_1 = houseFolder.Plantation_Place_1:GetChildren()
-	houseObject.Plot_2 = houseFolder.Plantation_Place_2:GetChildren()
+	houseObject.Plots = {}
+	houseObject.Plots.Plot_1 = houseFolder.Plantation_Place_1
+	houseObject.Plots.Plot_2 = houseFolder.Plantation_Place_2
 
 	houseObject.claimPart.Touched:Connect(function(touch)
 		local Player = Players:GetPlayerFromCharacter(touch.Parent)
@@ -33,6 +36,7 @@ function House.new(houseFolder, allHouses)
 			Remotes.UpdateOwnership:FireClient(Player, true)
 			Remotes.EstablishWaterRefillUI:FireClient(Player, houseObject.well)
 			Remotes.EstablishPlotsUI:FireClient(Player)
+			House.plantTrees(houseObject, profile.Data.Plots)
 		end
 	end)
 
@@ -56,6 +60,22 @@ function House:checkOwner(Player)
 		end
 	end
 	return false
+end
+
+function House.plantTrees(house, plots)
+
+	for name, plot in pairs(house.Plots)do 
+		if not plots[tonumber(name:match("%d+"))].Tree then 
+			continue
+		end
+		local spawnPosition = plot["Mud"].Position
+		local tree = plots[tonumber(name:match("%d+"))].Tree
+		
+		local treeModel: Model = TreeModels:FindFirstChild(tree.Rarity):FindFirstChild(tree.Name):FindFirstChild(tree.Name.. "_" .. tree.CurrentLevel):Clone()
+		treeModel.Parent = house.treeFolder
+		treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
+	end
+
 end
 
 return House

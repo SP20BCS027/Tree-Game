@@ -6,6 +6,7 @@ local Remotes = ReplicatedStorage.Remotes
 
 local triggerparts = WorkSpace.Dungeons:GetChildren()
 local debounce = {}
+local DELAY = 5
 
 local function generateUI(player: Player, DungeonName)
     if debounce[player] then return end 
@@ -15,7 +16,7 @@ local function generateUI(player: Player, DungeonName)
     print("This player ".. player.Name .. " Triggered")
 
     debounce[player] = true
-    task.delay(0.5, function()
+    task.delay(DELAY, function()
         debounce[player] = nil 
     end)
 	

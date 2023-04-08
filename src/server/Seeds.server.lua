@@ -3,9 +3,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
 local Trees = require(ReplicatedStorage.Configs.TreeConfig)
-local TreeModels = ReplicatedStorage.Trees
 
 local Remotes = ReplicatedStorage.Remotes
+local TreeModels = ReplicatedStorage.Trees
+
 
 local function selectTree(seed)
 	local sortedTrees = {}
@@ -18,12 +19,11 @@ local function selectTree(seed)
 	return sortedTrees[randomIndex]
 end
 
-local function spawnTree(spawnPosition, tree, seed)
+local function spawnTree(spawnPosition, tree, seed, treeFolder)
 	local treeModel: Model = TreeModels:FindFirstChild(seed):FindFirstChild(tree):FindFirstChild(tree.."_1"):Clone()
-	treeModel.Parent = workspace
+	treeModel.Parent = treeFolder
 	treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
 end
-
 local function ChangeSeeds(player: Player, amount: number, seedName: string)	
 	Manager.AdjustSeeds(player, amount, seedName)
 end
@@ -32,7 +32,8 @@ local function ChangeOccupationStatus(player: Player, plotId: number, isOccupied
 	-- add a server side check to check plot occupation maybe? 
 	print(spawnPosition)
 	local treeToPlant = selectTree(seed).Name
-	spawnTree(spawnPosition, treeToPlant, seed)
+	local treeFolder = Remotes.Bindables.GetPlayerHouseInfo:FireServer(player, plotId, "folder")
+	spawnTree(spawnPosition, treeToPlant, seed, treeFolder)
 	Manager.AdjustPlotOccupation(player, plotId, isOccupied, treeToPlant)
 end
 

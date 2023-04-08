@@ -57,12 +57,12 @@ end
 local function generateUIs()
 	if StateManager.GetData().IsOwner then 
 		for number, plot in (Plots) do
-			local Plot = Remotes.AskUIInformation:InvokeServer(plot)
+			local Plot = Remotes.AskUIInformation:InvokeServer(plot, "plot")
 			local Buttons = Template:Clone()
 			Buttons.Parent = UI.PlotInteractive
 			Buttons.Name = number
 			Buttons.Enabled = true 
-			for _, item in pairs(Plot) do
+			for _, item in pairs(Plot:GetChildren()) do
 				if item.Name == "Mud" then
 					mud = item
 				end
