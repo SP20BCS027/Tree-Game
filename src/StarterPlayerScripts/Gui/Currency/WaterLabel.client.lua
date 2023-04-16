@@ -23,6 +23,12 @@ Remotes.UpdateWater.OnClientEvent:Connect(function()
 	end)
 end)
 
+Remotes.ChangeEquippedWaterCan.OnClientEvent:Connect(function()
+	task.delay(0, function()
+		UpdateWater()
+	end) 
+end)
+
 Remotes.RefillWater.OnClientEvent:Connect(function()
 	task.delay(0, function()
 		UpdateWater()

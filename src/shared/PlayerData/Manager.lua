@@ -33,6 +33,15 @@ function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)
 	Remotes.UpdateSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
 end
 
+function Manager.AdjustFertilizer(player: Player, amount: number, fertilizerType: string)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.Fertilizers[fertilizerType].Amount += amount 
+	Remotes.UpdateOwnedFertilizers:FireClient(player, profile.Data.Fertilizers[fertilizerType].Amount, fertilizerType)
+
+end
+
 function Manager.AdjustWater(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -80,8 +89,6 @@ function Manager.AdjustPlotOccupation(player: Player, PlotId: number, isOccupied
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	print(treeToPlant)
-
 	profile.Data.Plots[PlotId].Occupied = isOccupied
 	profile.Data.Plots[PlotId].Tree = Trees[treeToPlant]
 	profile.Data.Plots[PlotId].Tree.TimeUntilWater = os.time() + 20 
@@ -90,20 +97,27 @@ function Manager.AdjustPlotOccupation(player: Player, PlotId: number, isOccupied
 	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotId].Tree.TimeUntilWater, PlotId, treeToPlant)
 end
 
+function Manager.PurchasePlot(player: Player, plot: directory)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+	
+	profile.Data.Plots[plot.Id] = plot
+	Remotes.UpdateOwnedPlots:FireClient(player, profile.Data.Plots)
+end
+
 function Manager.AdjustPlayerOwnership(player: Player, ownerShipStatus: boolean)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
 	profile.Data.IsOwner = ownerShipStatus
-	
 	Remotes.UpdateOwnership:FireClient(player, ownerShipStatus)
 end
 
 function Manager.PurchaseWaterCan(player: Player, waterCanId: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
-	
-	table.insert(profile.Data.OwnedWaterCans, WaterCans[waterCanId])
+
+	profile.Data.OwnedWaterCans[waterCanId] =  WaterCans[waterCanId]
 	Remotes.UpdateOwnedWaterCans:FireClient(player, profile.Data.OwnedWaterCans)
 end
 
@@ -119,9 +133,8 @@ function Manager.PurchaseBackpack(player: Player, backpackId: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	table.insert(profile.Data.OwnedBackpacks, Backpacks[backpackId])
+	profile.Data.OwnedBackpacks[backpackId] =  Backpacks[backpackId]
 	Remotes.UpdateOwnedBackpacks:FireClient(player, profile.Data.OwnedBackpacks)	
-	
 end
 
 function Manager.EquipBackpack(player: Player, backpackId: string)
@@ -140,20 +153,22 @@ function Manager.UpdateTreeWaterTimer(player: Player, PlotId: number)
 	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[PlotId].Tree.TimeUntilWater, PlotId)
 end
 
-function Manager.UpdateTreeLevel(player: Player, PlotId: number)
+function Manager.UpdateTreeLevel(player: Player, PlotId: number, cycle: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	if profile.Data.Plots[PlotId].Tree.MaxCycle == profile.Data.Plots[PlotId].Tree.CurrentCycle + 1  then
+	if profile.Data.Plots[PlotId].Tree.MaxCycle <= profile.Data.Plots[PlotId].Tree.CurrentCycle + cycle then
 		profile.Data.Plots[PlotId].Tree.CurrentLevel = profile.Data.Plots[PlotId].Tree.CurrentLevel + 1 
 		profile.Data.Plots[PlotId].Tree.MaxCycle = profile.Data.Plots[PlotId].Tree.MaxCycle + 1 
 		profile.Data.Plots[PlotId].Tree.CurrentCycle = 0
 		
 		Remotes.UpdateTreeLevel:FireClient(player, "LEVEL", PlotId)
+		return "LEVEL"
 	else
-		profile.Data.Plots[PlotId].Tree.CurrentCycle = profile.Data.Plots[PlotId].Tree.CurrentCycle + 1
+		profile.Data.Plots[PlotId].Tree.CurrentCycle = profile.Data.Plots[PlotId].Tree.CurrentCycle + cycle
 		
 		Remotes.UpdateTreeLevel:FireClient(player, "CYCLE", PlotId)
+		return "CYCLE"
 	end
 end
 
@@ -203,7 +218,7 @@ function Manager.ResetAllData(player: Player)
 	if not profile then return end
 	
 	Manager.Profiles[player].Data = template
-	
+	player.leaderstats.Coins.Value = profile.Data.Coins
 	Remotes.ResetData:FireClient(player, profile.Data)
 end
 
