@@ -11,7 +11,7 @@ local Outline = GUI.Frame
 local Moneyamount = Outline.MoneyFrame.Amount
 
 local function UpdateCurrency()
-	Moneyamount.Text = StateManager.GetData().Money
+	Moneyamount.Text = StateManager.GetData().Money .. "/" .. StateManager.GetData().EquippedBackpack.Capacity
 end
 
 UpdateCurrency()

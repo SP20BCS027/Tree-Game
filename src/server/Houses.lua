@@ -17,6 +17,7 @@ end
 createHouses()
 
 function HouseModule.GetPlayerPlot(player: Player, plot: string)
+	
 	for _, HouseOb in pairs(Houses) do
 		if not HouseOb.owner then return end 
         if HouseOb.owner ~= player then return end 

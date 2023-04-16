@@ -41,6 +41,8 @@ local function updateFertilizerIcons(plotIdrcv)
 		Icon.Amount.Text = Fertilizers[Icon.Name].Amount		
 		if Fertilizers[Icon.Name].Amount <= 0 then
 			Icon.Visible = false
+		else 
+			Icon.Visible = true
 		end	
 	end
 	UI.Enabled = true

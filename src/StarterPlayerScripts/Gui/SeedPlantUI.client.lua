@@ -54,22 +54,14 @@ local function fertilizePlot(plotId)
 end 
 
 local function generateUIs()
-	print("This got fired")
-	print(StateManager.GetData().Plots)
 	if StateManager.GetData().IsOwner then 
-<<<<<<< Updated upstream
-		for number, plot in (Plots) do
-			local Plot = Remotes.AskUIInformation:InvokeServer(plot)
-=======
 		for name, _ in (StateManager.GetData().Plots) do
-			print(name)
 			local Plot = Remotes.AskUIInformation:InvokeServer(name)
->>>>>>> Stashed changes
 			local Buttons = Template:Clone()
 			Buttons.Parent = UI.PlotInteractive
 			Buttons.Name = name
 			Buttons.Enabled = true 
-			for _, item in pairs(Plot) do
+			for _, item in pairs(Plot:GetChildren()) do
 				if item.Name == "Mud" then
 					mud = item
 				end
@@ -77,8 +69,6 @@ local function generateUIs()
 			Buttons.Adornee = mud
 			local mudPosition = mud.Position
 			
-			print("reached")
-
 			Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
 				plantSeed(name, mudPosition)
 			end)

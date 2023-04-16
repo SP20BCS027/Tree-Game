@@ -12,7 +12,7 @@ local Moneyamount = Outline.WaterFrame.Amount
 
 
 local function UpdateWater()
-	Moneyamount.Text = StateManager.GetData().Water
+	Moneyamount.Text = StateManager.GetData().Water .. "/" .. StateManager.GetData().EquippedWaterCan.Capacity
 end
 
 UpdateWater()

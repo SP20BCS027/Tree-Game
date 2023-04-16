@@ -5,6 +5,7 @@ local Players = game:GetService("Players")
 local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
+local TreeModels = ReplicatedStorage.Trees
 
 local House = {}
 
@@ -20,15 +21,10 @@ function House.new(houseFolder, allHouses)
 	houseObject.owner = nil
 	houseObject.signLabel = houseFolder.Claim_Part.BillboardGui.TextLabel
 	houseObject.allHouses = allHouses
-<<<<<<< Updated upstream
-	houseObject.Plot_1 = houseFolder.Plantation_Place_1:GetChildren()
-	houseObject.Plot_2 = houseFolder.Plantation_Place_2:GetChildren()
-=======
 	houseObject.Plots = {}
 	for _, plot in pairs (houseFolder.Plots:GetChildren()) do 
 		houseObject.Plots[plot.Name] = plot
 	end 
->>>>>>> Stashed changes
 
 	houseObject.claimPart.Touched:Connect(function(touch)
 		local Player = Players:GetPlayerFromCharacter(touch.Parent)
@@ -40,11 +36,8 @@ function House.new(houseFolder, allHouses)
 			Remotes.UpdateOwnership:FireClient(Player, true)
 			Remotes.EstablishWaterRefillUI:FireClient(Player, houseObject.well)
 			Remotes.EstablishPlotsUI:FireClient(Player)
-<<<<<<< Updated upstream
-=======
 			House.plantTrees(houseObject, profile.Data.Plots)
 			House.GeneratePlots(houseObject, profile.Data.Plots)
->>>>>>> Stashed changes
 		end
 	end)
 
@@ -70,8 +63,6 @@ function House:checkOwner(Player)
 	return false
 end
 
-<<<<<<< Updated upstream
-=======
 function House.plantTrees(house, playerDataPlots)
 
 	for name, plot in pairs(house.Plots)do 
@@ -90,7 +81,7 @@ end
 function House.GeneratePlots(house, playerDataPlots)
 	for name, plot in pairs (house.Plots) do 
 		if not playerDataPlots[name] then continue end 
-		print(plot:GetChildren())
+		
 		for _, part: Part in pairs (plot:GetChildren()) do 
 			if part:IsA("Part") then 
 				part.Transparency = 0 
@@ -100,5 +91,4 @@ function House.GeneratePlots(house, playerDataPlots)
 	end 
 end 
 
->>>>>>> Stashed changes
 return House
