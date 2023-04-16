@@ -13,8 +13,6 @@ local function generateUI(player: Player)
 
 	Remotes.OpenWaterCanShop:FireClient(player)
 
-    print("This player ".. player.Name .. " Triggered")
-
     debounce[player] = true
     task.delay(DELAY, function()
         debounce[player] = nil 

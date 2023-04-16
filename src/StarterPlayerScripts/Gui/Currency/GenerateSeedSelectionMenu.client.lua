@@ -41,22 +41,13 @@ local function updateSeedIcons(plotIdrcv, mudPosition)
 	MudPos = mudPosition
 	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
 
-		if Icon.Name == "UIGridLayout" then continue end  
+		if Icon.Name == "UIGridLayout" then continue end
 
-		if Icon.Name == Seeds.Basic.Name then
-			Icon.Amount.Text = Seeds.Basic.Amount
-		elseif Icon.Name == Seeds.Uncommon.Name then 
-			Icon.Amount.Text = Seeds.Uncommon.Amount
-		elseif Icon.Name == Seeds.Rare.Name then
-			Icon.Amount.Text = Seeds.Rare.Amount
-		elseif Icon.Name == Seeds.Legendary.Name then 
-			Icon.Amount.Text = Seeds.Legendary.Amount
-		elseif Icon.Name == Seeds.Mythical.Name then
-			Icon.Amount.Text = Seeds.Mythical.Amount
-		end
-		
+		Icon.Amount.Text = Seeds[Icon.Name].Amount 
 		if Seeds[Icon.Name].Amount <= 0 then
 			Icon.Visible = false
+		else 
+			Icon.Visible = true
 		end	
 	end
 	UI.Enabled = true
@@ -71,7 +62,7 @@ end
 generateSelectableSeeds()
 
 local function plantSeed()
-	Remotes.UpdateSeeds:FireServer(-1, seedthing.Name)
+	Remotes.UpdateOwnedSeeds:FireServer(-1, seedthing.Name)
 	Remotes.UpdateOccupied:FireServer(plotId, true, seedthing.Name, MudPos)
 end
 

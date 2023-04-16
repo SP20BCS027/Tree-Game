@@ -34,3 +34,6 @@ Remotes.SellAllMoney.OnClientEvent:Connect(function()
 	callingtheUpdate()
 end)
 
+Remotes.Bindables.OnReset.ResetMoney.Event:Connect(function()
+	callingtheUpdate()
+end)

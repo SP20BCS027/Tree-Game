@@ -34,7 +34,6 @@ local function buySelectedItem(item)
 	end
 end
 
-
 local function loadStats(item) 
 	InformationFrame.Frame.Capacity.Text = item.Capacity
 	InformationFrame.Frame.Price.Text = item.Price
@@ -72,7 +71,6 @@ end)
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 end)
-
 
 Remotes.Bindables.WaterShopOpener.Event:Connect(ShopOpener)
 Remotes.OpenWaterCanShop.OnClientEvent:Connect(ShopOpener)

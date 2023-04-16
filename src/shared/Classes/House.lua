@@ -32,8 +32,6 @@ function House.new(houseFolder, allHouses)
 		if not profile then return end
 		if Player and houseObject.owner == nil and houseObject:checkOwner(Player) == false then
 			houseObject.owner = Player
-			profile.Data.IsOwner = true
-			Remotes.UpdateOwnership:FireClient(Player, true)
 			Remotes.EstablishWaterRefillUI:FireClient(Player, houseObject.well)
 			Remotes.EstablishPlotsUI:FireClient(Player)
 			House.plantTrees(houseObject, profile.Data.Plots)

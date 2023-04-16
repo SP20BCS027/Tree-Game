@@ -8,7 +8,6 @@ local SeedsConfig = require(ReplicatedStorage.Configs.SeedsConfig)
 local FertilizerConfig = require(ReplicatedStorage.Configs.FertilizerConfig)
 
 local Template = {
-	IsOwner =  false,
 	Coins = 0, 
 	Gems = 100, 
 	Water = 0, 

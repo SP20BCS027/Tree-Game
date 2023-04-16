@@ -30,7 +30,7 @@ function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)
 	if not profile then return end
 	
 	profile.Data.Seeds[seedType].Amount += amount 
-	Remotes.UpdateSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
+	Remotes.UpdateOwnedSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
 end
 
 function Manager.AdjustFertilizer(player: Player, amount: number, fertilizerType: string)
@@ -105,14 +105,6 @@ function Manager.PurchasePlot(player: Player, plot: directory)
 	Remotes.UpdateOwnedPlots:FireClient(player, profile.Data.Plots)
 end
 
-function Manager.AdjustPlayerOwnership(player: Player, ownerShipStatus: boolean)
-	local profile = Manager.Profiles[player]
-	if not profile then return end
-	
-	profile.Data.IsOwner = ownerShipStatus
-	Remotes.UpdateOwnership:FireClient(player, ownerShipStatus)
-end
-
 function Manager.PurchaseWaterCan(player: Player, waterCanId: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -126,7 +118,7 @@ function Manager.EquipWaterCan(player: Player, waterCanId: string)
 	if not profile then return end
 	
 	profile.Data.EquippedWaterCan = WaterCans[waterCanId]
-	Remotes.ChangeEquippedWaterCan:FireClient(player, profile.Data.EquippedWaterCan)
+	Remotes.ChangeEquippedWateringCan:FireClient(player, profile.Data.EquippedWaterCan)
 end
 
 function Manager.PurchaseBackpack(player: Player, backpackId: string)
@@ -162,12 +154,12 @@ function Manager.UpdateTreeLevel(player: Player, PlotId: number, cycle: number)
 		profile.Data.Plots[PlotId].Tree.MaxCycle = profile.Data.Plots[PlotId].Tree.MaxCycle + 1 
 		profile.Data.Plots[PlotId].Tree.CurrentCycle = 0
 		
-		Remotes.UpdateTreeLevel:FireClient(player, "LEVEL", PlotId)
+		Remotes.UpdateTreeLevel:FireClient(player, "LEVEL", PlotId, cycle)
 		return "LEVEL"
 	else
 		profile.Data.Plots[PlotId].Tree.CurrentCycle = profile.Data.Plots[PlotId].Tree.CurrentCycle + cycle
 		
-		Remotes.UpdateTreeLevel:FireClient(player, "CYCLE", PlotId)
+		Remotes.UpdateTreeLevel:FireClient(player, "CYCLE", PlotId, cycle)
 		return "CYCLE"
 	end
 end
@@ -202,7 +194,6 @@ Remotes.GetAllData.OnServerInvoke = GetAllData
 
 -- Client to Server Communication 
 
-Remotes.UpdateOwnership.OnServerEvent:Connect(Manager.AdjustPlayerOwnership)
 
 -- Here are some functions for the Commands 
 
@@ -219,7 +210,8 @@ function Manager.ResetAllData(player: Player)
 	
 	Manager.Profiles[player].Data = template
 	player.leaderstats.Coins.Value = profile.Data.Coins
-	Remotes.ResetData:FireClient(player, profile.Data)
+	player.leaderstats.Gems.Value = profile.Data.Gems 
+	Remotes.ResetData:FireClient(player)
 end
 
 return Manager

@@ -54,34 +54,32 @@ local function fertilizePlot(plotId)
 end 
 
 local function generateUIs()
-	if StateManager.GetData().IsOwner then 
-		for name, _ in (StateManager.GetData().Plots) do
-			local Plot = Remotes.AskUIInformation:InvokeServer(name)
-			local Buttons = Template:Clone()
-			Buttons.Parent = UI.PlotInteractive
-			Buttons.Name = name
-			Buttons.Enabled = true 
-			for _, item in pairs(Plot:GetChildren()) do
-				if item.Name == "Mud" then
-					mud = item
-				end
+	for name, _ in (StateManager.GetData().Plots) do
+		local Plot = Remotes.AskUIInformation:InvokeServer(name)
+		local Buttons = Template:Clone()
+		Buttons.Parent = UI.PlotInteractive
+		Buttons.Name = name
+		Buttons.Enabled = true 
+		for _, item in pairs(Plot:GetChildren()) do
+			if item.Name == "Mud" then
+				mud = item
 			end
-			Buttons.Adornee = mud
-			local mudPosition = mud.Position
-			
-			Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
-				plantSeed(name, mudPosition)
-			end)
-			Buttons.Holder.WaterButton.MouseButton1Down:Connect(function()
-				waterTree(name)
-			end)
-			Buttons.Holder.CollectButton.MouseButton1Down:Connect(function()
-				collectMoney(name)
-			end)
-			Buttons.Holder.FertilizerButton.MouseButton1Down:Connect(function()
-				fertilizePlot(name) 
-			end)
 		end
+		Buttons.Adornee = mud
+		local mudPosition = mud.Position
+		
+		Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
+			plantSeed(name, mudPosition)
+		end)
+		Buttons.Holder.WaterButton.MouseButton1Down:Connect(function()
+			waterTree(name)
+		end)
+		Buttons.Holder.CollectButton.MouseButton1Down:Connect(function()
+			collectMoney(name)
+		end)
+		Buttons.Holder.FertilizerButton.MouseButton1Down:Connect(function()
+			fertilizePlot(name) 
+		end)
 	end
 end
 

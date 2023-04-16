@@ -82,6 +82,20 @@ end
 
 generatePlotsUI()
 
+local function updateLevelLabel(plotIconId)
+    local plotIcon = plotIcons[plotIconId]
+    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+
+    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
+end
+
+local function updateCycleLabel(plotIconId)
+    local plotIcon = plotIcons[plotIconId]
+    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+
+    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle.." / "..currentPlot.Tree.MaxCycle) 
+end
+
 TreeButton.MouseButton1Down:Connect(function()
     PlotsGui.Enabled = not PlotsGui.Enabled
 end)
@@ -90,15 +104,33 @@ CloseButton.MouseButton1Down:Connect(function()
     PlotsGui.Enabled = false
 end)
 
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt, plotID)
+    if prompt == "LEVEL" then 
+        task.delay(0, function()
+            updateLevelLabel(plotID)
+        end)
+    end
+    if prompt == "CYCLE" then 
+        task.delay(0, function()
+            updateCycleLabel(plotID)
+        end)
+    end
+    
+end)
+
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
     --clearPlotIcons()
-    task.delay(0, generatePlotsUI)
+    --task.delay(0, generatePlotsUI)
 end)
 Remotes.UpdateOccupied.OnClientEvent:Connect(function()
     clearPlotIcons()
     task.delay(0, generatePlotsUI)
 end)
 
+Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
+    clearPlotIcons()
+    task.delay(0, generatePlotsUI)
+end)
 
 task.spawn(function()
 	while task.wait(1) do 
