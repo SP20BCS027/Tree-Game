@@ -7,20 +7,12 @@ local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("PlotStats")
 local Template = UI.Template
 
-
 local mud 
 
-local Plots = {
-	"Plot_1", 
-	"Plot_2"
-}
 
 local function plantSeed(plotId, mudPosition)
-	print(plotId)
 	if not StateManager.GetData().Plots[plotId].Occupied then 
 		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition)
-		--Remotes.UpdateSeeds:FireServer(-1)
-		--Remotes.UpdateOccupied:FireServer(plotId, true)
 	else
 		print("This plot is occupied!")
 	end
@@ -54,13 +46,28 @@ local function collectMoney(plotId)
 	end
 end
 
+local function fertilizePlot(plotId)
+	if not StateManager.GetData().Plots[plotId].Occupied then return end
+	if not StateManager.GetData().Plots[plotId].Tree then return end 
+	Remotes.Bindables.SelectFertilizer:Fire(plotId)
+
+end 
+
 local function generateUIs()
+	print("This got fired")
+	print(StateManager.GetData().Plots)
 	if StateManager.GetData().IsOwner then 
+<<<<<<< Updated upstream
 		for number, plot in (Plots) do
 			local Plot = Remotes.AskUIInformation:InvokeServer(plot)
+=======
+		for name, _ in (StateManager.GetData().Plots) do
+			print(name)
+			local Plot = Remotes.AskUIInformation:InvokeServer(name)
+>>>>>>> Stashed changes
 			local Buttons = Template:Clone()
 			Buttons.Parent = UI.PlotInteractive
-			Buttons.Name = number
+			Buttons.Name = name
 			Buttons.Enabled = true 
 			for _, item in pairs(Plot) do
 				if item.Name == "Mud" then
@@ -70,21 +77,32 @@ local function generateUIs()
 			Buttons.Adornee = mud
 			local mudPosition = mud.Position
 			
+			print("reached")
+
 			Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
-				plantSeed(number, mudPosition)
+				plantSeed(name, mudPosition)
 			end)
 			Buttons.Holder.WaterButton.MouseButton1Down:Connect(function()
-				waterTree(number)
+				waterTree(name)
 			end)
 			Buttons.Holder.CollectButton.MouseButton1Down:Connect(function()
-				collectMoney(number)
+				collectMoney(name)
 			end)
 			Buttons.Holder.FertilizerButton.MouseButton1Down:Connect(function()
-				-- DO nothing for now 
+				fertilizePlot(name) 
 			end)
 		end
-
 	end
 end
 
+local function clearUIs()
+	UI.PlotInteractive:ClearAllChildren()
+end
+
 Remotes.EstablishPlotsUI.OnClientEvent:Connect(generateUIs)
+Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
+	clearUIs()
+	task.delay(0, function()
+		generateUIs()
+	end)
+end)

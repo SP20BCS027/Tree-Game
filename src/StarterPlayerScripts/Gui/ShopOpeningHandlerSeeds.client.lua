@@ -4,29 +4,24 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 local Configs = ReplicatedStorage.Configs
 
-local WaterConfigs = require(Configs.WaterCanConfig)
+local Seeds = require(Configs.SeedsConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("WaterShop")
+local UI = player.PlayerGui:WaitForChild("SeedsShop")
 local CloseButton = UI.CloseFrame.CloseButton
 local ScrollingFrame = UI.MainFrame.InternalFrame.ScrollingFrame
 local InformationFrame = UI.MainFrame.InternalFrame.InformationFrame
 local Template = ScrollingFrame.Template
 local PurchaseButton = InformationFrame.Frame.Template
 
-local selectedItem 
+local selectedItem
 
 local function ShopOpener()
 	UI.Enabled = not UI.Enabled
 end
 
 local function buySelectedItem(item)
-	if StateManager.GetData().OwnedWaterCans[item.Name] then 
-		print("You already own this item") 
-		return
-	end 
-		
 	if StateManager.GetData().Coins >= item.Price then
-		Remotes.UpdateOwnedWaterCans:FireServer(item.Name)
+		Remotes.UpdateOwnedSeeds:FireServer(1, item.Name)
 		Remotes.UpdateCoins:FireServer(-(item.Price))
 		print("Bought")
 	else
@@ -36,10 +31,10 @@ end
 
 
 local function loadStats(item) 
-	InformationFrame.Frame.Capacity.Text = item.Capacity
+	InformationFrame.Frame.Description.Text = item.Description
 	InformationFrame.Frame.Price.Text = item.Price
 	
-	selectedItem = item 
+	selectedItem = item
 end
 
 local function createWaterCanIcon(item)
@@ -56,23 +51,23 @@ local function createWaterCanIcon(item)
 end
 
 local function GenerateShopItems()
-	for _, item in WaterConfigs do 
+	for _, item in Seeds do 
 		createWaterCanIcon(item)
 	end
 end
 
 GenerateShopItems()
 
-PurchaseButton.MouseButton1Down:Connect(function()
-	if selectedItem then 
-		buySelectedItem(selectedItem)
-	end
-end)
-
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 end)
 
+PurchaseButton.MouseButton1Down:Connect(function()
+	if selectedItem then 
+		buySelectedItem(selectedItem)
+	end 
+end)
+
 
 Remotes.Bindables.WaterShopOpener.Event:Connect(ShopOpener)
-Remotes.OpenWaterCanShop.OnClientEvent:Connect(ShopOpener)
+Remotes.OpenSeedsShop.OnClientEvent:Connect(ShopOpener)

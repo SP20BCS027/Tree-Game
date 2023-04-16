@@ -40,6 +40,9 @@ local function updateSeedIcons(plotIdrcv, mudPosition)
 	plotId = plotIdrcv
 	MudPos = mudPosition
 	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
+
+		if Icon.Name == "UIGridLayout" then continue end  
+
 		if Icon.Name == Seeds.Basic.Name then
 			Icon.Amount.Text = Seeds.Basic.Amount
 		elseif Icon.Name == Seeds.Uncommon.Name then 
@@ -52,16 +55,8 @@ local function updateSeedIcons(plotIdrcv, mudPosition)
 			Icon.Amount.Text = Seeds.Mythical.Amount
 		end
 		
-		if Seeds.Basic.Amount <= 0 and Icon.Name == Seeds.Basic.Name then
+		if Seeds[Icon.Name].Amount <= 0 then
 			Icon.Visible = false
-		elseif Seeds.Uncommon.Amount <= 0 and Icon.Name == Seeds.Uncommon.Name then
-			Icon.Visible = false 
-		elseif Seeds.Rare.Amount <= 0 and Icon.Name == Seeds.Rare.Name then
-			Icon.Visible = false 
-		elseif Seeds.Legendary.Amount <= 0 and Icon.Name == Seeds.Legendary.Name  then
-			Icon.Visible = false 
-		elseif Seeds.Mythical.Amount <= 0 and Icon.Name == Seeds.Mythical.Name then
-			Icon.Visible = false 
 		end	
 	end
 	UI.Enabled = true

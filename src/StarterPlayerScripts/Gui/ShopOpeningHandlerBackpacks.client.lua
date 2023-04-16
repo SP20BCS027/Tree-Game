@@ -10,7 +10,7 @@ local CloseButton = UI.CloseFrame.CloseButton
 local ScrollingFrame = UI.MainFrame.InternalFrame.ScrollingFrame
 local InformationFrame = UI.MainFrame.InternalFrame.InformationFrame
 local Template = ScrollingFrame.Template
-local PurchaseButton = InformationFrame.Frame.PurchaseButton
+local PurchaseButton = InformationFrame.Frame.Template
 
 local selectedItem
 
@@ -18,17 +18,18 @@ local function ShopOpener()
 	UI.Enabled = not UI.Enabled
 end
 
-local function buySelectedItem()
-	if not StateManager.GetData().OwnedWaterCans[selectedItem] then 
-		if StateManager.GetData().Coins >= selectedItem.Price then
-			--Purchase Item 
-			Remotes.PurchaseWaterCan:FireServer(selectedItem.Name)
-			Remotes.UpdateCoins:FireServer(-(selectedItem.Price))
-		else
-			print("You don't have enough money")
-		end
-	else 
-		print("You already own this item!")
+local function buySelectedItem(item)
+	if StateManager.GetData().OwnedBackpacks[item.Name] then 
+		print("Item Already Owned")
+		return
+	end 
+	
+	if StateManager.GetData().Coins >= item.Price then
+		Remotes.UpdateOwnedBackpacks:FireServer(item.Name)
+		Remotes.UpdateCoins:FireServer(-(item.Price))
+		print("Bought")
+	else
+		print("You don't have enough money")
 	end
 end
 
@@ -60,12 +61,15 @@ end
 
 GenerateShopItems()
 
-PurchaseButton.MouseButton1Down:Connect(function()
-	Remotes.UpdateOwnedBackpacks:FireServer(selectedItem.Name)
-end)
-
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 end)
 
+PurchaseButton.MouseButton1Down:Connect(function()
+	if selectedItem then 
+		buySelectedItem(selectedItem)
+	end
+end)
+
 Remotes.Bindables.BackpackShopOpener.Event:Connect(ShopOpener)
+Remotes.OpenBackpackShop.OnClientEvent:Connect(ShopOpener)

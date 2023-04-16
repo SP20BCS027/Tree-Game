@@ -2,7 +2,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
-
+local Houses = require(ServerScriptService.Houses)
 local Remotes = ReplicatedStorage.Remotes
 
 local function UpdateTreeWaterTimer(player: Player, plotId: number)
@@ -10,7 +10,11 @@ local function UpdateTreeWaterTimer(player: Player, plotId: number)
 end
 
 local function UpdateTreeLevel(player: Player, plotId: number)
-	Manager.UpdateTreeLevel(player, plotId)
+	local Evaluation = Manager.UpdateTreeLevel(player, plotId, 1)
+	if Evaluation == "LEVEL" then 
+		local plotObject = Houses.GetPlayerPlot(player, plotId)
+		Houses.ChangeTreeModel(plotObject)
+	end
 end
 
 local function RefillWater(player: Player)

@@ -33,6 +33,10 @@ Remotes.UpdateSeeds.OnClientEvent:Connect(function(amount: number, seedType: str
 	PlayerData.Seeds[seedType].Amount = amount
 end)
 
+Remotes.UpdateOwnedFertilizers.OnClientEvent:Connect(function(amount: number, fertilizerType: string)
+	PlayerData.Fertilizers[fertilizerType].Amount = amount 
+end)
+
 Remotes.UpdateOwnership.OnClientEvent:Connect(function(ownerShipStatus: boolean)
 	PlayerData.IsOwner = ownerShipStatus 
 end)
@@ -90,6 +94,10 @@ end)
 Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(ownedBackpacks)
 	PlayerData.OwnedBackpacks = ownedBackpacks
 	Remotes.Bindables.GenerateBackpackInventory:Fire()
+end)
+
+Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(plots)
+	PlayerData.Plots = plots
 end)
 
 Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function(equippedBackpack)

@@ -16,15 +16,21 @@ end
 
 UpdateCurrency()
 
-Remotes.UpdateMoney.OnClientEvent:Connect(function()
+local function callingtheUpdate()
 	task.delay(0, function()
 		UpdateCurrency()
 	end)
+end
+
+Remotes.UpdateMoney.OnClientEvent:Connect(function()
+	callingtheUpdate()
+end)
+
+Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function()
+	callingtheUpdate()
 end)
 
 Remotes.SellAllMoney.OnClientEvent:Connect(function()
-	task.delay(0, function()
-		UpdateCurrency()
-	end)
+	callingtheUpdate()
 end)
 
