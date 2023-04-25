@@ -20,6 +20,7 @@ local TIMER = "Time:  XYZ"
 local LEVEL = "Level: AMOUNT"
 local CYCLE = "Cycle: AMOUNT"
 
+
 local plotIcons = {}
 
 local function updateMoneyTimer(plotIcon)
@@ -63,6 +64,7 @@ local function createIcon(plot)
 
     plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle) 
     
+
 end
 
 local function generatePlotsUI()
@@ -88,6 +90,7 @@ local function updateLevelLabel(plotIconId)
     local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
 
     plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
+
 end
 
 local function updateCycleLabel(plotIconId)

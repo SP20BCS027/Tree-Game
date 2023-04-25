@@ -58,6 +58,8 @@ end)
 Remotes.UpdateTree.OnClientEvent:Connect(function(TimeTillThirst: number, plotId: number, tree)
 	PlayerData.Plots[plotId].Tree = TreeConfig[tree]
 	PlayerData.Plots[plotId].Tree.TimeUntilWater = TimeTillThirst
+	Remotes.Bindables.UpdateTreeLevel:Fire(plotId)
+	Remotes.Bindables.UpdateTreeCycle:Fire(plotId)
 end)
 
 Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(TimeTillThirst: number, plotId: number)
@@ -81,6 +83,8 @@ Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(Prompt: string, plotId: n
 		PlayerData.Plots[plotId].Tree.CurrentLevel = PlayerData.Plots[plotId].Tree.CurrentLevel + 1 
 		PlayerData.Plots[plotId].Tree.MaxCycle = PlayerData.Plots[plotId].Tree.MaxCycle + 1
 		PlayerData.Plots[plotId].Tree.CurrentCycle = 0 
+		Remotes.Bindables.UpdateTreeLevel:Fire(plotId)
+		Remotes.Bindables.UpdateTreeCycle:Fire(plotId)
 	elseif Prompt == "CYCLE" then
 		PlayerData.Plots[plotId].Tree.CurrentCycle = PlayerData.Plots[plotId].Tree.CurrentCycle + cycle
 	end

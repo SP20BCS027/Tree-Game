@@ -10,6 +10,8 @@ local GUI = PlayerGUI:WaitForChild("Stats")
 local Outline = GUI.Frame
 local Moneyamount = Outline.WaterFrame.Amount
 
+local WATER_AMOUNT = "AMOUNT"
+local WATER_CAPACITY = "CAPACITY"
 
 local function UpdateWater()
 	Moneyamount.Text = StateManager.GetData().Water .. "/" .. StateManager.GetData().EquippedWaterCan.Capacity
