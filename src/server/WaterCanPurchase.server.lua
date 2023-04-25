@@ -15,4 +15,4 @@ local function changeEquippedWaterCan(player: Player, WaterCan: string)
 end
 
 Remotes.UpdateOwnedWaterCans.OnServerEvent:Connect(purchaseCan)
-Remotes.ChangeEquippedWaterCan.OnServerEvent:Connect(changeEquippedWaterCan)
+Remotes.ChangeEquippedWateringCan.OnServerEvent:Connect(changeEquippedWaterCan)

@@ -14,20 +14,29 @@ local MONEY_AMOUNT_TEXT = "AMOUNT"
 local MONEY_CAPACITY_TEXT = "CAPACITY"
 
 local function UpdateCurrency()
-	Moneyamount.Text = MONEY_AMOUNT_TEXT:gsub("AMOUNT", StateManager.GetData().Money).." / "..MONEY_CAPACITY_TEXT:gsub("CAPACITY", StateManager.GetData().EquippedBackpack.Capacity)
+	Moneyamount.Text = StateManager.GetData().Money .. "/" .. StateManager.GetData().EquippedBackpack.Capacity
 end
 
 UpdateCurrency()
 
-Remotes.UpdateMoney.OnClientEvent:Connect(function()
+local function callingtheUpdate()
 	task.delay(0, function()
 		UpdateCurrency()
 	end)
+end
+
+Remotes.UpdateMoney.OnClientEvent:Connect(function()
+	callingtheUpdate()
+end)
+
+Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function()
+	callingtheUpdate()
 end)
 
 Remotes.SellAllMoney.OnClientEvent:Connect(function()
-	task.delay(0, function()
-		UpdateCurrency()
-	end)
+	callingtheUpdate()
 end)
 
+Remotes.Bindables.OnReset.ResetMoney.Event:Connect(function()
+	callingtheUpdate()
+end)

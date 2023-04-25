@@ -4,29 +4,20 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 local Configs = ReplicatedStorage.Configs
 
-local WaterConfigs = require(Configs.WaterCanConfig)
+local Fertilizers = require(Configs.FertilizerConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("WaterShop")
+local UI = player.PlayerGui:WaitForChild("FertilizerShop")
 local CloseButton = UI.CloseFrame.CloseButton
 local ScrollingFrame = UI.MainFrame.InternalFrame.ScrollingFrame
 local InformationFrame = UI.MainFrame.InternalFrame.InformationFrame
-local Template = ScrollingFrame.Template
+local Template = UI.MainFrame.InternalFrame.Template
 local PurchaseButton = InformationFrame.Frame.Template
 
 local selectedItem 
 
-local function ShopOpener()
-	UI.Enabled = not UI.Enabled
-end
-
 local function buySelectedItem(item)
-	if StateManager.GetData().OwnedWaterCans[item.Name] then 
-		print("You already own this item") 
-		return
-	end 
-		
 	if StateManager.GetData().Coins >= item.Price then
-		Remotes.UpdateOwnedWaterCans:FireServer(item.Name)
+		Remotes.UpdateOwnedFertilizers:FireServer(1, item.Name)
 		Remotes.UpdateCoins:FireServer(-(item.Price))
 		print("Bought")
 	else
@@ -35,7 +26,6 @@ local function buySelectedItem(item)
 end
 
 local function loadStats(item) 
-	InformationFrame.Frame.Capacity.Text = item.Capacity
 	InformationFrame.Frame.Price.Text = item.Price
 	
 	selectedItem = item 
@@ -55,12 +45,23 @@ local function createWaterCanIcon(item)
 end
 
 local function GenerateShopItems()
-	for _, item in WaterConfigs do 
+	for _, item in Fertilizers do 
 		createWaterCanIcon(item)
 	end
 end
 
-GenerateShopItems()
+local function ClearShopItems()
+	for _, item in ScrollingFrame:GetChildren() do 
+		if item.name == "UIGridLayout" then continue end 
+		item:Destroy()
+	end 
+end 
+
+local function ShopOpener()
+	UI.Enabled = not UI.Enabled
+	ClearShopItems() 
+	GenerateShopItems()
+end
 
 PurchaseButton.MouseButton1Down:Connect(function()
 	if selectedItem then 
@@ -72,5 +73,4 @@ CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 end)
 
-Remotes.Bindables.WaterShopOpener.Event:Connect(ShopOpener)
-Remotes.OpenWaterCanShop.OnClientEvent:Connect(ShopOpener)
+Remotes.OpenFertilizerShop.OnClientEvent:Connect(ShopOpener)

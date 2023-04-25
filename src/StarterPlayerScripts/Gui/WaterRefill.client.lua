@@ -19,6 +19,4 @@ RefillIcon.Holder.WaterButton.MouseButton1Down:Connect(function()
 	RefillWater()
 end)
 
-
-
 Remotes.EstablishWaterRefillUI.OnClientEvent:Connect(AdorneeUI)

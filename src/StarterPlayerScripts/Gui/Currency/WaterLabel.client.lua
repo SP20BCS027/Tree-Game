@@ -14,20 +14,29 @@ local WATER_AMOUNT = "AMOUNT"
 local WATER_CAPACITY = "CAPACITY"
 
 local function UpdateWater()
-	Moneyamount.Text = WATER_AMOUNT:gsub("AMOUNT", StateManager.GetData().Water).." / "..WATER_CAPACITY:gsub("CAPACITY", StateManager.GetData().EquippedWaterCan.Capacity)
+	Moneyamount.Text = StateManager.GetData().Water .. "/" .. StateManager.GetData().EquippedWaterCan.Capacity
 end
 
 UpdateWater()
 
-Remotes.UpdateWater.OnClientEvent:Connect(function()
+local function callingtheUpdate()
 	task.delay(0, function()
 		UpdateWater()
 	end)
+end
+
+Remotes.UpdateWater.OnClientEvent:Connect(function()
+	callingtheUpdate()
+end)
+
+Remotes.ChangeEquippedWateringCan.OnClientEvent:Connect(function()
+	callingtheUpdate()
 end)
 
 Remotes.RefillWater.OnClientEvent:Connect(function()
-	task.delay(0, function()
-		UpdateWater()
-	end)
+	callingtheUpdate()
 end)
 
+Remotes.Bindables.OnReset.ResetWater.Event:Connect(function()
+	callingtheUpdate()
+end)

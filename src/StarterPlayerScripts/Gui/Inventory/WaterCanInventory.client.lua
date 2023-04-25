@@ -65,6 +65,6 @@ CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
 end)
 
-Remotes.Bindables.GenerateWaterCanInventory.Event:Connect(function()
+Remotes.Bindables.OnReset.GenerateWaterCanInventory.Event:Connect(function()
     generateSelectableWateringCan()
 end)

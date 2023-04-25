@@ -2,31 +2,25 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = game.Players.LocalPlayer
 
 local Remotes = ReplicatedStorage.Remotes
-local Configs = ReplicatedStorage.Configs
 
-local WaterConfigs = require(Configs.WaterCanConfig)
+local Plots = require(ReplicatedStorage.Configs.PlotsConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("WaterShop")
+local UI = player.PlayerGui:WaitForChild("PlotsShop")
 local CloseButton = UI.CloseFrame.CloseButton
 local ScrollingFrame = UI.MainFrame.InternalFrame.ScrollingFrame
 local InformationFrame = UI.MainFrame.InternalFrame.InformationFrame
-local Template = ScrollingFrame.Template
+local InternalFrame = UI.MainFrame.InternalFrame
+local Template = InternalFrame.Template
 local PurchaseButton = InformationFrame.Frame.Template
 
 local selectedItem 
 
-local function ShopOpener()
-	UI.Enabled = not UI.Enabled
-end
+
 
 local function buySelectedItem(item)
-	if StateManager.GetData().OwnedWaterCans[item.Name] then 
-		print("You already own this item") 
-		return
-	end 
-		
+	
 	if StateManager.GetData().Coins >= item.Price then
-		Remotes.UpdateOwnedWaterCans:FireServer(item.Name)
+		Remotes.UpdateOwnedPlots:FireServer(item)
 		Remotes.UpdateCoins:FireServer(-(item.Price))
 		print("Bought")
 	else
@@ -35,42 +29,62 @@ local function buySelectedItem(item)
 end
 
 local function loadStats(item) 
-	InformationFrame.Frame.Capacity.Text = item.Capacity
 	InformationFrame.Frame.Price.Text = item.Price
 	
 	selectedItem = item 
 end
 
-local function createWaterCanIcon(item)
+local function createPlotIcon(item)
 	local shopItem = Template:Clone()
 	shopItem.Parent = ScrollingFrame
 	shopItem.Name = item.Name
 	shopItem.Label.Text = item.Name
-	shopItem.Amount.Text = item.Price 
-	shopItem.Visible = true
-	
+	shopItem.Amount.Text = item.Id
+
+	if not StateManager.GetData().Plots[item.Id] then
+		shopItem.Visible = true
+	end
+
 	shopItem.TextButton.MouseButton1Down:Connect(function()
 		loadStats(item)
 	end)
 end
 
 local function GenerateShopItems()
-	for _, item in WaterConfigs do 
-		createWaterCanIcon(item)
+	for _, item in Plots do 
+		createPlotIcon(item)
 	end
 end
 
-GenerateShopItems()
+local function ClearShop()
+	for _, item in pairs(ScrollingFrame:GetChildren()) do 
+		if item.Name == "UIGridLayout" then continue end 
+		item:Destroy()
+	end 
+end
 
-PurchaseButton.MouseButton1Down:Connect(function()
-	if selectedItem then 
-		buySelectedItem(selectedItem)
-	end
-end)
+local function ShopOpener()
+	UI.Enabled = not UI.Enabled
+	ClearShop()
+	GenerateShopItems()
+end
+
+local function RegenerateShop()
+	task.delay(0, function()
+		ClearShop()
+		GenerateShopItems()
+	end)
+end
 
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 end)
 
-Remotes.Bindables.WaterShopOpener.Event:Connect(ShopOpener)
-Remotes.OpenWaterCanShop.OnClientEvent:Connect(ShopOpener)
+PurchaseButton.MouseButton1Down:Connect(function()
+	if selectedItem then 
+		buySelectedItem(selectedItem)
+	end 
+end)
+
+Remotes.UpdateOwnedPlots.OnClientEvent:Connect(RegenerateShop)
+Remotes.OpenPlotsShop.OnClientEvent:Connect(ShopOpener)
