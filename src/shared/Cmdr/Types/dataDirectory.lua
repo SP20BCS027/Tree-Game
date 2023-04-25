@@ -4,7 +4,7 @@ local Template = require(ReplicatedStorage.PlayerData.Template)
 
 local directories = {}
 
-for directory, value in Template do 
+for directory, _ in Template do 
 	table.insert(directories, directory)
 end
 

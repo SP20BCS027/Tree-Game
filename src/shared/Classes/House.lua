@@ -36,12 +36,15 @@ function House.new(houseFolder, allHouses)
 			Remotes.EstablishPlotsUI:FireClient(Player)
 			House.plantTrees(houseObject, profile.Data.Plots)
 			House.GeneratePlots(houseObject, profile.Data.Plots)
+			House.ClearPlotOnPlayerLeaving(houseObject)
+
 		end
 	end)
 
 	game.Players.PlayerRemoving:Connect(function(Player: Player)
 		if houseObject.owner == Player then
 			houseObject.owner = nil
+			House.ClearPlotOnPlayerLeaving(houseObject)
 		end
 	end)
 
@@ -88,5 +91,15 @@ function House.GeneratePlots(house, playerDataPlots)
 		end 
 	end 
 end 
+
+function House.ClearPlotOnPlayerLeaving(house)
+	for _, plot in house.Plots do 
+		for _, part in plot:GetChildren() do 
+			if string.find(part.Name, "Tree") then 
+				part:Destroy()
+			end
+		end
+	end 
+end
 
 return House

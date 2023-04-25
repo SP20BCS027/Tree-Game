@@ -47,6 +47,7 @@ local function updateWaterTimer(plotIcon)
 end
 
 local function createIcon(plot)
+    print(plot)
     local plotIcon = Template:Clone()
     plotIcon.Parent = ScrollingFrame
     plotIcon.Visible = true 
