@@ -3,12 +3,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlotsConfig = require(ReplicatedStorage.Configs.PlotsConfig)
 local BackpackConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
---local DungeonConfig = require(ReplicatedStorage.Configs.DungeonConfig)
+local DungeonConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 local SeedsConfig = require(ReplicatedStorage.Configs.SeedsConfig)
 local FertilizerConfig = require(ReplicatedStorage.Configs.FertilizerConfig)
 
 local Template = {
-	IsOwner =  false,
 	Coins = 0, 
 	Gems = 100, 
 	Water = 0, 
@@ -36,6 +35,8 @@ local Template = {
 		DrawStringBag = BackpackConfig.DrawStringBag
 	},
 	
+	UnlockedDungeons = DungeonConfig, 
+
 }
 
 export type PlayerData = typeof(Template)

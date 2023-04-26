@@ -8,6 +8,7 @@ local triggerparts = WorkSpace.Dungeons:GetChildren()
 local debounce = {}
 local DELAY = 5
 
+
 local function generateUI(player: Player, DungeonName)
     if debounce[player] then return end 
 

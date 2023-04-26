@@ -24,9 +24,6 @@ local function spawnTree(spawnPosition, tree, seed, plotObject)
 	treeModel.Parent = plotObject
 	treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
 end
-local function ChangeSeeds(player: Player, amount: number, seedName: string)	
-	Manager.AdjustSeeds(player, amount, seedName)
-end
 
 local function ChangeOccupationStatus(player: Player, plotId: number, isOccupied: boolean, seed, spawnPosition)
 	-- add a server side check to check plot occupation maybe? 
@@ -36,5 +33,4 @@ local function ChangeOccupationStatus(player: Player, plotId: number, isOccupied
 	Manager.AdjustPlotOccupation(player, plotId, isOccupied, treeToPlant)
 end
 
-Remotes.UpdateSeeds.OnServerEvent:Connect(ChangeSeeds)
 Remotes.UpdateOccupied.OnServerEvent:Connect(ChangeOccupationStatus)

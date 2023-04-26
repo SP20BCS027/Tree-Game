@@ -4,6 +4,8 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 local Configs = ReplicatedStorage.Configs
 
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+
 local Fertilizers = require(Configs.FertilizerConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("FertilizerShop")
@@ -59,6 +61,7 @@ end
 
 local function ShopOpener()
 	UI.Enabled = not UI.Enabled
+	PlayerMovement:Movement(player, false)
 	ClearShopItems() 
 	GenerateShopItems()
 end
@@ -71,6 +74,7 @@ end)
 
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
+	PlayerMovement:Movement(player, true)
 end)
 
 Remotes.OpenFertilizerShop.OnClientEvent:Connect(ShopOpener)

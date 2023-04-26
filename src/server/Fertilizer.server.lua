@@ -11,7 +11,6 @@ local function UpdateFertilizers(player: Player, amount: number, fertilizerType:
 end
 
 local function FertlizeTree(player: Player, plotID: string, amount: number)
-	print(plotID)
 	local Evaluation = Manager.UpdateTreeLevel(player, plotID, amount)
 	if Evaluation == "LEVEL" then 
 		local plotObject = Houses.GetPlayerPlot(player, plotID)

@@ -66,7 +66,7 @@ CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
 end)
 
-Remotes.Bindables.GenerateBackpackInventory.Event:Connect(function()
+Remotes.Bindables.OnReset.GenerateBackpackInventory.Event:Connect(function()
     generateSelectableBackpack()
 end) 
 

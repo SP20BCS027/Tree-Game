@@ -12,9 +12,7 @@ local function generateUI(player: Player)
     if debounce[player] then return end 
 
 	Remotes.OpenWaterCanShop:FireClient(player)
-
-    print("This player ".. player.Name .. " Triggered")
-
+        
     debounce[player] = true
     task.delay(DELAY, function()
         debounce[player] = nil 
@@ -32,6 +30,3 @@ local function ListenToWaterShopTouch()
 end
 
 ListenToWaterShopTouch()
-
-
-

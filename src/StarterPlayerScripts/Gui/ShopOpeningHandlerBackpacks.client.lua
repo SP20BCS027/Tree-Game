@@ -3,6 +3,8 @@ local player = game.Players.LocalPlayer
 
 local Remotes = ReplicatedStorage.Remotes
 
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+
 local Backpacks = require(ReplicatedStorage.Configs.BackpacksConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("BackpackShop")
@@ -16,6 +18,7 @@ local selectedItem
 
 local function ShopOpener()
 	UI.Enabled = not UI.Enabled
+	PlayerMovement:Movement(player, false)
 end
 
 local function buySelectedItem(item)
@@ -63,6 +66,8 @@ GenerateShopItems()
 
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
+	PlayerMovement:Movement(player, true)
+
 end)
 
 PurchaseButton.MouseButton1Down:Connect(function()

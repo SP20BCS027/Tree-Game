@@ -1,7 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+
 local Remotes = ReplicatedStorage.Remotes
 local player = game.Players.LocalPlayer
+local character = player.CharacterAdded:Wait()
+
+local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("SeedSelection")
@@ -17,6 +22,10 @@ local Seeds = StateManager.GetData().Seeds
 local seedthing 
 local plotId
 local MudPos
+local AnimPart
+
+local crouchAnimID = "rbxassetid://13248889864"
+
 
 local function loadStats(seed)
 	InformationFrame.SeedDescription.Text = seed.Description 
@@ -36,27 +45,19 @@ local function createSeedIcon(seed)
 	end)	
 end
 
-local function updateSeedIcons(plotIdrcv, mudPosition)
+local function updateSeedIcons(plotIdrcv, mudPosition, animationPositionPart)
 	plotId = plotIdrcv
 	MudPos = mudPosition
+	AnimPart = animationPositionPart
 	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
 
-		if Icon.Name == "UIGridLayout" then continue end  
+		if Icon.Name == "UIGridLayout" then continue end
 
-		if Icon.Name == Seeds.Basic.Name then
-			Icon.Amount.Text = Seeds.Basic.Amount
-		elseif Icon.Name == Seeds.Uncommon.Name then 
-			Icon.Amount.Text = Seeds.Uncommon.Amount
-		elseif Icon.Name == Seeds.Rare.Name then
-			Icon.Amount.Text = Seeds.Rare.Amount
-		elseif Icon.Name == Seeds.Legendary.Name then 
-			Icon.Amount.Text = Seeds.Legendary.Amount
-		elseif Icon.Name == Seeds.Mythical.Name then
-			Icon.Amount.Text = Seeds.Mythical.Amount
-		end
-		
+		Icon.Amount.Text = Seeds[Icon.Name].Amount 
 		if Seeds[Icon.Name].Amount <= 0 then
 			Icon.Visible = false
+		else 
+			Icon.Visible = true
 		end	
 	end
 	UI.Enabled = true
@@ -71,17 +72,21 @@ end
 generateSelectableSeeds()
 
 local function plantSeed()
-	Remotes.UpdateSeeds:FireServer(-1, seedthing.Name)
+	Remotes.UpdateOwnedSeeds:FireServer(-1, seedthing.Name)
 	Remotes.UpdateOccupied:FireServer(plotId, true, seedthing.Name, MudPos)
 end
 
 InformationFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	plantSeed() 	
+	AnimationHandler.playAnimation(player, character, crouchAnimID)
+	local plantingSound = AnimPart.WateringSound
+	plantingSound:Play()
 end)
 
 closeButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
+	PlayerMovement:Movement(player, true)
 end)
 
 Remotes.Bindables.SelectSeed.Event:Connect(updateSeedIcons)

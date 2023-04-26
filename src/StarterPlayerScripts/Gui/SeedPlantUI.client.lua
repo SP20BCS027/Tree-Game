@@ -2,28 +2,47 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Remotes = ReplicatedStorage.Remotes
 local player = game.Players.LocalPlayer
+local character = player.CharacterAdded:Wait()
+
+local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("PlotStats")
 local Template = UI.Template
 
-local mud 
+local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
+local crouchAnimID = "rbxassetid://13248889864"
 
+local function changeCharacterPosition(position)
+	character:WaitForChild("HumanoidRootPart").CFrame = position + VERTICAL_OFFSET
+end
 
-local function plantSeed(plotId, mudPosition)
+local function plantSeed(plotId, mudPosition, animationPositionPart)
 	if not StateManager.GetData().Plots[plotId].Occupied then 
-		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition)
+		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
+		changeCharacterPosition(animationPositionPart.CFrame)
+		PlayerMovement:Movement(player, false)
+		
+		print("Seed Planted")
 	else
 		print("This plot is occupied!")
 	end
 end
 
-local function waterTree(plotId)
+local function waterTree(plotId, animationPositionPart)
 	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
 		if StateManager.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and StateManager.GetData().Water > 0 then
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
 			Remotes.UpdateTreeLevel:FireServer(plotId)
 			Remotes.UpdateWater:FireServer()
+
+			changeCharacterPosition(animationPositionPart.CFrame)
+			PlayerMovement:Movement(player, false)
+			AnimationHandler.playAnimation(player, character, crouchAnimID)
+
+			local wateringSound = animationPositionPart.WateringSound
+			wateringSound:Play()
 			print("Tree has been watered!")
 		else
 			print("The Tree is already watered or You have no water!")
@@ -33,10 +52,15 @@ local function waterTree(plotId)
 	end
 end
 
-local function collectMoney(plotId)
+local function collectMoney(plotId, animationPositionPart)
 	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
 		if StateManager.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
 			Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
+			changeCharacterPosition(animationPositionPart.CFrame)
+			PlayerMovement:Movement(player, false)
+			AnimationHandler.playAnimation(player, character, crouchAnimID)
+			local collectingSound = animationPositionPart.WateringSound
+			collectingSound:Play()
 			print("Money has been collected")
 		else
 			print("No money to be collected!")
@@ -46,42 +70,40 @@ local function collectMoney(plotId)
 	end
 end
 
-local function fertilizePlot(plotId)
+local function fertilizePlot(plotId, animationPositionPart)
 	if not StateManager.GetData().Plots[plotId].Occupied then return end
 	if not StateManager.GetData().Plots[plotId].Tree then return end 
-	Remotes.Bindables.SelectFertilizer:Fire(plotId)
-
+	Remotes.Bindables.SelectFertilizer:Fire(plotId, animationPositionPart)
+	PlayerMovement:Movement(player, false)
+	changeCharacterPosition(animationPositionPart.CFrame)
+	print("Fertilized")
 end 
 
 local function generateUIs()
-	if StateManager.GetData().IsOwner then 
-		for name, _ in (StateManager.GetData().Plots) do
-			local Plot = Remotes.AskUIInformation:InvokeServer(name)
-			local Buttons = Template:Clone()
-			Buttons.Parent = UI.PlotInteractive
-			Buttons.Name = name
-			Buttons.Enabled = true 
-			for _, item in pairs(Plot:GetChildren()) do
-				if item.Name == "Mud" then
-					mud = item
-				end
-			end
-			Buttons.Adornee = mud
-			local mudPosition = mud.Position
-			
-			Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
-				plantSeed(name, mudPosition)
-			end)
-			Buttons.Holder.WaterButton.MouseButton1Down:Connect(function()
-				waterTree(name)
-			end)
-			Buttons.Holder.CollectButton.MouseButton1Down:Connect(function()
-				collectMoney(name)
-			end)
-			Buttons.Holder.FertilizerButton.MouseButton1Down:Connect(function()
-				fertilizePlot(name) 
-			end)
-		end
+	for name, _ in (StateManager.GetData().Plots) do
+		local Plot = Remotes.AskUIInformation:InvokeServer(name)
+		local Buttons = Template:Clone()
+		Buttons.Parent = UI.PlotInteractive
+		Buttons.Name = name
+		Buttons.Enabled = true 
+		
+		local mud = Plot["Mud"]
+		local animationPosition = Plot["AnimationPosition"]
+		
+		Buttons.Adornee = mud
+		
+		Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
+			plantSeed(name, mud.Position, animationPosition)
+		end)
+		Buttons.Holder.WaterButton.MouseButton1Down:Connect(function()
+			waterTree(name, animationPosition)
+		end)
+		Buttons.Holder.CollectButton.MouseButton1Down:Connect(function()
+			collectMoney(name, animationPosition)
+		end)
+		Buttons.Holder.FertilizerButton.MouseButton1Down:Connect(function()
+			fertilizePlot(name, animationPosition) 
+		end)
 	end
 end
 

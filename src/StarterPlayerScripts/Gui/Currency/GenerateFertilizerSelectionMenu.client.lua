@@ -1,7 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+
 local Remotes = ReplicatedStorage.Remotes
 local player = game.Players.LocalPlayer
+local character = player.CharacterAdded:Wait()
+
+local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("FertilizerSelection")
@@ -16,6 +21,9 @@ local Fertilizers = StateManager.GetData().Fertilizers
 
 local Fertilizer
 local plotId
+local AnimPart
+
+local crouchAnimID = "rbxassetid://13248889864"
 
 local function loadStats(fertilizer)
 	InformationFrame.SeedDescription.Text = fertilizer.Description 
@@ -34,8 +42,9 @@ local function createFertilizerIcon(fertilizer)
 	end)	
 end
 
-local function updateFertilizerIcons(plotIdrcv)
+local function updateFertilizerIcons(plotIdrcv, animationPositionPart)
 	plotId = plotIdrcv
+	AnimPart = animationPositionPart
 	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
 		if Icon.Name == "UIGridLayout" then continue end  
 		Icon.Amount.Text = Fertilizers[Icon.Name].Amount		
@@ -64,10 +73,14 @@ end
 InformationFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	fertilizePlot() 	
+	AnimationHandler.playAnimation(player, character, crouchAnimID)
+	local fertilizingSound = AnimPart.WateringSound
+	fertilizingSound:Play()
 end)
 
 closeButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
+	PlayerMovement:Movement(player, true)
 end)
 
 Remotes.Bindables.SelectFertilizer.Event:Connect(updateFertilizerIcons)

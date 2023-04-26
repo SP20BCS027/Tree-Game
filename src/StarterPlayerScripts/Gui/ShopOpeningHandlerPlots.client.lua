@@ -3,6 +3,8 @@ local player = game.Players.LocalPlayer
 
 local Remotes = ReplicatedStorage.Remotes
 
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+
 local Plots = require(ReplicatedStorage.Configs.PlotsConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("PlotsShop")
@@ -65,6 +67,7 @@ end
 
 local function ShopOpener()
 	UI.Enabled = not UI.Enabled
+	PlayerMovement:Movement(player, false)
 	ClearShop()
 	GenerateShopItems()
 end
@@ -78,6 +81,7 @@ end
 
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
+	PlayerMovement:Movement(player, true)
 end)
 
 PurchaseButton.MouseButton1Down:Connect(function()

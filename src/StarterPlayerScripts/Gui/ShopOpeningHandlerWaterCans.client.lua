@@ -4,6 +4,8 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 local Configs = ReplicatedStorage.Configs
 
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+
 local WaterConfigs = require(Configs.WaterCanConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("WaterShop")
@@ -17,6 +19,7 @@ local selectedItem
 
 local function ShopOpener()
 	UI.Enabled = not UI.Enabled
+	PlayerMovement:Movement(player, false)
 end
 
 local function buySelectedItem(item)
@@ -33,7 +36,6 @@ local function buySelectedItem(item)
 		print("You don't have enough money")
 	end
 end
-
 
 local function loadStats(item) 
 	InformationFrame.Frame.Capacity.Text = item.Capacity
@@ -71,8 +73,8 @@ end)
 
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
+	PlayerMovement:Movement(player, true)
 end)
-
 
 Remotes.Bindables.WaterShopOpener.Event:Connect(ShopOpener)
 Remotes.OpenWaterCanShop.OnClientEvent:Connect(ShopOpener)

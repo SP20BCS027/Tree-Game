@@ -32,8 +32,6 @@ function House.new(houseFolder, allHouses)
 		if not profile then return end
 		if Player and houseObject.owner == nil and houseObject:checkOwner(Player) == false then
 			houseObject.owner = Player
-			profile.Data.IsOwner = true
-			Remotes.UpdateOwnership:FireClient(Player, true)
 			Remotes.EstablishWaterRefillUI:FireClient(Player, houseObject.well)
 			Remotes.EstablishPlotsUI:FireClient(Player)
 			House.plantTrees(houseObject, profile.Data.Plots)
@@ -44,6 +42,7 @@ function House.new(houseFolder, allHouses)
 	game.Players.PlayerRemoving:Connect(function(Player: Player)
 		if houseObject.owner == Player then
 			houseObject.owner = nil
+			House.ClearPlotOnPlayerLeaving(houseObject)
 		end
 	end)
 
@@ -71,7 +70,6 @@ function House.plantTrees(house, playerDataPlots)
 
 		local spawnPosition = plot["Mud"].Position
 		local tree = playerDataPlots[name].Tree
-		
 		local treeModel: Model = TreeModels:FindFirstChild(tree.Rarity):FindFirstChild(tree.Name):FindFirstChild(tree.Name.. "_" .. tree.CurrentLevel):Clone()
 		treeModel.Parent = house.Plots[name]
 		treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
@@ -84,11 +82,27 @@ function House.GeneratePlots(house, playerDataPlots)
 		
 		for _, part: Part in pairs (plot:GetChildren()) do 
 			if part:IsA("Part") then 
+				if part.Name == "AnimationPosition" then continue end 
 				part.Transparency = 0 
 				part.CanCollide = true 
 			end 
 		end 
 	end 
 end 
+
+function House.ClearPlotOnPlayerLeaving(house)
+	for _, plot in house.Plots do 
+		for _, part in plot:GetChildren() do 
+			if part:IsA("Part") then 
+				if part.Name == "AnimationPosition" then continue end 
+				part.Transparency = 1
+				part.CanCollide = false 
+			end 
+			if string.find(part.Name, "Tree") then 
+				part:Destroy()
+			end
+		end
+	end 
+end
 
 return House

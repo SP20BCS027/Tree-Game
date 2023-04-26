@@ -8,30 +8,32 @@ local Remotes = ReplicatedStorage.Remotes
 
 local GUI = PlayerGUI:WaitForChild("Stats")
 local Outline = GUI.Frame
-local Moneyamount = Outline.WaterFrame.Amount
-
+local Wateramount = Outline.WaterFrame.Amount
 
 local function UpdateWater()
-	Moneyamount.Text = StateManager.GetData().Water .. "/" .. StateManager.GetData().EquippedWaterCan.Capacity
+	Wateramount.Text = StateManager.GetData().Water .. "/" .. StateManager.GetData().EquippedWaterCan.Capacity
 end
 
 UpdateWater()
 
-Remotes.UpdateWater.OnClientEvent:Connect(function()
+local function callingtheUpdate()
 	task.delay(0, function()
 		UpdateWater()
 	end)
+end
+
+Remotes.UpdateWater.OnClientEvent:Connect(function()
+	callingtheUpdate()
 end)
 
-Remotes.ChangeEquippedWaterCan.OnClientEvent:Connect(function()
-	task.delay(0, function()
-		UpdateWater()
-	end) 
+Remotes.ChangeEquippedWateringCan.OnClientEvent:Connect(function()
+	callingtheUpdate()
 end)
 
 Remotes.RefillWater.OnClientEvent:Connect(function()
-	task.delay(0, function()
-		UpdateWater()
-	end)
+	callingtheUpdate()
 end)
 
+Remotes.Bindables.OnReset.ResetWater.Event:Connect(function()
+	callingtheUpdate()
+end)
