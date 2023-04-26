@@ -1,7 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+
 local Remotes = ReplicatedStorage.Remotes
 local player = game.Players.LocalPlayer
+local character = player.CharacterAdded:Wait()
+
+local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 
 local StateManager = require(ReplicatedStorage.Client.State)
 local UI = player.PlayerGui:WaitForChild("SeedSelection")
@@ -17,6 +22,9 @@ local Seeds = StateManager.GetData().Seeds
 local seedthing 
 local plotId
 local MudPos
+
+local crouchAnimID = "rbxassetid://13248889864"
+
 
 local function loadStats(seed)
 	InformationFrame.SeedDescription.Text = seed.Description 
@@ -69,10 +77,12 @@ end
 InformationFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	plantSeed() 	
+	AnimationHandler.playAnimation(player, character, crouchAnimID)
 end)
 
 closeButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
+	PlayerMovement:Movement(player, true)
 end)
 
 Remotes.Bindables.SelectSeed.Event:Connect(updateSeedIcons)

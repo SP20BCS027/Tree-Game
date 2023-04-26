@@ -60,8 +60,8 @@ local function createIcon(plot)
     local waterTime = plot.Tree.TimeUntilWater
     plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(moneyTime - os.time()))
     plotIcon.WaterBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(waterTime - os.time()))
-    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
 
+    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
     plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle) 
     
 
@@ -119,7 +119,6 @@ Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt, plotID)
             updateCycleLabel(plotID)
         end)
     end
-    
 end)
 
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
