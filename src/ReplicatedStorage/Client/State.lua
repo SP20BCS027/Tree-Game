@@ -92,12 +92,12 @@ end)
 
 Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(ownedCans)
 	PlayerData.OwnedWaterCans = ownedCans
-	Remotes.Bindables.GenerateWaterCanInventory:Fire()
+	Remotes.Bindables.OnReset.GenerateWaterCanInventory:Fire()
 end)
 
 Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(ownedBackpacks)
 	PlayerData.OwnedBackpacks = ownedBackpacks
-	Remotes.Bindables.GenerateBackpackInventory:Fire()
+	Remotes.Bindables.OnReset.GenerateBackpackInventory:Fire()
 end)
 
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(plots)

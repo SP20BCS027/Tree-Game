@@ -18,27 +18,31 @@ local function changeCharacterPosition(position)
 	character:WaitForChild("HumanoidRootPart").CFrame = position + VERTICAL_OFFSET
 end
 
-local function plantSeed(plotId, mudPosition, animationPosition)
+local function plantSeed(plotId, mudPosition, animationPositionPart)
 	if not StateManager.GetData().Plots[plotId].Occupied then 
-		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition)
-		changeCharacterPosition(animationPosition)
+		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
+		changeCharacterPosition(animationPositionPart.CFrame)
 		PlayerMovement:Movement(player, false)
+		
+		print("Seed Planted")
 	else
 		print("This plot is occupied!")
 	end
 end
 
-local function waterTree(plotId, animationPosition)
+local function waterTree(plotId, animationPositionPart)
 	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
 		if StateManager.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and StateManager.GetData().Water > 0 then
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
 			Remotes.UpdateTreeLevel:FireServer(plotId)
 			Remotes.UpdateWater:FireServer()
 
-			changeCharacterPosition(animationPosition)
+			changeCharacterPosition(animationPositionPart.CFrame)
 			PlayerMovement:Movement(player, false)
 			AnimationHandler.playAnimation(player, character, crouchAnimID)
 
+			local wateringSound = animationPositionPart.WateringSound
+			wateringSound:Play()
 			print("Tree has been watered!")
 		else
 			print("The Tree is already watered or You have no water!")
@@ -48,13 +52,15 @@ local function waterTree(plotId, animationPosition)
 	end
 end
 
-local function collectMoney(plotId, animationPosition)
+local function collectMoney(plotId, animationPositionPart)
 	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
 		if StateManager.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
 			Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
-			changeCharacterPosition(animationPosition)
+			changeCharacterPosition(animationPositionPart.CFrame)
 			PlayerMovement:Movement(player, false)
 			AnimationHandler.playAnimation(player, character, crouchAnimID)
+			local collectingSound = animationPositionPart.WateringSound
+			collectingSound:Play()
 			print("Money has been collected")
 		else
 			print("No money to be collected!")
@@ -64,12 +70,13 @@ local function collectMoney(plotId, animationPosition)
 	end
 end
 
-local function fertilizePlot(plotId, animationPosition)
+local function fertilizePlot(plotId, animationPositionPart)
 	if not StateManager.GetData().Plots[plotId].Occupied then return end
 	if not StateManager.GetData().Plots[plotId].Tree then return end 
-	Remotes.Bindables.SelectFertilizer:Fire(plotId)
+	Remotes.Bindables.SelectFertilizer:Fire(plotId, animationPositionPart)
 	PlayerMovement:Movement(player, false)
-	changeCharacterPosition(animationPosition)
+	changeCharacterPosition(animationPositionPart.CFrame)
+	print("Fertilized")
 end 
 
 local function generateUIs()
@@ -86,16 +93,16 @@ local function generateUIs()
 		Buttons.Adornee = mud
 		
 		Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
-			plantSeed(name, mud.Position, animationPosition.CFrame)
+			plantSeed(name, mud.Position, animationPosition)
 		end)
 		Buttons.Holder.WaterButton.MouseButton1Down:Connect(function()
-			waterTree(name, animationPosition.CFrame)
+			waterTree(name, animationPosition)
 		end)
 		Buttons.Holder.CollectButton.MouseButton1Down:Connect(function()
-			collectMoney(name, animationPosition.CFrame)
+			collectMoney(name, animationPosition)
 		end)
 		Buttons.Holder.FertilizerButton.MouseButton1Down:Connect(function()
-			fertilizePlot(name, animationPosition.CFrame) 
+			fertilizePlot(name, animationPosition) 
 		end)
 	end
 end

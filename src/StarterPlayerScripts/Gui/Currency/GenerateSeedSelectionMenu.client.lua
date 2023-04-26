@@ -22,6 +22,7 @@ local Seeds = StateManager.GetData().Seeds
 local seedthing 
 local plotId
 local MudPos
+local AnimPart
 
 local crouchAnimID = "rbxassetid://13248889864"
 
@@ -44,9 +45,10 @@ local function createSeedIcon(seed)
 	end)	
 end
 
-local function updateSeedIcons(plotIdrcv, mudPosition)
+local function updateSeedIcons(plotIdrcv, mudPosition, animationPositionPart)
 	plotId = plotIdrcv
 	MudPos = mudPosition
+	AnimPart = animationPositionPart
 	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
 
 		if Icon.Name == "UIGridLayout" then continue end
@@ -78,6 +80,8 @@ InformationFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	plantSeed() 	
 	AnimationHandler.playAnimation(player, character, crouchAnimID)
+	local plantingSound = AnimPart.WateringSound
+	plantingSound:Play()
 end)
 
 closeButton.MouseButton1Down:Connect(function()

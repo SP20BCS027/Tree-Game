@@ -8,7 +8,8 @@ local player = game.Players.LocalPlayer
 local InventoryGUI = player.PlayerGui:WaitForChild("Inventory")
 local CloseButton = InventoryGUI.CloseFrame.CloseButton
 local scrollingFrame = InventoryGUI.MainFrame.InternalFrame.ScrollingFrame
-local template = scrollingFrame.Template
+local InternalFrame = InventoryGUI.MainFrame.InternalFrame
+local template = InternalFrame.Template
 
 local InventoryButton = player.PlayerGui:WaitForChild("Stats").Frame.InventoryButtonFrame.InventoryButton
 
@@ -27,6 +28,7 @@ end
 
 local function updateUI()
 	for _, Icon in scrollingFrame:GetChildren() do
+		if Icon.Name == "UIGridLayout" then continue end 
 		Icon.Amount.Text = Seeds[Icon.Name].Amount
 	end
 end

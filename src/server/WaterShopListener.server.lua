@@ -12,7 +12,7 @@ local function generateUI(player: Player)
     if debounce[player] then return end 
 
 	Remotes.OpenWaterCanShop:FireClient(player)
-
+        
     debounce[player] = true
     task.delay(DELAY, function()
         debounce[player] = nil 

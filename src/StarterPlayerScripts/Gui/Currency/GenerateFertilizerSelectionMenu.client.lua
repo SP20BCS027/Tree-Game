@@ -21,6 +21,7 @@ local Fertilizers = StateManager.GetData().Fertilizers
 
 local Fertilizer
 local plotId
+local AnimPart
 
 local crouchAnimID = "rbxassetid://13248889864"
 
@@ -41,8 +42,9 @@ local function createFertilizerIcon(fertilizer)
 	end)	
 end
 
-local function updateFertilizerIcons(plotIdrcv)
+local function updateFertilizerIcons(plotIdrcv, animationPositionPart)
 	plotId = plotIdrcv
+	AnimPart = animationPositionPart
 	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
 		if Icon.Name == "UIGridLayout" then continue end  
 		Icon.Amount.Text = Fertilizers[Icon.Name].Amount		
@@ -72,6 +74,8 @@ InformationFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	fertilizePlot() 	
 	AnimationHandler.playAnimation(player, character, crouchAnimID)
+	local fertilizingSound = AnimPart.WateringSound
+	fertilizingSound:Play()
 end)
 
 closeButton.MouseButton1Down:Connect(function()

@@ -192,9 +192,6 @@ end
 Remotes.GetData.OnServerInvoke = GetData	
 Remotes.GetAllData.OnServerInvoke = GetAllData
 
--- Client to Server Communication 
-
-
 -- Here are some functions for the Commands 
 
 function Manager.ToggleFirstPlot(player: Player, Toggle: boolean)
