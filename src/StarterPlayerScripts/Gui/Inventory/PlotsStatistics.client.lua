@@ -2,16 +2,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
-local StateManager = require(ReplicatedStorage.Client.State)
+
+local State = require(ReplicatedStorage.Client.State)
 local FormatTime = require(ReplicatedStorage.Libs.FormatTime)
 
-local PlotsGui = player.PlayerGui:WaitForChild("PlotStatistics")
+local PlotsGUI = player.PlayerGui:WaitForChild("PlotStatistics")
 local InventoryButtons = player.PlayerGui:WaitForChild("InventoryButtons")
 
 local TreeButton = InventoryButtons.ButtonsHolder.TreeButton.TreeInventoryButton
 
-local CloseButton = PlotsGui.CloseFrame.CloseButton
-local MainFrame = PlotsGui.MainFrame
+local CloseButton = PlotsGUI.CloseFrame.CloseButton
+local MainFrame = PlotsGUI.MainFrame
 local InternalFrame = MainFrame.InternalFrame
 local ScrollingFrame = InternalFrame.ScrollingFrame
 local Template = InternalFrame.Template
@@ -21,10 +22,10 @@ local LEVEL = "Level: AMOUNT"
 local CYCLE = "Cycle: AMOUNT"
 
 
-local plotIcons = {}
+local PlotIcons = {}
 
-local function updateMoneyTimer(plotIcon)
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateMoneyTimer(plotIcon)
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
     if currentPlot.Occupied then 
         local endTime = currentPlot.Tree.TimeUntilMoney
         if (endTime - os.time()) > 0 then 
@@ -35,8 +36,8 @@ local function updateMoneyTimer(plotIcon)
     end
 end
 
-local function updateWaterTimer(plotIcon)
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateWaterTimer(plotIcon)
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
     if currentPlot.Occupied then 
         local endTime = currentPlot.Tree.TimeUntilWater
         if (endTime - os.time()) > 0 then 
@@ -47,14 +48,13 @@ local function updateWaterTimer(plotIcon)
     end
 end
 
-local function createIcon(plot)
-    print(plot)
+local function CreateIcon(plot)
     local plotIcon = Template:Clone()
     plotIcon.Parent = ScrollingFrame
     plotIcon.Visible = true 
     plotIcon.Name = plot.Id
 
-    plotIcons[plot.Id] =  plotIcon
+    PlotIcons[plot.Id] =  plotIcon
 
     local moneyTime = plot.Tree.TimeUntilMoney
     local waterTime = plot.Tree.TimeUntilWater
@@ -67,56 +67,56 @@ local function createIcon(plot)
 
 end
 
-local function generatePlotsUI()
-    for _, plot in (StateManager.GetData().Plots) do 
+local function GeneratePlotsUI()
+    for _, plot in (State.GetData().Plots) do 
         if plot.Occupied then 
-            createIcon(plot)
+            CreateIcon(plot)
         end
     end
 end
 
-local function clearPlotIcons()
+local function ClearPlotIcons()
     for _, icon in pairs (ScrollingFrame:GetChildren()) do 
         if icon.Name == "UIGridLayout" then continue end 
         icon:Destroy()
     end
-    table.clear(plotIcons)
+    table.clear(PlotIcons)
 end
 
-generatePlotsUI()
+GeneratePlotsUI()
 
-local function updateLevelLabel(plotIconId)
-    local plotIcon = plotIcons[plotIconId]
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateLevelLabel(plotIconID)
+    local plotIcon = PlotIcons[plotIconID]
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
 
     plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
 
 end
 
-local function updateCycleLabel(plotIconId)
-    local plotIcon = plotIcons[plotIconId]
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateCycleLabel(plotIconId)
+    local plotIcon = PlotIcons[plotIconId]
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
 
-    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle.." / "..currentPlot.Tree.MaxCycle) 
+    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle .. " / " .. currentPlot.Tree.MaxCycle) 
 end
 
 TreeButton.MouseButton1Down:Connect(function()
-    PlotsGui.Enabled = not PlotsGui.Enabled
+    PlotsGUI.Enabled = not PlotsGUI.Enabled
 end)
 
 CloseButton.MouseButton1Down:Connect(function()
-    PlotsGui.Enabled = false
+    PlotsGUI.Enabled = false
 end)
 
-Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt, plotID)
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: string)
     if prompt == "LEVEL" then 
         task.delay(0, function()
-            updateLevelLabel(plotID)
+            UpdateLevelLabel(plotID)
         end)
     end
     if prompt == "CYCLE" then 
         task.delay(0, function()
-            updateCycleLabel(plotID)
+            UpdateCycleLabel(plotID)
         end)
     end
 end)
@@ -126,20 +126,20 @@ Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
     --task.delay(0, generatePlotsUI)
 end)
 Remotes.UpdateOccupied.OnClientEvent:Connect(function()
-    clearPlotIcons()
-    task.delay(0, generatePlotsUI)
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
 end)
 
 Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
-    clearPlotIcons()
-    task.delay(0, generatePlotsUI)
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
 end)
 
 task.spawn(function()
 	while task.wait(1) do 
-		for _, plotIcon in (plotIcons) do 
-			updateMoneyTimer(plotIcon)
-			updateWaterTimer(plotIcon)
+		for _, plotIcon in (PlotIcons) do 
+			UpdateMoneyTimer(plotIcon)
+			UpdateWaterTimer(plotIcon)
 		end
 	end
 end)

@@ -5,21 +5,21 @@ local Players = game:GetService("Players")
 local Remotes = ReplicatedStorage.Remotes
 
 local triggerpart = WorkSpace.PlotsShop
-local debounce = {}
+local Debounce = {}
 local DELAY = 5
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 
-local function generateUI(player: Player)
-    if debounce[player] then return end 
+local function GenerateUI(player: Player)
+    if Debounce[player] then return end 
 
 	Remotes.OpenPlotsShop:FireClient(player)
 
     local character = player.Character 
     character.HumanoidRootPart.CFrame = triggerpart.PositionPart.CFrame + VERTICAL_OFFSET
 
-    debounce[player] = true
+    Debounce[player] = true
     task.delay(DELAY, function()
-        debounce[player] = nil 
+        Debounce[player] = nil 
     end)
 end
 
@@ -28,7 +28,7 @@ local function ListenToWaterShopTouch()
         local player = Players:GetPlayerFromCharacter(hit.Parent)
 
         if player then 
-            generateUI(player)
+            GenerateUI(player)
         end
     end)
 end

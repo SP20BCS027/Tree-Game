@@ -5,14 +5,14 @@ local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
 
-local function purchaseCan(player: Player, WaterCan: string)
-	Manager.PurchaseWaterCan(player, WaterCan)
-	Manager.EquipWaterCan(player, WaterCan)
+local function PurchaseCan(player: Player, waterCan: string)
+	Manager.PurchaseWaterCan(player, waterCan)
+	Manager.EquipWaterCan(player, waterCan)
 end
 
-local function changeEquippedWaterCan(player: Player, WaterCan: string)
-	Manager.EquipWaterCan(player, WaterCan)
+local function ChangeEquippedWaterCan(player: Player, waterCan: string)
+	Manager.EquipWaterCan(player, waterCan)
 end
 
-Remotes.UpdateOwnedWaterCans.OnServerEvent:Connect(purchaseCan)
-Remotes.ChangeEquippedWateringCan.OnServerEvent:Connect(changeEquippedWaterCan)
+Remotes.UpdateOwnedWaterCans.OnServerEvent:Connect(PurchaseCan)
+Remotes.ChangeEquippedWateringCan.OnServerEvent:Connect(ChangeEquippedWaterCan)

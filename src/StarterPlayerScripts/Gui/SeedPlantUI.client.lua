@@ -7,21 +7,21 @@ local character = player.CharacterAdded:Wait()
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 
-local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("PlotStats")
-local Template = UI.Template
+local State = require(ReplicatedStorage.Client.State)
+local PlotStatsUI = player.PlayerGui:WaitForChild("PlotStats")
+local Template = PlotStatsUI.Template
 
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 local crouchAnimID = "rbxassetid://13248889864"
 
-local function changeCharacterPosition(position)
+local function ChangeCharacterPosition(position)
 	character:WaitForChild("HumanoidRootPart").CFrame = position + VERTICAL_OFFSET
 end
 
-local function plantSeed(plotId, mudPosition, animationPositionPart)
-	if not StateManager.GetData().Plots[plotId].Occupied then 
+local function PlantSeed(plotId, mudPosition, animationPositionPart)
+	if not State.GetData().Plots[plotId].Occupied then 
 		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
-		changeCharacterPosition(animationPositionPart.CFrame)
+		ChangeCharacterPosition(animationPositionPart.CFrame)
 		PlayerMovement:Movement(player, false)
 		
 		print("Seed Planted")
@@ -30,16 +30,16 @@ local function plantSeed(plotId, mudPosition, animationPositionPart)
 	end
 end
 
-local function waterTree(plotId, animationPositionPart)
-	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
-		if StateManager.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and StateManager.GetData().Water > 0 then
+local function WaterTree(plotId, animationPositionPart)
+	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
+		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
 			Remotes.UpdateTreeLevel:FireServer(plotId)
 			Remotes.UpdateWater:FireServer()
 
-			changeCharacterPosition(animationPositionPart.CFrame)
+			ChangeCharacterPosition(animationPositionPart.CFrame)
 			PlayerMovement:Movement(player, false)
-			AnimationHandler.playAnimation(player, character, crouchAnimID)
+			AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 
 			local wateringSound = animationPositionPart.WateringSound
 			wateringSound:Play()
@@ -52,13 +52,13 @@ local function waterTree(plotId, animationPositionPart)
 	end
 end
 
-local function collectMoney(plotId, animationPositionPart)
-	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
-		if StateManager.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
+local function CollectMoney(plotId, animationPositionPart)
+	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
+		if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
 			Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
-			changeCharacterPosition(animationPositionPart.CFrame)
+			ChangeCharacterPosition(animationPositionPart.CFrame)
 			PlayerMovement:Movement(player, false)
-			AnimationHandler.playAnimation(player, character, crouchAnimID)
+			AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 			local collectingSound = animationPositionPart.WateringSound
 			collectingSound:Play()
 			print("Money has been collected")
@@ -70,20 +70,20 @@ local function collectMoney(plotId, animationPositionPart)
 	end
 end
 
-local function fertilizePlot(plotId, animationPositionPart)
-	if not StateManager.GetData().Plots[plotId].Occupied then return end
-	if not StateManager.GetData().Plots[plotId].Tree then return end 
+local function FertilizePlot(plotId, animationPositionPart)
+	if not State.GetData().Plots[plotId].Occupied then return end
+	if not State.GetData().Plots[plotId].Tree then return end 
 	Remotes.Bindables.SelectFertilizer:Fire(plotId, animationPositionPart)
 	PlayerMovement:Movement(player, false)
-	changeCharacterPosition(animationPositionPart.CFrame)
+	ChangeCharacterPosition(animationPositionPart.CFrame)
 	print("Fertilized")
 end 
 
-local function generateUIs()
-	for name, _ in (StateManager.GetData().Plots) do
+local function GenerateUIs()
+	for name, _ in (State.GetData().Plots) do
 		local Plot = Remotes.AskUIInformation:InvokeServer(name)
 		local Buttons = Template:Clone()
-		Buttons.Parent = UI.PlotInteractive
+		Buttons.Parent = PlotStatsUI.PlotInteractive
 		Buttons.Name = name
 		Buttons.Enabled = true 
 		
@@ -93,28 +93,28 @@ local function generateUIs()
 		Buttons.Adornee = mud
 		
 		Buttons.Holder.SeedButton.MouseButton1Down:Connect(function()
-			plantSeed(name, mud.Position, animationPosition)
+			PlantSeed(name, mud.Position, animationPosition)
 		end)
 		Buttons.Holder.WaterButton.MouseButton1Down:Connect(function()
-			waterTree(name, animationPosition)
+			WaterTree(name, animationPosition)
 		end)
 		Buttons.Holder.CollectButton.MouseButton1Down:Connect(function()
-			collectMoney(name, animationPosition)
+			CollectMoney(name, animationPosition)
 		end)
 		Buttons.Holder.FertilizerButton.MouseButton1Down:Connect(function()
-			fertilizePlot(name, animationPosition) 
+			FertilizePlot(name, animationPosition) 
 		end)
 	end
 end
 
-local function clearUIs()
-	UI.PlotInteractive:ClearAllChildren()
+local function ClearUIs()
+	PlotStatsUI.PlotInteractive:ClearAllChildren()
 end
 
-Remotes.EstablishPlotsUI.OnClientEvent:Connect(generateUIs)
+Remotes.EstablishPlotsUI.OnClientEvent:Connect(GenerateUIs)
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
-	clearUIs()
+	ClearUIs()
 	task.delay(0, function()
-		generateUIs()
+		GenerateUIs()
 	end)
 end)

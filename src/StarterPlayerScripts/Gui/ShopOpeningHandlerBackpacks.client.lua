@@ -4,30 +4,30 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
-
 local Backpacks = require(ReplicatedStorage.Configs.BackpacksConfig)
-local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("BackpackShop")
-local CloseButton = UI.CloseFrame.CloseButton
-local ScrollingFrame = UI.MainFrame.InternalFrame.ScrollingFrame
-local InformationFrame = UI.MainFrame.InternalFrame.InformationFrame
+local State = require(ReplicatedStorage.Client.State)
+
+local BackpackShopUI = player.PlayerGui:WaitForChild("BackpackShop")
+local CloseButton = BackpackShopUI.CloseFrame.CloseButton
+local ScrollingFrame = BackpackShopUI.MainFrame.InternalFrame.ScrollingFrame
+local InformationFrame = BackpackShopUI.MainFrame.InternalFrame.InformationFrame
 local Template = ScrollingFrame.Template
 local PurchaseButton = InformationFrame.Frame.Template
 
-local selectedItem
+local SelectedItem
 
 local function ShopOpener()
-	UI.Enabled = not UI.Enabled
+	BackpackShopUI.Enabled = not BackpackShopUI.Enabled
 	PlayerMovement:Movement(player, false)
 end
 
-local function buySelectedItem(item)
-	if StateManager.GetData().OwnedBackpacks[item.Name] then 
+local function BuySelectedItem(item)
+	if State.GetData().OwnedBackpacks[item.Name] then 
 		print("Item Already Owned")
 		return
 	end 
 	
-	if StateManager.GetData().Coins >= item.Price then
+	if State.GetData().Coins >= item.Price then
 		Remotes.UpdateOwnedBackpacks:FireServer(item.Name)
 		Remotes.UpdateCoins:FireServer(-(item.Price))
 		print("Bought")
@@ -36,14 +36,14 @@ local function buySelectedItem(item)
 	end
 end
 
-local function loadStats(item) 
+local function LoadStats(item) 
 	InformationFrame.Frame.Capacity.Text = item.Capacity
 	InformationFrame.Frame.Price.Text = item.Price
 	
-	selectedItem = item 
+	SelectedItem = item 
 end
 
-local function createWaterCanIcon(item)
+local function CreateWaterCanIcon(item)
 	local shopItem = Template:Clone()
 	shopItem.Parent = ScrollingFrame
 	shopItem.Name = item.Name
@@ -52,27 +52,27 @@ local function createWaterCanIcon(item)
 	shopItem.Visible = true
 	
 	shopItem.TextButton.MouseButton1Down:Connect(function()
-		loadStats(item)
+		LoadStats(item)
 	end)
 end
 
 local function GenerateShopItems()
 	for _, item in Backpacks do 
-		createWaterCanIcon(item)
+		CreateWaterCanIcon(item)
 	end
 end
 
 GenerateShopItems()
 
 CloseButton.MouseButton1Down:Connect(function()
-	UI.Enabled = false
+	BackpackShopUI.Enabled = false
 	PlayerMovement:Movement(player, true)
 
 end)
 
 PurchaseButton.MouseButton1Down:Connect(function()
-	if selectedItem then 
-		buySelectedItem(selectedItem)
+	if SelectedItem then 
+		BuySelectedItem(SelectedItem)
 	end
 end)
 

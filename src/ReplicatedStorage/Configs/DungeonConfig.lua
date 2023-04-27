@@ -7,7 +7,7 @@ export type DungeonConfigTemp = {
 	IsUnlocked: boolean,   
 }
 
-local DungeonConfig: {[string]: DungeonConfigTemp }= {
+local DungeonConfig: {[string]: DungeonConfigTemp} = {
 	TutorialDungeon = {
 		UIID = "Tutorial", 
 		Name = "Tutorial Dungeon", 

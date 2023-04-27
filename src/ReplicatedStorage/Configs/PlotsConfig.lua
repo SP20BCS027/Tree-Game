@@ -1,8 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Trees = require(ReplicatedStorage.Configs.TreeConfig)
+local Trees = require(ReplicatedStorage.Configs.TreeCofig)
 
-type PlotsConfig = {
+type PlotsConfigTemp = {
 	Name: string, 
 	Id: string, 
 	Occupied: boolean, 
@@ -11,7 +11,7 @@ type PlotsConfig = {
 	Price: number, 
 }
 
-local Plots:{ [number] : PlotsConfig } = {
+local Plots: {[number] : PlotsConfigTemp} = {
 	Plot_1 = {
 		Name = "FirstPlot",
 		Id = "Plot_1",
@@ -26,7 +26,6 @@ local Plots:{ [number] : PlotsConfig } = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
-
 	}, 
 	Plot_3 = {
 		Name = "ThirdPlot",
@@ -34,7 +33,6 @@ local Plots:{ [number] : PlotsConfig } = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
-
 	}, 
 	Plot_4 = {
 		Name = "FourthPlot",
@@ -42,7 +40,6 @@ local Plots:{ [number] : PlotsConfig } = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
-
 	}, 
 	Plot_5 = {
 		Name = "FifthPlot",
@@ -50,9 +47,7 @@ local Plots:{ [number] : PlotsConfig } = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
-
 	}, 
-	
 }
 
 return Plots

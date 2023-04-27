@@ -3,9 +3,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Remotes = ReplicatedStorage.Remotes
 local player = game.Players.LocalPlayer
 
-local UI = player.PlayerGui:WaitForChild("Shops")
-local WaterShop = UI.WaterShopButton
-local BackpackShop = UI.BackpackShopButton
+local AllShops = player.PlayerGui:WaitForChild("Shops")
+local WaterShop = AllShops.WaterShopButton
+local BackpackShop = AllShops.BackpackShopButton
 
 WaterShop.MouseButton1Down:Connect(function()
 	Remotes.Bindables.WaterShopOpener:Fire()

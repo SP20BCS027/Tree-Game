@@ -13,23 +13,30 @@ local RefillIcon = UI.IconHolder
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 local crouchAnimID = "rbxassetid://13248889864"
 
-local function RefillWater(position)
+local function RefillWater(animationPosition)
 	Remotes.RefillWater:FireServer()
-	character:WaitForChild("HumanoidRootPart").CFrame = position.CFrame + VERTICAL_OFFSET
+
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+	humanoidRootPart.CFrame = animationPosition.CFrame + VERTICAL_OFFSET
 	PlayerMovement:Movement(player, false)
-	AnimationHandler.playAnimation(player, character, crouchAnimID)
-	local wateringSound = position.WateringSound
-			wateringSound:Play()
+	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
+	
+	animationPosition.WateringSound:Play()
+end
+
+local function GetHouseWell()
+	return Remotes.GetHouseWell:InvokeServer()
 end
 
 local function AdorneeUI()
-	local well = Remotes.GetHouseWell:InvokeServer()
+	local housewell = GetHouseWell()
 
 	RefillIcon.Enabled = true
-	RefillIcon.Adornee = well.Well
+	RefillIcon.Adornee = housewell.Well
 
 	RefillIcon.Holder.WaterButton.MouseButton1Down:Connect(function()
-		RefillWater(well.AnimationPosition)
+		RefillWater(housewell.AnimationPosition)
 	end)
 end
 

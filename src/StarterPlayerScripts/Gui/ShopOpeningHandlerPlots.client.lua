@@ -4,22 +4,20 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
-
 local Plots = require(ReplicatedStorage.Configs.PlotsConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("PlotsShop")
-local CloseButton = UI.CloseFrame.CloseButton
-local ScrollingFrame = UI.MainFrame.InternalFrame.ScrollingFrame
-local InformationFrame = UI.MainFrame.InternalFrame.InformationFrame
-local InternalFrame = UI.MainFrame.InternalFrame
+
+local PlotsShopUI = player.PlayerGui:WaitForChild("PlotsShop")
+local CloseButton = PlotsShopUI.CloseFrame.CloseButton
+local ScrollingFrame = PlotsShopUI.MainFrame.InternalFrame.ScrollingFrame
+local InformationFrame = PlotsShopUI.MainFrame.InternalFrame.InformationFrame
+local InternalFrame = PlotsShopUI.MainFrame.InternalFrame
 local Template = InternalFrame.Template
 local PurchaseButton = InformationFrame.Frame.Template
 
-local selectedItem 
+local SelectedItem 
 
-
-
-local function buySelectedItem(item)
+local function BuySelectedItem(item)
 	
 	if StateManager.GetData().Coins >= item.Price then
 		Remotes.UpdateOwnedPlots:FireServer(item)
@@ -30,13 +28,13 @@ local function buySelectedItem(item)
 	end
 end
 
-local function loadStats(item) 
+local function LoadStats(item) 
 	InformationFrame.Frame.Price.Text = item.Price
 	
-	selectedItem = item 
+	SelectedItem = item 
 end
 
-local function createPlotIcon(item)
+local function CreatePlotIcon(item)
 	local shopItem = Template:Clone()
 	shopItem.Parent = ScrollingFrame
 	shopItem.Name = item.Name
@@ -48,13 +46,13 @@ local function createPlotIcon(item)
 	end
 
 	shopItem.TextButton.MouseButton1Down:Connect(function()
-		loadStats(item)
+		LoadStats(item)
 	end)
 end
 
 local function GenerateShopItems()
 	for _, item in Plots do 
-		createPlotIcon(item)
+		CreatePlotIcon(item)
 	end
 end
 
@@ -66,7 +64,7 @@ local function ClearShop()
 end
 
 local function ShopOpener()
-	UI.Enabled = not UI.Enabled
+	PlotsShopUI.Enabled = not PlotsShopUI.Enabled
 	PlayerMovement:Movement(player, false)
 	ClearShop()
 	GenerateShopItems()
@@ -80,13 +78,13 @@ local function RegenerateShop()
 end
 
 CloseButton.MouseButton1Down:Connect(function()
-	UI.Enabled = false
+	PlotsShopUI.Enabled = false
 	PlayerMovement:Movement(player, true)
 end)
 
 PurchaseButton.MouseButton1Down:Connect(function()
-	if selectedItem then 
-		buySelectedItem(selectedItem)
+	if SelectedItem then 
+		BuySelectedItem(SelectedItem)
 	end 
 end)
 

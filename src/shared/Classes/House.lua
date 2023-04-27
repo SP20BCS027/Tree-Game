@@ -22,25 +22,26 @@ function House.new(houseFolder, allHouses)
 	houseObject.signLabel = houseFolder.Claim_Part.BillboardGui.TextLabel
 	houseObject.allHouses = allHouses
 	houseObject.Plots = {}
+
 	for _, plot in pairs (houseFolder.Plots:GetChildren()) do 
 		houseObject.Plots[plot.Name] = plot
 	end 
 
 	houseObject.claimPart.Touched:Connect(function(touch)
-		local Player = Players:GetPlayerFromCharacter(touch.Parent)
-		local profile = Manager.Profiles[Player]
+		local player = Players:GetPlayerFromCharacter(touch.Parent)
+		local profile = Manager.Profiles[player]
 		if not profile then return end
-		if Player and houseObject.owner == nil and houseObject:checkOwner(Player) == false then
-			houseObject.owner = Player
-			Remotes.EstablishWaterRefillUI:FireClient(Player, houseObject.well)
-			Remotes.EstablishPlotsUI:FireClient(Player)
-			House.plantTrees(houseObject, profile.Data.Plots)
+		if player and houseObject.owner == nil and houseObject:CheckOwner(player) == false then
+			houseObject.owner = player
+			Remotes.EstablishWaterRefillUI:FireClient(player, houseObject.well)
+			Remotes.EstablishPlotsUI:FireClient(player)
+			House.PlantTrees(houseObject, profile.Data.Plots)
 			House.GeneratePlots(houseObject, profile.Data.Plots)
 		end
 	end)
 
-	game.Players.PlayerRemoving:Connect(function(Player: Player)
-		if houseObject.owner == Player then
+	game.Players.PlayerRemoving:Connect(function(player: Player)
+		if houseObject.owner == player then
 			houseObject.owner = nil
 			House.ClearPlotOnPlayerLeaving(houseObject)
 		end
@@ -49,23 +50,23 @@ function House.new(houseFolder, allHouses)
 	return houseObject
 end
 
-function House:update()
+function House:Update()
 	self.signLabel.Text = self.owner and self.owner.Name or "No Owner!"
 end
 
-function House:checkOwner(Player)
+function House:CheckOwner(player: Player)
 	for _, house in pairs(self.allHouses) do
-		if house.owner == Player then
+		if house.owner == player then
 			return true
 		end
 	end
 	return false
 end
 
-function House.plantTrees(house, playerDataPlots)
+function House.PlantTrees(house, playerDataPlots)
 
 	for name, plot in pairs(house.Plots)do 
-		if not playerDataPlots[name] then  continue end
+		if not playerDataPlots[name] then continue end
 		if not playerDataPlots[name].Tree then continue end
 
 		local spawnPosition = plot["Mud"].Position

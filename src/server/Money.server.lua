@@ -5,15 +5,15 @@ local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
 
-local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotId: number)
-	local backpackIsFull = Manager.AdjustPlayerMoney(player, plotId)
+local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotID: number)
+	local backpackIsFull = Manager.AdjustPlayerMoney(player, plotID)
 	
 	if not backpackIsFull then 
-		Manager.UpdateTreeMoneyTimer(player, plotId)
+		Manager.UpdateTreeMoneyTimer(player, plotID)
 	end
 end
 
-local function SellAllMoney(player:Player)
+local function SellAllMoney(player: Player)
 	Manager.SellAllMoney(player)
 end
 

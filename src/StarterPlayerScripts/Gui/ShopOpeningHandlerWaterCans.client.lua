@@ -5,24 +5,24 @@ local Remotes = ReplicatedStorage.Remotes
 local Configs = ReplicatedStorage.Configs
 
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
-
-local WaterConfigs = require(Configs.WaterCanConfig)
+local WaterCanConfig = require(Configs.WaterCanConfig)
 local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("WaterShop")
-local CloseButton = UI.CloseFrame.CloseButton
-local ScrollingFrame = UI.MainFrame.InternalFrame.ScrollingFrame
-local InformationFrame = UI.MainFrame.InternalFrame.InformationFrame
+
+local WaterShopUI = player.PlayerGui:WaitForChild("WaterShop")
+local CloseButton = WaterShopUI.CloseFrame.CloseButton
+local ScrollingFrame = WaterShopUI.MainFrame.InternalFrame.ScrollingFrame
+local InformationFrame = WaterShopUI.MainFrame.InternalFrame.InformationFrame
 local Template = ScrollingFrame.Template
 local PurchaseButton = InformationFrame.Frame.Template
 
 local selectedItem 
 
 local function ShopOpener()
-	UI.Enabled = not UI.Enabled
+	WaterShopUI.Enabled = not WaterShopUI.Enabled
 	PlayerMovement:Movement(player, false)
 end
 
-local function buySelectedItem(item)
+local function BuySelectedItem(item)
 	if StateManager.GetData().OwnedWaterCans[item.Name] then 
 		print("You already own this item") 
 		return
@@ -37,14 +37,14 @@ local function buySelectedItem(item)
 	end
 end
 
-local function loadStats(item) 
+local function LoadStats(item) 
 	InformationFrame.Frame.Capacity.Text = item.Capacity
 	InformationFrame.Frame.Price.Text = item.Price
 	
 	selectedItem = item 
 end
 
-local function createWaterCanIcon(item)
+local function CreateWaterCanIcon(item)
 	local shopItem = Template:Clone()
 	shopItem.Parent = ScrollingFrame
 	shopItem.Name = item.Name
@@ -53,13 +53,13 @@ local function createWaterCanIcon(item)
 	shopItem.Visible = true
 	
 	shopItem.TextButton.MouseButton1Down:Connect(function()
-		loadStats(item)
+		LoadStats(item)
 	end)
 end
 
 local function GenerateShopItems()
-	for _, item in WaterConfigs do 
-		createWaterCanIcon(item)
+	for _, item in WaterCanConfig do 
+		CreateWaterCanIcon(item)
 	end
 end
 
@@ -67,12 +67,12 @@ GenerateShopItems()
 
 PurchaseButton.MouseButton1Down:Connect(function()
 	if selectedItem then 
-		buySelectedItem(selectedItem)
+		BuySelectedItem(selectedItem)
 	end
 end)
 
 CloseButton.MouseButton1Down:Connect(function()
-	UI.Enabled = false
+	WaterShopUI.Enabled = false
 	PlayerMovement:Movement(player, true)
 end)
 

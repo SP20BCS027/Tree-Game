@@ -1,10 +1,10 @@
-export type BackpackConfig = {
+export type BackpackConfigTemp = {
 	Name: string,
 	Capacity: number, 
 	Price: number
 }
 
-local Backpacks: {[string]: BackpackConfig }= {
+local Backpacks: {[string]: BackpackConfigTemp} = {
 	SmallPouch = {
 		Name = "SmallPouch", 
 		Capacity = 100, 

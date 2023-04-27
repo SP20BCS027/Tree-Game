@@ -5,8 +5,8 @@ local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
 
-local function changeCoins(player: Player, amount: number)
+local function ChangeCoins(player: Player, amount: number)
 	Manager.AdjustCoins(player, amount)
 end
 
-Remotes.UpdateCoins.OnServerEvent:Connect(changeCoins)
+Remotes.UpdateCoins.OnServerEvent:Connect(ChangeCoins)

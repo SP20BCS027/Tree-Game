@@ -51,23 +51,23 @@ Remotes.ResetData.OnClientEvent:Connect(function()
 	Remotes.Bindables.OnReset.GenerateWaterCanInventory:Fire()
 end)
 
-Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotId: number)
-	PlayerData.Plots[plotId].Occupied = occupy
+Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotID: number)
+	PlayerData.Plots[plotID].Occupied = occupy
 end)
 
-Remotes.UpdateTree.OnClientEvent:Connect(function(TimeTillThirst: number, plotId: number, tree)
-	PlayerData.Plots[plotId].Tree = TreeConfig[tree]
-	PlayerData.Plots[plotId].Tree.TimeUntilWater = TimeTillThirst
-	Remotes.Bindables.UpdateTreeLevel:Fire(plotId)
-	Remotes.Bindables.UpdateTreeCycle:Fire(plotId)
+Remotes.UpdateTree.OnClientEvent:Connect(function(timeTillThirst: number, plotID: number, tree: string)
+	PlayerData.Plots[plotID].Tree = TreeConfig[tree]
+	PlayerData.Plots[plotID].Tree.TimeUntilWater = timeTillThirst
+	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
+	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
 end)
 
-Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(TimeTillThirst: number, plotId: number)
-	PlayerData.Plots[plotId].Tree.TimeUntilWater = TimeTillThirst
+Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(timeTillThirst: number, plotID: number)
+	PlayerData.Plots[plotID].Tree.TimeUntilWater = timeTillThirst
 end)
 
-Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(function(TimeTillMoney: number, plotId: number)
-	PlayerData.Plots[plotId].Tree.TimeUntilMoney = TimeTillMoney
+Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(function(timeTillMoney: number, plotID: number)
+	PlayerData.Plots[plotID].Tree.TimeUntilMoney = timeTillMoney
 end)
 
 Remotes.UpdateWater.OnClientEvent:Connect(function(water: number)
@@ -78,42 +78,42 @@ Remotes.RefillWater.OnClientEvent:Connect(function()
 	PlayerData.Water = PlayerData.EquippedWaterCan.Capacity
 end)
 
-Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(Prompt: string, plotId: number, cycle: number)
-	if Prompt == "LEVEL" then
-		PlayerData.Plots[plotId].Tree.CurrentLevel = PlayerData.Plots[plotId].Tree.CurrentLevel + 1 
-		PlayerData.Plots[plotId].Tree.MaxCycle = PlayerData.Plots[plotId].Tree.MaxCycle + 1
-		PlayerData.Plots[plotId].Tree.CurrentCycle = 0 
-		Remotes.Bindables.UpdateTreeLevel:Fire(plotId)
-		Remotes.Bindables.UpdateTreeCycle:Fire(plotId)
-	elseif Prompt == "CYCLE" then
-		PlayerData.Plots[plotId].Tree.CurrentCycle = PlayerData.Plots[plotId].Tree.CurrentCycle + cycle
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: number, cycle: number)
+	if prompt == "LEVEL" then
+		PlayerData.Plots[plotID].Tree.CurrentLevel = PlayerData.Plots[plotID].Tree.CurrentLevel + 1 
+		PlayerData.Plots[plotID].Tree.MaxCycle = PlayerData.Plots[plotID].Tree.MaxCycle + 1
+		PlayerData.Plots[plotID].Tree.CurrentCycle = 0 
+		Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
+		Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
+	elseif prompt == "CYCLE" then
+		PlayerData.Plots[plotID].Tree.CurrentCycle = PlayerData.Plots[plotID].Tree.CurrentCycle + cycle
 	end
 end)
 
-Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(ownedCans)
-	PlayerData.OwnedWaterCans = ownedCans
+Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(OwnedWaterCans: {})
+	PlayerData.OwnedWaterCans = OwnedWaterCans
 	Remotes.Bindables.OnReset.GenerateWaterCanInventory:Fire()
 end)
 
-Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(ownedBackpacks)
-	PlayerData.OwnedBackpacks = ownedBackpacks
+Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(OwnedBackpacks: {})
+	PlayerData.OwnedBackpacks = OwnedBackpacks
 	Remotes.Bindables.OnReset.GenerateBackpackInventory:Fire()
 end)
 
-Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(plots)
-	PlayerData.Plots = plots
+Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(Plots: {})
+	PlayerData.Plots = Plots
 end)
 
-Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function(equippedBackpack)
-	PlayerData.EquippedBackpack = equippedBackpack
+Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function(EquippedBackpack: {})
+	PlayerData.EquippedBackpack = EquippedBackpack
 end)
 
-Remotes.ChangeEquippedWateringCan.OnClientEvent:Connect(function(equippedCan)
-	PlayerData.EquippedWaterCan = equippedCan
+Remotes.ChangeEquippedWateringCan.OnClientEvent:Connect(function(EquippedWaterCan: {})
+	PlayerData.EquippedWaterCan = EquippedWaterCan
 end)
 
-Remotes.UpdateMoney.OnClientEvent:Connect(function(Money)
-	PlayerData.Money = Money
+Remotes.UpdateMoney.OnClientEvent:Connect(function(money: number)
+	PlayerData.Money = money
 end)
 
 Remotes.SellAllMoney.OnClientEvent:Connect(function()

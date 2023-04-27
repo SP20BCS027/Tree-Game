@@ -17,26 +17,20 @@ local Template = {
 	Fertilizers = FertilizerConfig, 
 	
 	Plots = {
-		Plot_1 = PlotsConfig.Plot_1, 
-		Plot_2 = PlotsConfig.Plot_2, 
+		Plot_1 = PlotsConfig.Plot_1
 	},
 	
 	EquippedWaterCan = WaterCanConfig.MiniWateringCan, 
 	OwnedWaterCans = {
 		MiniWateringCan = WaterCanConfig.MiniWateringCan, 
-		BasicWateringCan = WaterCanConfig.BasicWateringCan, 
-		WideMouthWateringCan = WaterCanConfig.WideMouthWateringCan
 	},
 	
 	EquippedBackpack = BackpackConfig.BasicBackpack,
 	OwnedBackpacks = {
 		BasicBackpack = BackpackConfig.BasicBackpack, 
-		SmallPouch = BackpackConfig.SmallPouch, 
-		DrawStringBag = BackpackConfig.DrawStringBag
 	},
 	
 	UnlockedDungeons = DungeonConfig, 
-
 }
 
 export type PlayerData = typeof(Template)
