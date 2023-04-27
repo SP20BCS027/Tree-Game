@@ -1,10 +1,10 @@
-export type WaterCanConfig = {
+export type WaterCanConfigTemp = {
 	Name: string,
 	Capacity: number, 
 	Price: number
 }
 
-local WaterCans: {[string]: WaterCanConfig} = {
+local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 	MiniWateringCan = {
 		Name = "MiniWateringCan", 
 		Capacity = 1, 
@@ -52,4 +52,4 @@ local WaterCans: {[string]: WaterCanConfig} = {
 	}
 }
 
-return WaterCans
+return WaterCanConfig

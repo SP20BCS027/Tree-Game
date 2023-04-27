@@ -19,20 +19,19 @@ local template = scrollingFrame.Template
 
 local Seeds = StateManager.GetData().Seeds
 
-local seedthing 
-local plotId
+local Seed 
+local PlotID
 local MudPos
 local AnimPart
 
 local crouchAnimID = "rbxassetid://13248889864"
 
-
-local function loadStats(seed)
-	InformationFrame.SeedDescription.Text = seed.Description 
-	seedthing = seed
+local function LoadStats(seedReceived)
+	InformationFrame.SeedDescription.Text = seedReceived.Description 
+	Seed = seedReceived
 end
 
-local function createSeedIcon(seed)
+local function CreateSeedIcon(seed)
 	local seedIcon = template:Clone()
 	seedIcon.Visible = true 
 	seedIcon.Parent = scrollingFrame.IconsFolder
@@ -41,12 +40,12 @@ local function createSeedIcon(seed)
 	seedIcon.Name = seed.Name
 	
 	seedIcon.TextButton.MouseButton1Down:Connect(function()
-		loadStats(seed)
+		LoadStats(seed)
 	end)	
 end
 
-local function updateSeedIcons(plotIdrcv, mudPosition, animationPositionPart)
-	plotId = plotIdrcv
+local function UpdateSeedIcons(plotReceived, mudPosition, animationPositionPart)
+	PlotID = plotReceived
 	MudPos = mudPosition
 	AnimPart = animationPositionPart
 	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
@@ -63,23 +62,23 @@ local function updateSeedIcons(plotIdrcv, mudPosition, animationPositionPart)
 	UI.Enabled = true
 end
 
-local function generateSelectableSeeds()
-	for _,seed in (Seeds) do
-		createSeedIcon(seed)
+local function GenerateSelectableSeeds()
+	for _, seed in (Seeds) do
+		CreateSeedIcon(seed)
 	end
 end
 
-generateSelectableSeeds()
+GenerateSelectableSeeds()
 
-local function plantSeed()
-	Remotes.UpdateOwnedSeeds:FireServer(-1, seedthing.Name)
-	Remotes.UpdateOccupied:FireServer(plotId, true, seedthing.Name, MudPos)
+local function PlantSeed()
+	Remotes.UpdateOwnedSeeds:FireServer(-1, Seed.Name)
+	Remotes.UpdateOccupied:FireServer(PlotID, true, Seed.Name, MudPos)
 end
 
 InformationFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
-	plantSeed() 	
-	AnimationHandler.playAnimation(player, character, crouchAnimID)
+	PlantSeed() 	
+	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 	local plantingSound = AnimPart.WateringSound
 	plantingSound:Play()
 end)
@@ -89,4 +88,4 @@ closeButton.MouseButton1Down:Connect(function()
 	PlayerMovement:Movement(player, true)
 end)
 
-Remotes.Bindables.SelectSeed.Event:Connect(updateSeedIcons)
+Remotes.Bindables.SelectSeed.Event:Connect(UpdateSeedIcons)

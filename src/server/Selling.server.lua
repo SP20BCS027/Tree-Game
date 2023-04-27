@@ -4,24 +4,25 @@ local Players = game:GetService("Players")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
 
-local Touchpart = WorkSpace:WaitForChild("SellPart")
+local TouchPart = WorkSpace:WaitForChild("SellPart")
 
-local debounce = {}
+local Debounce = {}
+local DELAY = 2
 
-Touchpart.Touched:Connect(function(touch)
-	local Player = Players:GetPlayerFromCharacter(touch.Parent)
+TouchPart.Touched:Connect(function(touch)
+	local player = Players:GetPlayerFromCharacter(touch.Parent)
 	
-	if Player then 
-		if debounce[Player] then return end
+	if player then 
+		if Debounce[player] then return end
 		
-		local profile = Manager.Profiles[Player]
+		local profile = Manager.Profiles[player]
 		if not profile then return end 
 		
-		Manager.AdjustCoins(Player, profile.Data.Money)
-		Manager.SellAllMoney(Player)		
+		Manager.AdjustCoins(player, profile.Data.Money)
+		Manager.SellAllMoney(player)		
 		
-		task.delay(0.5, function()
-			debounce[Player] = nil
+		task.delay(DELAY, function()
+			Debounce[player] = nil
 		end)
 	end
 end)

@@ -5,7 +5,7 @@ local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
 
-local function UpdateSeeds(player: Player, amount: number?, seedType: string)
+local function UpdateSeeds(player: Player, amount: number, seedType: string)
 	Manager.AdjustSeeds(player, amount, seedType)
 end
 

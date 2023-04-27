@@ -7,14 +7,14 @@ local House = require(game.ServerScriptService.Classes.House)
 local Houses = {}
 local HouseModule = {}
 
-local function createHouses()
+local function CreateHouses()
     for _, houseFolder in pairs(workspace.Houses:GetChildren()) do 
         local houseObj = House.new(houseFolder, Houses)
         table.insert(Houses, houseObj)
     end
 end
 
-createHouses()
+CreateHouses()
 
 function HouseModule.GetPlayerPlot(player: Player, plot: string)
 	for _, HouseOb in pairs(Houses) do
@@ -34,7 +34,7 @@ function HouseModule.ReturnPlayerWell(player: Player)
 	end
 end
 
-local function getTreeObject(plotObject)
+local function GetTreeObject(plotObject: Model)
 	for _, child in pairs (plotObject:GetChildren()) do 
 		if string.find(child.Name, "Tree") then 
 			return child 
@@ -42,7 +42,7 @@ local function getTreeObject(plotObject)
 	end 
 end
 
-local function getNewTree(nameOfTree)
+local function GetNewTree(nameOfTree: string)
 	for _, desc in pairs (Trees:GetDescendants()) do 
 		if desc.Name == nameOfTree then 
 			return desc
@@ -50,16 +50,15 @@ local function getNewTree(nameOfTree)
 	end
 end
 
-function HouseModule.ChangeTreeModel(plotObject)
-	print(plotObject)
-	local plantedTree = getTreeObject(plotObject)
+function HouseModule.ChangeTreeModel(plotObject: Model)
+	local plantedTree = GetTreeObject(plotObject)
 	local treeName = plantedTree.Name 
 
 	local baseName = string.sub(treeName, 1, string.find(treeName, "_") - 1)
 	local level = string.sub(treeName, -1)
 	level += 1 
 
-	local updatedTree = getNewTree(baseName .. "_" ..level)
+	local updatedTree = GetNewTree(baseName .. "_" .. level)
 	updatedTree.Parent = plantedTree.Parent 
 	updatedTree:PivotTo(CFrame.new(plantedTree:GetPivot().p))
 	plantedTree:Destroy()

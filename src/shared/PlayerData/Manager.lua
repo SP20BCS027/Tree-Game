@@ -2,10 +2,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local template = require(ReplicatedStorage.PlayerData.Template)
-local Trees = require(ReplicatedStorage.Configs.TreeConfig)
-local WaterCans = require(ReplicatedStorage.Configs.WaterCanConfig)
-local Backpacks = require(ReplicatedStorage.Configs.BackpacksConfig)
+local Template = require(ReplicatedStorage.PlayerData.Template)
+local TreeConfig = require(ReplicatedStorage.Configs.TreeConfig)
+local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
+local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 
 local Manager = {}
 
@@ -39,7 +39,6 @@ function Manager.AdjustFertilizer(player: Player, amount: number, fertilizerType
 
 	profile.Data.Fertilizers[fertilizerType].Amount += amount 
 	Remotes.UpdateOwnedFertilizers:FireClient(player, profile.Data.Fertilizers[fertilizerType].Amount, fertilizerType)
-
 end
 
 function Manager.AdjustWater(player: Player)
@@ -50,7 +49,7 @@ function Manager.AdjustWater(player: Player)
 	Remotes.UpdateWater:FireClient(player, profile.Data.Water)
 end
 
-function Manager.AdjustPlayerMoney(player:Player, plotID: number)
+function Manager.AdjustPlayerMoney(player:Player, plotID: number): boolean
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
@@ -85,16 +84,16 @@ function Manager.SellAllMoney(player: Player)
 	Remotes.SellAllMoney:FireClient(player)
 end
 
-function Manager.AdjustPlotOccupation(player: Player, PlotId: number, isOccupied: boolean, treeToPlant: string)
+function Manager.AdjustPlotOccupation(player: Player, PlotID: number, isOccupied: boolean, treeToPlant: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.Plots[PlotId].Occupied = isOccupied
-	profile.Data.Plots[PlotId].Tree = Trees[treeToPlant]
-	profile.Data.Plots[PlotId].Tree.TimeUntilWater = os.time() + 20 
+	profile.Data.Plots[PlotID].Occupied = isOccupied
+	profile.Data.Plots[PlotID].Tree = TreeConfig[treeToPlant]
+	profile.Data.Plots[PlotID].Tree.TimeUntilWater = os.time() + 20 
 	
-	Remotes.UpdateOccupied:FireClient(player, profile.Data.Plots[PlotId].Occupied, PlotId)
-	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotId].Tree.TimeUntilWater, PlotId, treeToPlant)
+	Remotes.UpdateOccupied:FireClient(player, profile.Data.Plots[PlotID].Occupied, PlotID)
+	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotID].Tree.TimeUntilWater, PlotID, treeToPlant)
 end
 
 function Manager.PurchasePlot(player: Player, plot: directory)
@@ -105,61 +104,61 @@ function Manager.PurchasePlot(player: Player, plot: directory)
 	Remotes.UpdateOwnedPlots:FireClient(player, profile.Data.Plots)
 end
 
-function Manager.PurchaseWaterCan(player: Player, waterCanId: string)
+function Manager.PurchaseWaterCan(player: Player, waterCanID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	profile.Data.OwnedWaterCans[waterCanId] =  WaterCans[waterCanId]
+	profile.Data.OwnedWaterCans[waterCanID] =  WaterCanConfig[waterCanID]
 	Remotes.UpdateOwnedWaterCans:FireClient(player, profile.Data.OwnedWaterCans)
 end
 
-function Manager.EquipWaterCan(player: Player, waterCanId: string)
+function Manager.EquipWaterCan(player: Player, waterCanID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.EquippedWaterCan = WaterCans[waterCanId]
+	profile.Data.EquippedWaterCan = WaterCanConfig[waterCanID]
 	Remotes.ChangeEquippedWateringCan:FireClient(player, profile.Data.EquippedWaterCan)
 end
 
-function Manager.PurchaseBackpack(player: Player, backpackId: string)
+function Manager.PurchaseBackpack(player: Player, backpackID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.OwnedBackpacks[backpackId] =  Backpacks[backpackId]
+	profile.Data.OwnedBackpacks[backpackID] =  BackpacksConfig[backpackID]
 	Remotes.UpdateOwnedBackpacks:FireClient(player, profile.Data.OwnedBackpacks)	
 end
 
-function Manager.EquipBackpack(player: Player, backpackId: string)
+function Manager.EquipBackpack(player: Player, backpackID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	profile.Data.EquippedBackpack = Backpacks[backpackId]
+	profile.Data.EquippedBackpack = BackpacksConfig[backpackID]
 	Remotes.ChangeEquippedBackpack:FireClient(player, profile.Data.EquippedBackpack)
 end
 
-function Manager.UpdateTreeWaterTimer(player: Player, PlotId: number)
+function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.Plots[PlotId].Tree.TimeUntilWater = os.time() + 10
-	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[PlotId].Tree.TimeUntilWater, PlotId)
+	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + 10
+	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
 end
 
-function Manager.UpdateTreeLevel(player: Player, PlotId: number, cycle: number)
+function Manager.UpdateTreeLevel(player: Player, plotID: number, cycle: number): string
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	if profile.Data.Plots[PlotId].Tree.MaxCycle <= profile.Data.Plots[PlotId].Tree.CurrentCycle + cycle then
-		profile.Data.Plots[PlotId].Tree.CurrentLevel = profile.Data.Plots[PlotId].Tree.CurrentLevel + 1 
-		profile.Data.Plots[PlotId].Tree.MaxCycle = profile.Data.Plots[PlotId].Tree.MaxCycle + 1 
-		profile.Data.Plots[PlotId].Tree.CurrentCycle = 0
+	if profile.Data.Plots[plotID].Tree.MaxCycle <= profile.Data.Plots[plotID].Tree.CurrentCycle + cycle then
+		profile.Data.Plots[plotID].Tree.CurrentLevel = profile.Data.Plots[plotID].Tree.CurrentLevel + 1 
+		profile.Data.Plots[plotID].Tree.MaxCycle = profile.Data.Plots[plotID].Tree.MaxCycle + 1 
+		profile.Data.Plots[plotID].Tree.CurrentCycle = 0
 		
-		Remotes.UpdateTreeLevel:FireClient(player, "LEVEL", PlotId, cycle)
+		Remotes.UpdateTreeLevel:FireClient(player, "LEVEL", plotID, cycle)
 		return "LEVEL"
 	else
-		profile.Data.Plots[PlotId].Tree.CurrentCycle = profile.Data.Plots[PlotId].Tree.CurrentCycle + cycle
+		profile.Data.Plots[plotID].Tree.CurrentCycle = profile.Data.Plots[plotID].Tree.CurrentCycle + cycle
 		
-		Remotes.UpdateTreeLevel:FireClient(player, "CYCLE", PlotId, cycle)
+		Remotes.UpdateTreeLevel:FireClient(player, "CYCLE", plotID, cycle)
 		return "CYCLE"
 	end
 end
@@ -194,18 +193,11 @@ Remotes.GetAllData.OnServerInvoke = GetAllData
 
 -- Here are some functions for the Commands 
 
-function Manager.ToggleFirstPlot(player: Player, Toggle: boolean)
-	local profile = Manager.Profiles[player]
-	if not profile then return end
-
-	profile.Data.Plots[1].Occupied = Toggle
-end
-
 function Manager.ResetAllData(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	Manager.Profiles[player].Data = template
+	Manager.Profiles[player].Data = Template
 	player.leaderstats.Coins.Value = profile.Data.Coins
 	player.leaderstats.Gems.Value = profile.Data.Gems 
 	Remotes.ResetData:FireClient(player)

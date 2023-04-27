@@ -4,27 +4,27 @@ local Players = game:GetService("Players")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local triggerpart = WorkSpace.WateringCanShop
-local debounce = {}
+local TriggerPart = WorkSpace.WateringCanShop
+local Debounce = {}
 local DELAY = 5
 
-local function generateUI(player: Player)
-    if debounce[player] then return end 
+local function GenerateUI(player: Player)
+    if Debounce[player] then return end 
 
 	Remotes.OpenWaterCanShop:FireClient(player)
         
-    debounce[player] = true
+    Debounce[player] = true
     task.delay(DELAY, function()
-        debounce[player] = nil 
+        Debounce[player] = nil 
     end)
 end
 
 local function ListenToWaterShopTouch()
-    triggerpart.Touched:Connect(function(hit)
+    TriggerPart.Touched:Connect(function(hit)
         local player = Players:GetPlayerFromCharacter(hit.Parent)
 
         if player then 
-            generateUI(player)
+            GenerateUI(player)
         end
     end)
 end

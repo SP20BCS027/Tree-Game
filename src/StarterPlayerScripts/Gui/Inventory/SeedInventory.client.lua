@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local StateManager = require(ReplicatedStorage.Client.State)
+local State = require(ReplicatedStorage.Client.State)
 local Remotes = ReplicatedStorage.Remotes
 
 local player = game.Players.LocalPlayer
@@ -13,9 +13,9 @@ local template = InternalFrame.Template
 
 local InventoryButton = player.PlayerGui:WaitForChild("Stats").Frame.InventoryButtonFrame.InventoryButton
 
-local Seeds = StateManager.GetData().Seeds
+local Seeds = State.GetData().Seeds
 
-local function generateUI()
+local function GenerateUI()
 	for _, Entry in (Seeds) do
 		local clonedTemplate = template:Clone()
 		clonedTemplate.Parent = scrollingFrame
@@ -26,14 +26,14 @@ local function generateUI()
 	end
 end
 
-local function updateUI()
+local function UpdateUI()
 	for _, Icon in scrollingFrame:GetChildren() do
 		if Icon.Name == "UIGridLayout" then continue end 
 		Icon.Amount.Text = Seeds[Icon.Name].Amount
 	end
 end
 
-generateUI()
+GenerateUI()
 
 CloseButton.MouseButton1Down:Connect(function()
 	InventoryGUI.Enabled = false
@@ -41,9 +41,9 @@ end)
 
 InventoryButton.MouseButton1Down:Connect(function()
 	InventoryGUI.Enabled = not InventoryGUI.Enabled
-	updateUI()
+	UpdateUI()
 end)
 
 Remotes.Bindables.OnReset.GenerateSeedsInventory.Event:Connect(function()
-    task.delay(0, updateUI)
+    task.delay(0, UpdateUI)
 end)

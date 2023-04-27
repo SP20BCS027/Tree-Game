@@ -1,11 +1,11 @@
-type SeedsConfig = {
+type SeedsConfigTemp = {
 	Name: string, 
 	Amount: number, 
 	Price: number, 
 	Description: string,
 }
 
-local SeedsConfig :{ [string] : SeedsConfig } = {
+local SeedsConfig: {[string] : SeedsConfigTemp} = {
 	Basic = {
 		Name = "Basic", 
 		Amount = 010, 
