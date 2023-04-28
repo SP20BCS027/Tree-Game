@@ -58,7 +58,7 @@ function HouseModule.ChangeTreeModel(plotObject: Model)
 	local level = string.sub(treeName, -1)
 	level += 1 
 
-	local updatedTree = GetNewTree(baseName .. "_" .. level)
+	local updatedTree = GetNewTree(baseName .. "_" .. level):Clone()
 	updatedTree.Parent = plantedTree.Parent 
 	updatedTree:PivotTo(CFrame.new(plantedTree:GetPivot().p))
 	plantedTree:Destroy()
@@ -70,7 +70,7 @@ Remotes.GetHouseWell.OnServerInvoke = HouseModule.ReturnPlayerWell
 task.spawn(function()
     while wait(1)  do
         for _, HouseOb in pairs(Houses) do
-            HouseOb:update()
+            HouseOb:Update()
         end
     end
 end)

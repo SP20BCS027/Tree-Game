@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Trees = require(ReplicatedStorage.Configs.TreeCofig)
+local Trees = require(ReplicatedStorage.Configs.TreeConfig)
 
 type PlotsConfigTemp = {
 	Name: string, 

@@ -10,9 +10,5 @@ local function PurchaseCan(player: Player, waterCan: string)
 	Manager.EquipWaterCan(player, waterCan)
 end
 
-local function ChangeEquippedWaterCan(player: Player, waterCan: string)
-	Manager.EquipWaterCan(player, waterCan)
-end
-
 Remotes.UpdateOwnedWaterCans.OnServerEvent:Connect(PurchaseCan)
-Remotes.ChangeEquippedWateringCan.OnServerEvent:Connect(ChangeEquippedWaterCan)
+--Remotes.ChangeEquippedWateringCan.OnServerEvent:Connect(ChangeEquippedWaterCan)

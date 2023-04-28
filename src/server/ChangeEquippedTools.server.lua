@@ -5,12 +5,17 @@ local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
 
-local function ChangeEquippedWateringCan(player: Player, WaterCan: string)
-    Manager.EquipWaterCan(player, WaterCan)
+local function ChangeEquippedWateringCan(player: Player, waterCan: string)
+    Manager.EquipWaterCan(player, waterCan)
 end
 
-local function ChangeEquippedBackpack(player: Player, Backpack: string)
-    Manager.EquipBackpack(player, Backpack)
+local function ChangeEquippedBackpack(player: Player, backpack: string)
+    local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	if profile.Data.OwnedBackpacks[backpack] then 
+		Manager.EquipBackpack(player, backpack)
+	end
 end
 
 Remotes.ChangeEquippedBackpack.OnServerEvent:Connect(ChangeEquippedBackpack)
