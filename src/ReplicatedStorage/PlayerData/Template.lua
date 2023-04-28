@@ -20,14 +20,16 @@ local Template = {
 		Plot_1 = PlotsConfig.Plot_1
 	},
 	
-	EquippedWaterCan = WaterCanConfig.MiniWateringCan, 
+	EquippedWaterCan = WaterCanConfig.SelfWateringCan, 
 	OwnedWaterCans = {
 		MiniWateringCan = WaterCanConfig.MiniWateringCan, 
+		SelfWateringCan = WaterCanConfig.SelfWateringCan,
 	},
 	
-	EquippedBackpack = BackpackConfig.BasicBackpack,
+	EquippedBackpack = BackpackConfig.DrawStringBag,
 	OwnedBackpacks = {
-		BasicBackpack = BackpackConfig.BasicBackpack, 
+		BasicBackpack = BackpackConfig.BasicBackpack,
+		DrawStringBag = BackpackConfig.DrawStringBag 
 	},
 	
 	UnlockedDungeons = DungeonConfig, 

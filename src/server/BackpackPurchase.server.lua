@@ -26,4 +26,4 @@ local function PurchasePack(player: Player, backpack: string)
 end
 
 Remotes.UpdateOwnedBackpacks.OnServerEvent:Connect(PurchasePack) 
-Remotes.ChangeEquippedBackpack.OnServerEvent:Connect(ChangeEquippedBackpack)
+--Remotes.ChangeEquippedBackpack.OnServerEvent:Connect(ChangeEquippedBackpack)

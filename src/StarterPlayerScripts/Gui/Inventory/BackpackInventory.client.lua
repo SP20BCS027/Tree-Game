@@ -20,7 +20,7 @@ local BackpackInventoryButton = BackpackUI.ButtonsHolder.BackpackButton.Backpack
 local selectedBackpack
 
 local function ChangeEquippedBackpack()
-    Remotes.ChangeEquippedBackpack:FireServer(selectedBackpack)
+    --Remotes.ChangeEquippedBackpack:FireServer(selectedBackpack)
 end
 
 local function LoadBackpack(pack)
