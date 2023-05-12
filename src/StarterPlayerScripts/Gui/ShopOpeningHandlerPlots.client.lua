@@ -82,7 +82,7 @@ local function ShopOpener()
 	GenerateShopItems()
 end
 
-
+-- This function Regenerates the shop 
 
 local function RegenerateShop()
 	task.delay(0, function()
