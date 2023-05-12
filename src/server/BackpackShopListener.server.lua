@@ -7,12 +7,13 @@ local Remotes = ReplicatedStorage.Remotes
 local TriggerPart = WorkSpace.BackpackShop
 local Debounce = {}
 local DELAY = 5
+local SHOP_ID = "Backpack"
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 
 local function GenerateUI(player: Player)
     if Debounce[player] then return end 
 
-	Remotes.OpenBackpackShop:FireClient(player)
+	Remotes.OpenBackpackShop:FireClient(player, SHOP_ID)
 
     local character = player.Character 
     character.HumanoidRootPart.CFrame = TriggerPart.PositionPart.CFrame + VERTICAL_OFFSET

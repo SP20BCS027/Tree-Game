@@ -7,12 +7,17 @@ local Remotes = ReplicatedStorage.Remotes
 local TriggerPart = WorkSpace.WateringCanShop
 local Debounce = {}
 local DELAY = 5
+local SHOP_ID = "Watercan"
+local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 
 local function GenerateUI(player: Player)
     if Debounce[player] then return end 
 
-	Remotes.OpenWaterCanShop:FireClient(player)
-        
+	Remotes.OpenWaterCanShop:FireClient(player, SHOP_ID)
+    
+    local character = player.Character 
+    character.HumanoidRootPart.CFrame = TriggerPart.PositionPart.CFrame + VERTICAL_OFFSET
+
     Debounce[player] = true
     task.delay(DELAY, function()
         Debounce[player] = nil 

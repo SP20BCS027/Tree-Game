@@ -17,6 +17,8 @@ local PurchaseButton = InformationFrame.Frame.Template
 
 local SelectedItem 
 
+-- This function Buys the selected Plot
+
 local function BuySelectedItem(item)
 	
 	if StateManager.GetData().Coins >= item.Price then
@@ -28,11 +30,15 @@ local function BuySelectedItem(item)
 	end
 end
 
+-- This function loads the stats of the selected Item
+
 local function LoadStats(item) 
 	InformationFrame.Frame.Price.Text = item.Price
 	
 	SelectedItem = item 
 end
+
+-- This function creates the Icons of all the Plots
 
 local function CreatePlotIcon(item)
 	local shopItem = Template:Clone()
@@ -50,11 +56,15 @@ local function CreatePlotIcon(item)
 	end)
 end
 
+-- This function Generates all the plots Icons in the Plots Config
+
 local function GenerateShopItems()
 	for _, item in Plots do 
 		CreatePlotIcon(item)
 	end
 end
+
+-- This function Deletes all the Plot Icons in the Menu
 
 local function ClearShop()
 	for _, item in pairs(ScrollingFrame:GetChildren()) do 
@@ -63,6 +73,8 @@ local function ClearShop()
 	end 
 end
 
+-- When this button is pressed the shop gets opened 
+
 local function ShopOpener()
 	PlotsShopUI.Enabled = not PlotsShopUI.Enabled
 	PlayerMovement:Movement(player, false)
@@ -70,12 +82,16 @@ local function ShopOpener()
 	GenerateShopItems()
 end
 
+-- This function Regenerates the shop 
+
 local function RegenerateShop()
 	task.delay(0, function()
 		ClearShop()
 		GenerateShopItems()
 	end)
 end
+
+-- When this button is pressed the Shop gets closed 
 
 CloseButton.MouseButton1Down:Connect(function()
 	PlotsShopUI.Enabled = false

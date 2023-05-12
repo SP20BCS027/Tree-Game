@@ -34,6 +34,11 @@ Remotes.SellAllMoney.OnClientEvent:Connect(function()
 	CallingtheUpdate()
 end)
 
+Remotes.FillupBackpack.OnClientEvent:Connect(function()
+	CallingtheUpdate()
+end)
+
 Remotes.Bindables.OnReset.ResetMoney.Event:Connect(function()
 	CallingtheUpdate()
 end)
+

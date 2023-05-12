@@ -6,8 +6,6 @@ local State = require(ReplicatedStorage.Client.State)
 
 local Configs = {}
 
---local ToolsConfig
-
 local CurrentDirectory
 
 local player = game.Players.LocalPlayer
@@ -36,6 +34,8 @@ local SelectedItem
 local CurrentInventory
 local EquippedItem
 
+-- This function loads the most Updated Data in the Configs Table
+
 local function GetDataFromClient()
     Configs["Backpacks"] = State.GetData().OwnedBackpacks
     Configs["Fertilizers"] = State.GetData().Fertilizers 
@@ -45,10 +45,14 @@ local function GetDataFromClient()
     Configs["EquippedWaterCan"] = State.GetData().EquippedWaterCan
 end
 
+-- This function sets the Sets the CurrentDirectory Variable
+
 local function SetCurrentConfig(setID)
     GetDataFromClient()
     CurrentDirectory = Configs[setID]
 end
+
+-- This function hides all the stats of the information frame
 
 local function HideStats()
     IconAmount.Visible = false
@@ -58,12 +62,16 @@ local function HideStats()
     IconImage.Visible = false
 end 
 
+-- This function makes the Equip Button Visible if the inventory is either Backpack or Watering Can
+
 local function HideEquipButton()
     if CurrentInventory == "Backpacks" or CurrentInventory == "WaterCans" then 
         EquipButton.Visible = true
         EquipButton.Text = "Equip"
     end
 end
+
+-- This function makes the items in Information Frame Visible 
 
 local function ShowStats(item)
     IconAmount.Visible = true
@@ -78,12 +86,16 @@ local function ShowStats(item)
     IconImage.Visible = true
 end
 
+-- This Function Resets the Trasparency of back to 0 for all icons
+
 local function ResetTransparency()
     for _, item in ScrollingFrame:GetChildren() do 
         if item.Name == "UIGridLayout" then continue end
         item.BackgroundTransparency = 0
     end
 end
+
+-- When an Icon gets selected this function gets called its stats are loaded in the Information Frame
 
 local function LoadStats(item)
     ShowStats(item)
@@ -97,6 +109,8 @@ local function LoadStats(item)
         IconAmount.Text = ITEM_CAPACITY:gsub("REPLACE", item.Capacity)
     end
 end
+
+-- This function Creates Icons in the Menu and loads desired Indicator UIs
 
 local function CreateIcon(item)
     local icon = Template:Clone()
@@ -124,12 +138,16 @@ local function CreateIcon(item)
     end)
 end
 
+-- This function clears all the UI in the Menu
+
 local function ClearInventory()
     for _, icon in ScrollingFrame:GetChildren() do 
         if icon.Name == "UIGridLayout" then continue end 
         icon:Destroy()
     end
 end
+
+-- When the Watering Can or Backpack is changed this function updates the UI
 
 function MainInventory.ChangeEquipped()
     GetDataFromClient()
@@ -143,6 +161,8 @@ function MainInventory.ChangeEquipped()
     end
 end
 
+-- This function is responsible for Generating the Inventory with the desired ID
+
 function MainInventory.GenerateInventory(setID)
     SetCurrentConfig(setID)
     GetDataFromClient()
@@ -155,6 +175,14 @@ function MainInventory.GenerateInventory(setID)
         CreateIcon(item)
     end 
 end 
+
+-- This Function Gets the Current Chosen Inventory of the UI
+
+function MainInventory.GetCurrentInventory(): string
+    return CurrentInventory
+end
+
+-- When the Equip button Gets pressed the Selected Item gets equipped if it is not already equipped 
 
 EquipButton.MouseButton1Down:Connect(function()
     if not SelectedItem then return end
@@ -170,13 +198,19 @@ EquipButton.MouseButton1Down:Connect(function()
     end
 end)
 
+-- This updates the Inventory after a Delay 
+
 ReplicatedStorage.Remotes.ChangeEquippedWateringCan.OnClientEvent:Connect(function()
     task.delay(0, MainInventory.ChangeEquipped)
 end)
 
+-- This updates the Inventory after a Delay 
+
 ReplicatedStorage.Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function()
     task.delay(0, MainInventory.ChangeEquipped)
 end)
+
+-- This when pressed closes the Inventory Menu
 
 CloseButton.MouseButton1Down:Connect(function()
     MainInventoryUI.Enabled = false 

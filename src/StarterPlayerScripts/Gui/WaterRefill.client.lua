@@ -13,6 +13,8 @@ local RefillIcon = UI.IconHolder
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 local crouchAnimID = "rbxassetid://13248889864"
 
+-- This function Refills the Water and changes the player position, plays refill animation and makes the player unable to move 
+
 local function RefillWater(animationPosition)
 	Remotes.RefillWater:FireServer()
 
@@ -25,9 +27,13 @@ local function RefillWater(animationPosition)
 	animationPosition.WateringSound:Play()
 end
 
+-- This function gets the well object from the player's house 
+
 local function GetHouseWell()
 	return Remotes.GetHouseWell:InvokeServer()
 end
+
+-- This function Adornees the Refill Button to the House Well
 
 local function AdorneeUI()
 	local housewell = GetHouseWell()
