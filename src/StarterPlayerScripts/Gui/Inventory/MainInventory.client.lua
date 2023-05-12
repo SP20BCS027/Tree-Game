@@ -1,14 +1,13 @@
---local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = game.Players.LocalPlayer
 
---local State = require(ReplicatedStorage.Client.State)
 local MainInventoryManager = require(player:WaitForChild("PlayerScripts").Gui.Inventory.MainInventoryManager)
 
 local MainInventoryUI = player.PlayerGui:WaitForChild("MainInventory")
 local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
 
-local InventoryButton = InventoryButtonUI.Inventory
+local InventoryButton = InventoryButtonUI.Frame.Inventory
 
 local MainFrame = MainInventoryUI.MainFrame
 local ButtonsFrame = MainFrame.ButtonsFrame
@@ -36,5 +35,16 @@ WaterCanButton.MouseButton1Down:Connect(function()
 end)
 
 InventoryButton.MouseButton1Down:Connect(function()
+    local currentInventory = MainInventoryManager.GetCurrentInventory()
+    if currentInventory then 
+        MainInventoryManager.GenerateInventory(currentInventory)
+    end 
     MainInventoryUI.Enabled = not MainInventoryUI.Enabled
 end)
+
+ReplicatedStorage.Remotes.Bindables.OnReset.GenerateMainInventory.Event:Connect(function()
+    local currentInventory = MainInventoryManager.GetCurrentInventory()
+    if currentInventory then 
+        MainInventoryManager.GenerateInventory(currentInventory)
+    end 
+end) 

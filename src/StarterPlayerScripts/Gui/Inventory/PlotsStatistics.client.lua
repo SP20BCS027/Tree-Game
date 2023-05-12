@@ -7,9 +7,9 @@ local State = require(ReplicatedStorage.Client.State)
 local FormatTime = require(ReplicatedStorage.Libs.FormatTime)
 
 local PlotsGUI = player.PlayerGui:WaitForChild("PlotStatistics")
-local InventoryButtons = player.PlayerGui:WaitForChild("InventoryButtons")
+local InventoryButton = player.PlayerGui:WaitForChild("InventoryButton")
 
-local TreeButton = InventoryButtons.ButtonsHolder.TreeButton.TreeInventoryButton
+local TreeButton = InventoryButton.Frame.Plots
 
 local CloseButton = PlotsGUI.CloseFrame.CloseButton
 local MainFrame = PlotsGUI.MainFrame

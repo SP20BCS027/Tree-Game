@@ -8,12 +8,12 @@ local TriggerPart = WorkSpace.FertilizerShop
 local Debounce = {}
 local DELAY = 5
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
-
+local SHOP_ID = "Fertilizer"
 
 local function GenerateUI(player: Player)
     if Debounce[player] then return end 
 
-	Remotes.OpenFertilizerShop:FireClient(player)
+	Remotes.OpenFertilizerShop:FireClient(player, SHOP_ID)
 
     local character = player.Character 
     character.HumanoidRootPart.CFrame = TriggerPart.PositionPart.CFrame + VERTICAL_OFFSET

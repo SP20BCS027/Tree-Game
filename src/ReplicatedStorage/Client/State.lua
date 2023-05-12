@@ -49,6 +49,7 @@ Remotes.ResetData.OnClientEvent:Connect(function()
 	Remotes.Bindables.OnReset.ResetWater:Fire()
 	Remotes.Bindables.OnReset.GenerateBackpackInventory:Fire()
 	Remotes.Bindables.OnReset.GenerateWaterCanInventory:Fire()
+	Remotes.Bindables.OnReset.GenerateMainInventory:Fire()
 end)
 
 Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotID: number)

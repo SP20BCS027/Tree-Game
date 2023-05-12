@@ -14,9 +14,14 @@ local Template = PlotStatsUI.Template
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 local crouchAnimID = "rbxassetid://13248889864"
 
+-- This function Moves the Character's Position 
+
 local function ChangeCharacterPosition(position)
 	character:WaitForChild("HumanoidRootPart").CFrame = position + VERTICAL_OFFSET
 end
+
+-- This function when called loads up the menu where the Seed to be Planted is Selected 
+-- It also makes the player unable to move 
 
 local function PlantSeed(plotId, mudPosition, animationPositionPart)
 	if not State.GetData().Plots[plotId].Occupied then 
@@ -29,6 +34,8 @@ local function PlantSeed(plotId, mudPosition, animationPositionPart)
 		print("This plot is occupied!")
 	end
 end
+
+-- This function when called Waters the tree in the selected Plot and renders the player motionless until the animation is complete 
 
 local function WaterTree(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
@@ -52,6 +59,8 @@ local function WaterTree(plotId, animationPositionPart)
 	end
 end
 
+-- This function when called collects the money from the tree in the Current Plot and renders the player motionless until the animation is complete 
+
 local function CollectMoney(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
 		if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
@@ -70,6 +79,8 @@ local function CollectMoney(plotId, animationPositionPart)
 	end
 end
 
+-- This function when called Opens the fertilization selection Menu and Fertilizes the plot. 
+
 local function FertilizePlot(plotId, animationPositionPart)
 	if not State.GetData().Plots[plotId].Occupied then return end
 	if not State.GetData().Plots[plotId].Tree then return end 
@@ -78,6 +89,8 @@ local function FertilizePlot(plotId, animationPositionPart)
 	ChangeCharacterPosition(animationPositionPart.CFrame)
 	print("Fertilized")
 end 
+
+-- This function Generates the UIs for each plot the player owns and Adornees it to that plot
 
 local function GenerateUIs()
 	for name, _ in (State.GetData().Plots) do
@@ -106,6 +119,8 @@ local function GenerateUIs()
 		end)
 	end
 end
+
+-- This function just deletes all the UIs from the plots
 
 local function ClearUIs()
 	PlotStatsUI.PlotInteractive:ClearAllChildren()

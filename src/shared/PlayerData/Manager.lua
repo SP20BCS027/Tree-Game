@@ -11,6 +11,9 @@ local Manager = {}
 
 Manager.Profiles = {}
 
+
+-- When this function is called the player's amount of coins get updated 
+
 function Manager.AdjustCoins(player: Player, amount: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -20,10 +23,14 @@ function Manager.AdjustCoins(player: Player, amount: number)
 	Remotes.UpdateCoins:FireClient(player, profile.Data.Coins)
 end
 
+-- When this function gets called the player's amount of gems gets updated 
+
 function Manager.AdjustGems(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 end
+
+-- When this function gets called the chosen SeedType is updated
 
 function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)	
 	local profile = Manager.Profiles[player]
@@ -33,6 +40,8 @@ function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)
 	Remotes.UpdateOwnedSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
 end
 
+--When this function gets called the chosen Fertilizer gets updated
+
 function Manager.AdjustFertilizer(player: Player, amount: number, fertilizerType: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -41,6 +50,8 @@ function Manager.AdjustFertilizer(player: Player, amount: number, fertilizerType
 	Remotes.UpdateOwnedFertilizers:FireClient(player, profile.Data.Fertilizers[fertilizerType].Amount, fertilizerType)
 end
 
+-- When this function gets the water in Player's backpack gets deducted 
+
 function Manager.AdjustWater(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -48,6 +59,8 @@ function Manager.AdjustWater(player: Player)
 	profile.Data.Water -= 1
 	Remotes.UpdateWater:FireClient(player, profile.Data.Water)
 end
+
+-- When this function gets called Player's Money in backpack gets updated
 
 function Manager.AdjustPlayerMoney(player:Player, plotID: number): boolean
 	local profile = Manager.Profiles[player]
@@ -68,6 +81,8 @@ function Manager.AdjustPlayerMoney(player:Player, plotID: number): boolean
 	end
 end
 
+-- When this function gets Called the player's Watering Can gets refilled
+
 function Manager.RefillWater(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -76,6 +91,8 @@ function Manager.RefillWater(player: Player)
 	Remotes.RefillWater:FireClient(player)
 end
 
+-- When this function gets called the player's money in the backpack gets sold and converted into Coins
+
 function Manager.SellAllMoney(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -83,6 +100,8 @@ function Manager.SellAllMoney(player: Player)
 	profile.Data.Money = 0 
 	Remotes.SellAllMoney:FireClient(player)
 end
+
+-- When this function gets called the player's Plot Status gets updated and a Tree is assigned to the plots data 
 
 function Manager.AdjustPlotOccupation(player: Player, PlotID: number, isOccupied: boolean, treeToPlant: string)
 	local profile = Manager.Profiles[player]
@@ -96,6 +115,8 @@ function Manager.AdjustPlotOccupation(player: Player, PlotID: number, isOccupied
 	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotID].Tree.TimeUntilWater, PlotID, treeToPlant)
 end
 
+-- When this function gets called the plot is added to the owned plots of the player. 
+
 function Manager.PurchasePlot(player: Player, plot: directory)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -103,6 +124,8 @@ function Manager.PurchasePlot(player: Player, plot: directory)
 	profile.Data.Plots[plot.Id] = plot
 	Remotes.UpdateOwnedPlots:FireClient(player, profile.Data.Plots)
 end
+
+-- When this function gets called the player buys the watering can and their inventory gets updated
 
 function Manager.PurchaseWaterCan(player: Player, waterCanID: string)
 	local profile = Manager.Profiles[player]
@@ -112,6 +135,8 @@ function Manager.PurchaseWaterCan(player: Player, waterCanID: string)
 	Remotes.UpdateOwnedWaterCans:FireClient(player, profile.Data.OwnedWaterCans)
 end
 
+-- When this function gets called the currently Equipped Watering Can is changed 
+
 function Manager.EquipWaterCan(player: Player, waterCanID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -119,6 +144,8 @@ function Manager.EquipWaterCan(player: Player, waterCanID: string)
 	profile.Data.EquippedWaterCan = WaterCanConfig[waterCanID]
 	Remotes.ChangeEquippedWateringCan:FireClient(player, profile.Data.EquippedWaterCan)
 end
+
+-- When this function gets called the player buys the Backpack and their inventory gets updated
 
 function Manager.PurchaseBackpack(player: Player, backpackID: string)
 	local profile = Manager.Profiles[player]
@@ -128,6 +155,8 @@ function Manager.PurchaseBackpack(player: Player, backpackID: string)
 	Remotes.UpdateOwnedBackpacks:FireClient(player, profile.Data.OwnedBackpacks)	
 end
 
+-- When this function gets called the currently Equipped Backpack is changed 
+
 function Manager.EquipBackpack(player: Player, backpackID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -136,6 +165,8 @@ function Manager.EquipBackpack(player: Player, backpackID: string)
 	Remotes.ChangeEquippedBackpack:FireClient(player, profile.Data.EquippedBackpack)
 end
 
+-- When this function gets called the Water Timer of the tree get updated 
+
 function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -143,6 +174,8 @@ function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + 10
 	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
 end
+
+-- When this function gets Called The Tree's Level or Cycle is Changed 
 
 function Manager.UpdateTreeLevel(player: Player, plotID: number, cycle: number): string
 	local profile = Manager.Profiles[player]
@@ -163,6 +196,8 @@ function Manager.UpdateTreeLevel(player: Player, plotID: number, cycle: number):
 	end
 end
 
+-- When this function gets called the Tree's Money timer gets reset 
+
 function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -172,12 +207,16 @@ function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilMoney, plotID)
 end
 
+-- This function is used to get a specific directory of Data of the player 
+
 local function GetData(player: Player, directory: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
 	return profile.Data[directory]	
 end
+
+-- This function is used to get all the Data of the player 
 
 local function GetAllData(player: Player)
 	local profile = Manager.Profiles[player]
@@ -192,6 +231,8 @@ Remotes.GetData.OnServerInvoke = GetData
 Remotes.GetAllData.OnServerInvoke = GetAllData
 
 -- Here are some functions for the Commands 
+
+-- This function Resets all the player Data back to the Default Template  
 
 function Manager.ResetAllData(player: Player)
 	local profile = Manager.Profiles[player]
