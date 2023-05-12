@@ -41,6 +41,10 @@ Remotes.UpdateCoins.OnClientEvent:Connect(function(amount: number)
 	PlayerData.Coins = amount
 end)
 
+Remotes.UpdateGems.OnClientEvent:Connect(function(amount: number)
+	PlayerData.Gems = amount
+end)
+
 Remotes.ResetData.OnClientEvent:Connect(function()
 	PlayerData = Template
 	
@@ -77,6 +81,10 @@ end)
 
 Remotes.RefillWater.OnClientEvent:Connect(function()
 	PlayerData.Water = PlayerData.EquippedWaterCan.Capacity
+end)
+
+Remotes.FillupBackpack.OnClientEvent:Connect(function()
+	PlayerData.Money = PlayerData.EquippedBackpack.Capacity
 end)
 
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: number, cycle: number)

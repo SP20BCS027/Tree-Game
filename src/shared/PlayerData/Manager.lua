@@ -11,7 +11,6 @@ local Manager = {}
 
 Manager.Profiles = {}
 
-
 -- When this function is called the player's amount of coins get updated 
 
 function Manager.AdjustCoins(player: Player, amount: number)
@@ -25,9 +24,13 @@ end
 
 -- When this function gets called the player's amount of gems gets updated 
 
-function Manager.AdjustGems(player: Player)
+function Manager.AdjustGems(player: Player, amount: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
+
+	profile.Data.Gems += amount
+	player.leaderstats.Gems.Value = profile.Data.Gems
+	Remotes.UpdateGems:FireClient(player, profile.Data.Gems)
 end
 
 -- When this function gets called the chosen SeedType is updated
@@ -52,11 +55,13 @@ end
 
 -- When this function gets the water in Player's backpack gets deducted 
 
-function Manager.AdjustWater(player: Player)
+function Manager.AdjustWater(player: Player, amount: number?)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.Water -= 1
+	amount = if amount then amount else 1
+
+	profile.Data.Water -= amount
 	Remotes.UpdateWater:FireClient(player, profile.Data.Water)
 end
 
@@ -151,7 +156,7 @@ function Manager.PurchaseBackpack(player: Player, backpackID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.OwnedBackpacks[backpackID] =  BackpacksConfig[backpackID]
+	profile.Data.OwnedBackpacks[backpackID] = BackpacksConfig[backpackID]
 	Remotes.UpdateOwnedBackpacks:FireClient(player, profile.Data.OwnedBackpacks)	
 end
 
@@ -242,6 +247,14 @@ function Manager.ResetAllData(player: Player)
 	player.leaderstats.Coins.Value = profile.Data.Coins
 	player.leaderstats.Gems.Value = profile.Data.Gems 
 	Remotes.ResetData:FireClient(player)
+end
+
+function Manager.FillupBackpack(player: Player)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.Money = profile.Data.EquippedBackpack.Capacity
+	Remotes.FillupBackpack:FireClient(player)
 end
 
 return Manager
