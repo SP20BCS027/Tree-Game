@@ -27,10 +27,12 @@ end
 
 local function ChangeOccupationStatus(player: Player, plotID: number, isOccupied: boolean, seed, spawnPosition)
 	-- add a server side check to check plot occupation maybe? 
+	print(plotID)
 	local treeToPlant = selectTree(seed).Name
 	local plotObject = Houses.GetPlayerPlot(player, plotID)
 	spawnTree(spawnPosition, treeToPlant, seed, plotObject)
 	Manager.AdjustPlotOccupation(player, plotID, isOccupied, treeToPlant)
 end
+
 
 Remotes.UpdateOccupied.OnServerEvent:Connect(ChangeOccupationStatus)
