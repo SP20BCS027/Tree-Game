@@ -150,7 +150,6 @@ local function BuyPlot()
         return
     end
     print("Not Enough Money")
-
 end
 
 -- This funcion shows all the stats of the Information Frame 
@@ -196,7 +195,6 @@ local function LoadStats(item)
             BuyButton.Text = "🔒"
         end
     end
-
     ShowStats()
 end
 
@@ -253,13 +251,13 @@ end
 
 -- This function gets called to and creates all the Icons of the current Shop
 
-function ShopsManager.GenerateShop(shopID)
+function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     ClearInventory()
-    HideStats()
+    if hideShop then 
+        HideStats()
+    end
     PlayerMovement:Movement(player, false)
-
     CurrentShop = shopID
-
     ShopUI.Enabled = true
 
     if CurrentShop == "Plot" then 
@@ -267,7 +265,6 @@ function ShopsManager.GenerateShop(shopID)
         for _, _ in pairs(State.GetData().Plots) do 
             NumberOfPlots += 1
         end 
-        print(NumberOfPlots)
     end 
 
     for _, item in Shops[shopID] do 

@@ -7,11 +7,13 @@ local State = require(ReplicatedStorage.Client.State)
 local Remotes = ReplicatedStorage.Remotes
 
 local GUI = PlayerGUI:WaitForChild("Stats")
-local Outline = GUI.Frame
-local Wateramount = Outline.WaterFrame.Amount
+local HolderFrame = GUI.HolderFrame
+local Wateramount = HolderFrame.WaterFrame.TextLabel
+
+local WATER = "Water: REPLACE"
 
 local function UpdateWater()
-	Wateramount.Text = State.GetData().Water .. "/" .. State.GetData().EquippedWaterCan.Capacity
+	Wateramount.Text = WATER:gsub("REPLACE", State.GetData().Water .. "/" .. State.GetData().EquippedWaterCan.Capacity)
 end
 
 UpdateWater()
