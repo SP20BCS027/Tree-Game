@@ -31,6 +31,7 @@ local PRICE_TEXT = "Price: REPLACE"
 
 local SelectedItem
 local CurrentShop
+local NumberOfPlots
 
 local Shops = {}
 
@@ -60,6 +61,14 @@ local function CheckForOwnerShip()
         end
     end
     return false 
+end
+
+local function CheckForPlotOwnerShip(Plot)
+    Plot = if Plot then Plot else SelectedItem.Id
+    if State.GetData().Plots[Plot] then 
+        return true
+    end
+    return false
 end
 
 -- Thsi function Buys the Backpack if it is not already owned 
@@ -122,6 +131,28 @@ local function BuyFertilizer()
 	end
 end
 
+local function BuyPlot()
+    if CheckForPlotOwnerShip() then 
+        print("Item Already Owned")
+        return
+    end 
+
+    if SelectedItem.LayoutOrder > NumberOfPlots + 1 then 
+        print("Item is Locked")
+        return 
+    end
+
+    if State.GetData().Coins >= SelectedItem.Price then 
+        Remotes.UpdateOwnedPlots:FireServer(SelectedItem    )
+		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
+        print("Item Has been Bought")
+        BuyButton.Text = "Owned"
+        return
+    end
+    print("Not Enough Money")
+
+end
+
 -- This funcion shows all the stats of the Information Frame 
 
 local function ShowStats()
@@ -147,15 +178,25 @@ end
 local function LoadStats(item)
     IconName.Text = NAME_TEXT:gsub("REPLACE", item.Name)
     IconPrice.Text = PRICE_TEXT:gsub("REPLACE", item.Price)
-    IconDescription.Text = item.Description
+    if item.Description then 
+        IconDescription.Text = item.Description
+    end
     BuyButton.Text = "Buy"
     if CurrentShop == "Backpack" or CurrentShop == "Watercan" then 
         if CheckForOwnerShip() then 
             BuyButton.Text = "Owned"
-        else 
-            BuyButton.Text = "Buy"
         end
     end
+
+    if CurrentShop == "Plot" then 
+        if CheckForPlotOwnerShip() then 
+            BuyButton.Text = "Owned" 
+        end
+        if item.LayoutOrder > NumberOfPlots + 1 then 
+            BuyButton.Text = "🔒"
+        end
+    end
+
     ShowStats()
 end
 
@@ -176,6 +217,21 @@ local function CreateIcon(item)
     icon.Name = item.Name
     icon.ItemName.Text = item.Name
     icon.Visible = true
+
+    if item.LayoutOrder then 
+        icon.LayoutOrder = item.LayoutOrder
+    end
+
+    if CurrentShop == "Plot" then 
+        icon.Name = item.Id
+        if CheckForPlotOwnerShip(icon.Name) then 
+            icon.EquippedIcon.Visible = true 
+        end
+        if item.LayoutOrder > NumberOfPlots + 1 then 
+            icon.EquippedIcon.Text = "🔒"
+            icon.EquippedIcon.Visible = true
+        end 
+    end
 
     icon.MouseButton1Down:Connect(function()
         ResetTransparency()
@@ -205,6 +261,15 @@ function ShopsManager.GenerateShop(shopID)
     CurrentShop = shopID
 
     ShopUI.Enabled = true
+
+    if CurrentShop == "Plot" then 
+        NumberOfPlots = 0 
+        for _, _ in pairs(State.GetData().Plots) do 
+            NumberOfPlots += 1
+        end 
+        print(NumberOfPlots)
+    end 
+
     for _, item in Shops[shopID] do 
         CreateIcon(item)
     end
@@ -236,6 +301,10 @@ BuyButton.MouseButton1Down:Connect(function()
         BuyFertilizer()
         return
     end
+    if CurrentShop == "Plot" then 
+        BuyPlot()
+        return 
+    end 
 end)
 
 return ShopsManager
