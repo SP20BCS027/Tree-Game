@@ -6,32 +6,36 @@ local Remotes = ReplicatedStorage.Remotes
 local State = require(ReplicatedStorage.Client.State)
 local FormatTime = require(ReplicatedStorage.Libs.FormatTime)
 
-local PlotsGUI = player.PlayerGui:WaitForChild("PlotStatistics")
+local PlotsGUI = player.PlayerGui:WaitForChild("Plots_Stats")
+local MainFrame = PlotsGUI.MainFrame
+
 local InventoryButton = player.PlayerGui:WaitForChild("InventoryButton")
 
 local TreeButton = InventoryButton.Frame.Plots
 
-local CloseButton = PlotsGUI.CloseFrame.CloseButton
-local MainFrame = PlotsGUI.MainFrame
-local InternalFrame = MainFrame.InternalFrame
-local ScrollingFrame = InternalFrame.ScrollingFrame
-local Template = InternalFrame.Template
+local CloseButton = MainFrame.CloseFrame.CloseButton
+local SelectedFrame = MainFrame.SelectedFrame
+local StatsFrame = SelectedFrame.Stats
+local InventoryFrame = MainFrame.InventoryFrame
+local ScrollingFrame = InventoryFrame.ScrollingFrame
+local Template = InventoryFrame.Template
 
 local TIMER = "Time:  XYZ"
 local LEVEL = "Level: AMOUNT"
 local CYCLE = "Cycle: AMOUNT"
 
-
-local PlotIcons = {}
+local LoadedIcon
+local PreviousIcon
 
 local function UpdateMoneyTimer(plotIcon)
     local currentPlot = State.GetData().Plots[plotIcon.Name]
     if currentPlot.Occupied then 
         local endTime = currentPlot.Tree.TimeUntilMoney
         if (endTime - os.time()) > 0 then 
-            plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
+            StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
-            plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", "Ready To Collect")
+            StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", "Ready To Collect")
+            return "Break"
         end
     end
 end
@@ -41,11 +45,56 @@ local function UpdateWaterTimer(plotIcon)
     if currentPlot.Occupied then 
         local endTime = currentPlot.Tree.TimeUntilWater
         if (endTime - os.time()) > 0 then 
-            plotIcon.WaterBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
+            StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
-            plotIcon.WaterBar.Text = TIMER:gsub("XYZ", "Water Me!")
+            StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", "Water Me!")
+            return "Break"
         end
     end
+end
+
+local function UpdateTimers(plot)
+    task.spawn(function()
+        repeat
+            local updateMoney = UpdateMoneyTimer(LoadedIcon)
+            local updateWater = UpdateWaterTimer(LoadedIcon)
+            print("Repeating")
+
+            if updateMoney and updateWater then break end
+            if LoadedIcon.Name ~= plot.Id then break end 
+            if PlotsGUI.Enabled == false then break end 
+
+        until not task.wait(1) 
+        return
+    end)
+end 
+
+local function HideStats()
+    SelectedFrame.Stats.Visible = false
+    SelectedFrame.Plot_ID.Visible = false
+    PreviousIcon = nil 
+end 
+
+local function ShowStats()
+    SelectedFrame.Stats.Visible = true
+    SelectedFrame.Plot_ID.Visible = true
+end
+
+local function LoadStats(plot)
+    SelectedFrame.Plot_ID.Text = plot.Id
+    StatsFrame.IconTreeName.Text = plot.Tree.Name
+
+    StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
+    StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle)
+
+    ShowStats()
+
+    if PreviousIcon then 
+        if LoadedIcon.Name == PreviousIcon.Name then return end 
+        UpdateTimers(plot)
+    end 
+
+    UpdateTimers(plot)
 end
 
 local function CreateIcon(plot)
@@ -53,18 +102,12 @@ local function CreateIcon(plot)
     plotIcon.Parent = ScrollingFrame
     plotIcon.Visible = true 
     plotIcon.Name = plot.Id
-
-    PlotIcons[plot.Id] =  plotIcon
-
-    local moneyTime = plot.Tree.TimeUntilMoney
-    local waterTime = plot.Tree.TimeUntilWater
-    plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(moneyTime - os.time()))
-    plotIcon.WaterBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(waterTime - os.time()))
-
-    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
-    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle) 
-    
-
+    plotIcon:WaitForChild("ItemName").Text = plot.Id 
+    plotIcon.MouseButton1Down:Connect(function()
+        LoadedIcon = plotIcon
+        LoadStats(plot)
+        PreviousIcon = LoadedIcon
+    end)
 end
 
 local function GeneratePlotsUI()
@@ -80,32 +123,35 @@ local function ClearPlotIcons()
         if icon.Name == "UIGridLayout" then continue end 
         icon:Destroy()
     end
-    table.clear(PlotIcons)
+    HideStats()
 end
 
 GeneratePlotsUI()
 
 local function UpdateLevelLabel(plotIconID)
-    local plotIcon = PlotIcons[plotIconID]
+    local plotIcon = ScrollingFrame[plotIconID]
     local currentPlot = State.GetData().Plots[plotIcon.Name]
 
-    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
-
+    StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
 end
 
-local function UpdateCycleLabel(plotIconId)
-    local plotIcon = PlotIcons[plotIconId]
+local function UpdateCycleLabel(plotIconID)
+    local plotIcon = ScrollingFrame[plotIconID]
     local currentPlot = State.GetData().Plots[plotIcon.Name]
 
-    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle .. " / " .. currentPlot.Tree.MaxCycle) 
+    StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle .. " / " .. currentPlot.Tree.MaxCycle) 
 end
 
 TreeButton.MouseButton1Down:Connect(function()
     PlotsGUI.Enabled = not PlotsGUI.Enabled
+    ClearPlotIcons()
+    GeneratePlotsUI()
 end)
 
 CloseButton.MouseButton1Down:Connect(function()
     PlotsGUI.Enabled = false
+    ClearPlotIcons()
+    GeneratePlotsUI()
 end)
 
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: string)
@@ -135,11 +181,4 @@ Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
     task.delay(0, GeneratePlotsUI)
 end)
 
-task.spawn(function()
-	while task.wait(1) do 
-		for _, plotIcon in (PlotIcons) do 
-			UpdateMoneyTimer(plotIcon)
-			UpdateWaterTimer(plotIcon)
-		end
-	end
-end)
+

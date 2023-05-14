@@ -8,38 +8,44 @@ local character = player.CharacterAdded:Wait()
 
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 
-local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("SeedSelection")
-local closeButton = UI.CloseFrame.CloseButton
-local MainFrame = UI.MainFrame
-local InternalFrame = MainFrame.InternalFrame
-local scrollingFrame = InternalFrame.ScrollingFrame
-local InformationFrame = InternalFrame.InformationFrame.Frame
-local template = scrollingFrame.Template
+local State= require(ReplicatedStorage.Client.State)
 
-local Seeds = StateManager.GetData().Seeds
+local UI = player.PlayerGui:WaitForChild("SeedSelection")
+local MainFrame = UI.MainFrame
+local CloseButton = MainFrame.CloseFrame.CloseButton
+local InventoryFrame = MainFrame.InventoryFrame
+local ScrollingFrame = InventoryFrame.ScrollingFrame
+local SelectedFrame = MainFrame.SelectedFrame
+local StatsFrame = SelectedFrame.Stats
+local Template = InventoryFrame.Template
+
+local Seeds = State.GetData().Seeds
 
 local Seed 
 local PlotID
 local MudPos
 local AnimPart
 
+local AMOUNT = "Amount: REPLACE"
+local NAME = "Name: REPLACE"
+
 local crouchAnimID = "rbxassetid://13248889864"
 
 local function LoadStats(seedReceived)
-	InformationFrame.SeedDescription.Text = seedReceived.Description 
+	StatsFrame.Description.IconDescription.Text = seedReceived.Description 
+	StatsFrame.IconAmount.Text = AMOUNT:gsub("REPLACE", seedReceived.Amount)
+	StatsFrame.IconName.Text = NAME:gsub("REPLACE", seedReceived.Name)
 	Seed = seedReceived
 end
 
 local function CreateSeedIcon(seed)
-	local seedIcon = template:Clone()
+	local seedIcon = Template:Clone()
 	seedIcon.Visible = true 
-	seedIcon.Parent = scrollingFrame.IconsFolder
-	seedIcon.Amount.Text = seed.Amount
-	seedIcon.Label.Text = seed.Name
+	seedIcon.Parent = ScrollingFrame
+	seedIcon.ItemName.Text = seed.Name
 	seedIcon.Name = seed.Name
 	
-	seedIcon.TextButton.MouseButton1Down:Connect(function()
+	seedIcon.MouseButton1Down:Connect(function()
 		LoadStats(seed)
 	end)	
 end
@@ -48,11 +54,13 @@ local function UpdateSeedIcons(plotReceived, mudPosition, animationPositionPart)
 	PlotID = plotReceived
 	MudPos = mudPosition
 	AnimPart = animationPositionPart
-	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
+
+	Seeds = State.GetData().Seeds
+
+	for _, Icon in ScrollingFrame:GetChildren() do
 
 		if Icon.Name == "UIGridLayout" then continue end
 
-		Icon.Amount.Text = Seeds[Icon.Name].Amount 
 		if Seeds[Icon.Name].Amount <= 0 then
 			Icon.Visible = false
 		else 
@@ -75,7 +83,7 @@ local function PlantSeed()
 	Remotes.UpdateOccupied:FireServer(PlotID, true, Seed.Name, MudPos)
 end
 
-InformationFrame.PlantButton.MouseButton1Down:Connect(function()
+StatsFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	PlantSeed() 	
 	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
@@ -83,7 +91,7 @@ InformationFrame.PlantButton.MouseButton1Down:Connect(function()
 	plantingSound:Play()
 end)
 
-closeButton.MouseButton1Down:Connect(function()
+CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
 	PlayerMovement:Movement(player, true)
 end)

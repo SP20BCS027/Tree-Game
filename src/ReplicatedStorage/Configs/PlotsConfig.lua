@@ -9,6 +9,7 @@ type PlotsConfigTemp = {
 	Tree: Trees.TreeConfig?, 
 	Position: CFrame, 
 	Price: number, 
+	LayoutOrder: number,
 }
 
 local Plots: {[number] : PlotsConfigTemp} = {
@@ -19,6 +20,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Tree = nil, 
 		Position = 0, 
 		Price = 100,
+		LayoutOrder = 1, 
 	},
 	Plot_2 = {
 		Name = "SecondPlot",
@@ -26,6 +28,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
+		LayoutOrder = 2, 
 	}, 
 	Plot_3 = {
 		Name = "ThirdPlot",
@@ -33,6 +36,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
+		LayoutOrder = 3, 
 	}, 
 	Plot_4 = {
 		Name = "FourthPlot",
@@ -40,6 +44,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
+		LayoutOrder = 4, 
 	}, 
 	Plot_5 = {
 		Name = "FifthPlot",
@@ -47,6 +52,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Occupied = false, 
 		Tree = nil, 
 		Price = 100,
+		LayoutOrder = 5, 
 	}, 
 }
 

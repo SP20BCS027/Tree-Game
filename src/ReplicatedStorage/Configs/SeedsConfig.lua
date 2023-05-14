@@ -32,7 +32,7 @@ local SeedsConfig: {[string] : SeedsConfigTemp} = {
 	}, 
 	Mythical = {
 		Name = "Mythical", 
-		Amount = 0, 
+		Amount = 010, 
 		Description = "This will plant a Mythical Tree", 
 		Price = 500
 	}

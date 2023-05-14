@@ -7,12 +7,13 @@ local Remotes = ReplicatedStorage.Remotes
 local triggerpart = WorkSpace.PlotsShop
 local Debounce = {}
 local DELAY = 5
+local SHOP_ID = "Plot"
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 
 local function GenerateUI(player: Player)
     if Debounce[player] then return end 
 
-	Remotes.OpenPlotsShop:FireClient(player)
+	Remotes.OpenPlotsShop:FireClient(player, SHOP_ID)
 
     local character = player.Character 
     character.HumanoidRootPart.CFrame = triggerpart.PositionPart.CFrame + VERTICAL_OFFSET

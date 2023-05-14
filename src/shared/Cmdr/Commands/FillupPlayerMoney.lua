@@ -1,7 +1,7 @@
 return {
 	Name = "fillupPlayerMoney"; 
 	Aliases = { "fillupPlayerMoney", "fpm" };
-	Description = "Fillsup the Backpack of the current Player";
+	Description = "Fills up the Backpack of the current Player";
 	Group = "Admin"; 
 	Args = {
 		{
