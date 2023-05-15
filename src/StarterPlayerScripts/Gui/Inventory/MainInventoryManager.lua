@@ -4,6 +4,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local State = require(ReplicatedStorage.Client.State)
 
+local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
+
 local Configs = {}
 
 local CurrentDirectory
@@ -12,6 +14,9 @@ local player = game.Players.LocalPlayer
 
 local MainInventoryUI = player.PlayerGui:WaitForChild("MainInventory")
 local MainFrame = MainInventoryUI.MainFrame
+
+local BackgroundFrame = MainFrame.BackgroundFrame
+
 local CloseButton = MainFrame.CloseFrame.CloseButton
 
 local InventoryFrame = MainFrame.InventoryFrame
@@ -84,6 +89,18 @@ local function ShowStats(item)
         EquipButton.Text = "Already Equipped"
     end
     IconImage.Visible = true
+end
+
+-- This Function Updates the Colors of the Inventory UI 
+
+local function ChangeColors()
+    BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].BackgroundFrame
+    InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].InventoryFrame    
+    EquippedFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].EquippedFrame
+    DescriptionFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].DescriptionFrame
+    IconAmount.BackgroundColor3 = InventoryUIColors[CurrentInventory].IconAmount
+    IconName.BackgroundColor3 = InventoryUIColors[CurrentInventory].IconName
+    IconImage.BackgroundColor3 = InventoryUIColors[CurrentInventory].IconImage
 end
 
 -- This Function Resets the Trasparency of back to 0 for all icons
@@ -170,6 +187,8 @@ function MainInventory.GenerateInventory(setID)
     HideStats()
 
     CurrentInventory = setID
+
+    ChangeColors()
 
     for _, item in CurrentDirectory do 
         CreateIcon(item)

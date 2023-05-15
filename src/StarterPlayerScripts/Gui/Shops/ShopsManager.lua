@@ -8,11 +8,12 @@ local Configs = ReplicatedStorage.Configs
 
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 local State = require(ReplicatedStorage.Client.State)
+local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 
 local ShopUI = player.PlayerGui:WaitForChild("ShopTemplate")
 local MainFrame = ShopUI.MainFrame
 local CloseButton = MainFrame.CloseFrame.CloseButton
-
+local BackgroundFrame = MainFrame.BackgroundFrame
 local SelectedFrame = MainFrame.SelectedFrame
 local IconImage = SelectedFrame.IconImage
 local IconStats = SelectedFrame.Stats
@@ -46,24 +47,35 @@ local Shops = {}
 -- This function loads the Configs into the Shops Table
 
 local function GetDataFromConfigs()
-    Shops["Backpack"] = require(Configs.BackpacksConfig)
-    Shops["Fertilizer"] = require(Configs.FertilizerConfig)
-    Shops["Plot"] = require(Configs.PlotsConfig)
-    Shops["Seed"] = require(Configs.SeedsConfig)
-    Shops["Watercan"] = require(Configs.WaterCanConfig)
+    Shops["Backpacks"] = require(Configs.BackpacksConfig)
+    Shops["Fertilizers"] = require(Configs.FertilizerConfig)
+    Shops["Plots"] = require(Configs.PlotsConfig)
+    Shops["Seeds"] = require(Configs.SeedsConfig)
+    Shops["WaterCans"] = require(Configs.WaterCanConfig)
 end
 
 GetDataFromConfigs()
 
+local function ChangeColors()
+    print(CurrentShop)
+    BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].BackgroundFrame
+    InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].InventoryFrame    
+    SelectedFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].EquippedFrame
+    DescriptionFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].DescriptionFrame
+    IconPrice.BackgroundColor3 = InventoryUIColors[CurrentShop].IconAmount
+    IconName.BackgroundColor3 = InventoryUIColors[CurrentShop].IconName
+    IconImage.BackgroundColor3 = InventoryUIColors[CurrentShop].IconImage
+end
+
 -- Thsi function Checks for owner of the Watering Can or the Bacpack and returns a boolean Value
 
 local function CheckForOwnerShip()
-    if CurrentShop == "Backpack" then 
+    if CurrentShop == "Backpacks" then 
         if State.GetData().OwnedBackpacks[SelectedItem.Name] then 
             return true
         end
     end
-    if CurrentShop == "Watercan" then 
+    if CurrentShop == "WaterCans" then 
         if State.GetData().OwnedWaterCans[SelectedItem.Name] then 
             return true
         end
@@ -171,7 +183,7 @@ local function ShowStats()
     IconPrice.Visible = true
     DescriptionFrame.Visible = true
     BuyButton.Visible = true
-    if CurrentShop == "Seed" or CurrentShop == "Fertilizer" then 
+    if CurrentShop == "Seeds" or CurrentShop == "Fertilizers" then 
         BuyButton.Visible = false
         BuyFrame.Visible = true 
     end
@@ -239,7 +251,7 @@ local function CreateIcon(item)
         icon.LayoutOrder = item.LayoutOrder
     end
 
-    if CurrentShop == "Plot" then 
+    if CurrentShop == "Plots" then 
         icon.Name = item.Id
         if CheckForPlotOwnerShip(icon.Name) then 
             icon.EquippedIcon.Visible = true 
@@ -279,7 +291,9 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     CurrentShop = shopID
     ShopUI.Enabled = true
 
-    if CurrentShop == "Plot" then 
+    ChangeColors()
+
+    if CurrentShop == "Plots" then 
         NumberOfPlots = 0 
         for _, _ in pairs(State.GetData().Plots) do 
             NumberOfPlots += 1
@@ -301,26 +315,26 @@ end)
 -- When the Buy Button is pressed calls the desired Buy Function
 
 BuyButton.MouseButton1Down:Connect(function()
-    if CurrentShop == "Backpack" then 
+    if CurrentShop == "Backpacks" then 
         BuyBackpack()
         return
     end
-    if CurrentShop == "Watercan" then 
+    if CurrentShop == "WaterCans" then 
         BuyWaterCan() 
         return
     end
-    if CurrentShop == "Plot" then 
+    if CurrentShop == "Plots" then 
         BuyPlot()
         return 
     end 
 end)
 
 NumberBuyButton.MouseButton1Down:Connect(function()
-    if CurrentShop == "Seed" then 
+    if CurrentShop == "Seeds" then 
         BuySeed()
         return
     end
-    if CurrentShop == "Fertilizer" then 
+    if CurrentShop == "Fertilizers" then 
         BuyFertilizer()
         return
     end

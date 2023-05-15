@@ -7,7 +7,7 @@ local Remotes = ReplicatedStorage.Remotes
 local TriggerPart = WorkSpace.BackpackShop
 local Debounce = {}
 local DELAY = 5
-local SHOP_ID = "Backpack"
+local SHOP_ID = "Backpacks"
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 
 local function GenerateUI(player: Player)
