@@ -19,6 +19,13 @@ local IconStats = SelectedFrame.Stats
 local IconName = IconStats.IconName
 local IconPrice = IconStats.IconPrice
 local BuyButton = IconStats.BuyButton
+local BuyFrame = IconStats.BuyFrame 
+local NumberBuyButton = BuyFrame.BuyButton
+local AdditionFrame = BuyFrame.AdditionFrame
+local AmountLabel = AdditionFrame.AmountLabel 
+local MinusButton = AdditionFrame.MinusButtonFrame.MinusButton
+local PlusButton = AdditionFrame.PlusButtonFrame.PlusButton 
+
 local DescriptionFrame = IconStats.Description
 local IconDescription = IconStats.Description.IconDescription
 
@@ -32,6 +39,7 @@ local PRICE_TEXT = "Price: REPLACE"
 local SelectedItem
 local CurrentShop
 local NumberOfPlots
+local AmountOfItems = 1 
 
 local Shops = {}
 
@@ -111,8 +119,8 @@ end
 
 local function BuySeed()
     if State.GetData().Coins >= SelectedItem.Price then
-		Remotes.UpdateOwnedSeeds:FireServer(1, SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
+		Remotes.UpdateOwnedSeeds:FireServer(AmountOfItems, SelectedItem.Name)
+		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price * AmountOfItems))
 		print("Bought")
 	else
 		print("You don't have enough money")
@@ -123,8 +131,8 @@ end
 
 local function BuyFertilizer()
     if State.GetData().Coins >= SelectedItem.Price then
-		Remotes.UpdateOwnedFertilizers:FireServer(1, SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
+		Remotes.UpdateOwnedFertilizers:FireServer(AmountOfItems, SelectedItem.Name)
+		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price * AmountOfItems))
 		print("Bought")
 	else
 		print("You don't have enough money")
@@ -152,6 +160,10 @@ local function BuyPlot()
     print("Not Enough Money")
 end
 
+local function SetAmountLabelText()
+    AmountLabel.Text = AmountOfItems
+end 
+
 -- This funcion shows all the stats of the Information Frame 
 
 local function ShowStats()
@@ -159,7 +171,13 @@ local function ShowStats()
     IconPrice.Visible = true
     DescriptionFrame.Visible = true
     BuyButton.Visible = true
+    if CurrentShop == "Seed" or CurrentShop == "Fertilizer" then 
+        BuyButton.Visible = false
+        BuyFrame.Visible = true 
+    end
     IconImage.Visible = true 
+    AmountLabel.Text = 1
+    AmountOfItems = 1 
 end
 
 -- This function Hides all the stats of the Information Frame 
@@ -169,6 +187,7 @@ local function HideStats()
     IconPrice.Visible = false
     DescriptionFrame.Visible = false 
     BuyButton.Visible = false
+    BuyFrame.Visible = false 
     IconImage.Visible = false
 end
 
@@ -290,6 +309,13 @@ BuyButton.MouseButton1Down:Connect(function()
         BuyWaterCan() 
         return
     end
+    if CurrentShop == "Plot" then 
+        BuyPlot()
+        return 
+    end 
+end)
+
+NumberBuyButton.MouseButton1Down:Connect(function()
     if CurrentShop == "Seed" then 
         BuySeed()
         return
@@ -298,10 +324,24 @@ BuyButton.MouseButton1Down:Connect(function()
         BuyFertilizer()
         return
     end
-    if CurrentShop == "Plot" then 
-        BuyPlot()
-        return 
-    end 
+end)
+
+MinusButton.MouseButton1Down:Connect(function()
+    if AmountOfItems < 2 then
+        AmountOfItems = 1 
+    else 
+        AmountOfItems -= 1 
+    end
+    SetAmountLabelText()
+end)
+
+PlusButton.MouseButton1Down:Connect(function()
+    if AmountOfItems > 9 then 
+        AmountOfItems = 10 
+    else 
+        AmountOfItems += 1
+    end
+    SetAmountLabelText()
 end)
 
 return ShopsManager
