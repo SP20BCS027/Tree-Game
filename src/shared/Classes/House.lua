@@ -46,7 +46,6 @@ function House.new(houseFolder, allHouses)
 			House.ClearPlotOnPlayerLeaving(houseObject)
 		end
 	end)
-
 	return houseObject
 end
 
@@ -64,7 +63,6 @@ function House:CheckOwner(player: Player)
 end
 
 function House.PlantTrees(house, playerDataPlots)
-
 	for name, plot in pairs(house.Plots)do 
 		if not playerDataPlots[name] then continue end
 		if not playerDataPlots[name].Tree then continue end

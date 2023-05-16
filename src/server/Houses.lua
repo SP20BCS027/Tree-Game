@@ -17,11 +17,11 @@ end
 CreateHouses()
 
 function HouseModule.GetPlayerPlot(player: Player, plot: string)
-	for _, HouseOb in pairs(Houses) do
-		if not HouseOb.owner then return end 
-        if HouseOb.owner ~= player then return end 
+	for _, house in pairs(Houses) do
+		if not house.owner then return end 
+        if house.owner ~= player then return end 
 
-        return HouseOb.Plots[plot]
+        return house.Plots[plot]
 	end
 end
 
@@ -34,12 +34,19 @@ function HouseModule.ReturnPlayerWell(player: Player)
 	end
 end
 
-local function GetTreeObject(plotObject: Model)
+function HouseModule.GetTreeObject(plotObject: Model)
 	for _, child in pairs (plotObject:GetChildren()) do 
 		if string.find(child.Name, "Tree") then 
 			return child 
 		end 
 	end 
+end
+
+function HouseModule.CheckForOwnerShip(player: Player)
+	for _, house in pairs(Houses) do 
+		if house.owner == player then return true end
+	end
+	return false
 end
 
 local function GetNewTree(nameOfTree: string)
@@ -51,7 +58,7 @@ local function GetNewTree(nameOfTree: string)
 end
 
 function HouseModule.ChangeTreeModel(plotObject: Model)
-	local plantedTree = GetTreeObject(plotObject)
+	local plantedTree = HouseModule.GetTreeObject(plotObject)
 	local treeName = plantedTree.Name 
 
 	local baseName = string.sub(treeName, 1, string.find(treeName, "_") - 1)
@@ -62,6 +69,12 @@ function HouseModule.ChangeTreeModel(plotObject: Model)
 	updatedTree.Parent = plantedTree.Parent 
 	updatedTree:PivotTo(CFrame.new(plantedTree:GetPivot().p))
 	plantedTree:Destroy()
+end
+
+function HouseModule.SetTreeHarvestTransparency(treeObject: Model, transparency: number)
+	for _, valuable in pairs(treeObject.Money:GetChildren()) do 
+		valuable.Transparency = transparency
+	end
 end
 
 Remotes.AskUIInformation.OnServerInvoke = HouseModule.GetPlayerPlot
