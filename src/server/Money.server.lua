@@ -13,11 +13,7 @@ local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotID: number
 		Manager.UpdateTreeMoneyTimer(player, plotID)
 		local plot = Houses.GetPlayerPlot(player, plotID)
 		local tree = Houses.GetTreeObject(plot)
-		local treeMoney = tree.Money:GetChildren()
-		print(treeMoney)
-		for _, valuable in pairs(treeMoney) do 
-			valuable.Transparency = 1
-		end
+		Houses.SetTreeHarvestTransparency(tree, 1)
 	end	
 end
 
