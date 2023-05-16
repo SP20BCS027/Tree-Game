@@ -34,7 +34,7 @@ function HouseModule.ReturnPlayerWell(player: Player)
 	end
 end
 
-local function GetTreeObject(plotObject: Model)
+ function HouseModule.GetTreeObject(plotObject: Model)
 	for _, child in pairs (plotObject:GetChildren()) do 
 		if string.find(child.Name, "Tree") then 
 			return child 
@@ -51,7 +51,7 @@ local function GetNewTree(nameOfTree: string)
 end
 
 function HouseModule.ChangeTreeModel(plotObject: Model)
-	local plantedTree = GetTreeObject(plotObject)
+	local plantedTree = HouseModule.GetTreeObject(plotObject)
 	local treeName = plantedTree.Name 
 
 	local baseName = string.sub(treeName, 1, string.find(treeName, "_") - 1)
