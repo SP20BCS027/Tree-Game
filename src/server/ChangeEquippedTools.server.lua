@@ -2,6 +2,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
+local BackpackEquippingHandler = require(ServerScriptService.BackpackEquippingHandler)
 
 local Remotes = ReplicatedStorage.Remotes
 
@@ -15,6 +16,7 @@ local function ChangeEquippedBackpack(player: Player, backpack: string)
 
 	if profile.Data.OwnedBackpacks[backpack] then 
 		Manager.EquipBackpack(player, backpack)
+		BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
 	end
 end
 

@@ -57,7 +57,6 @@ end
 GetDataFromConfigs()
 
 local function ChangeColors()
-    print(CurrentShop)
     BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].BackgroundFrame
     InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].InventoryFrame    
     SelectedFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].EquippedFrame
@@ -101,6 +100,8 @@ local function BuyBackpack()
 
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedBackpacks:FireServer(SelectedItem.Name)
+        Remotes.GivePlayerBackpack:FireServer(SelectedItem.Name)
+        Remotes.UpdateBackpackLabel:FireServer()
 		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
         print("Bought")
         BuyButton.Text = "Owned"

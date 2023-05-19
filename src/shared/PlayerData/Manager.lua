@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local Remotes = ReplicatedStorage.Remotes
 
@@ -253,7 +254,7 @@ function Manager.FillupBackpack(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	profile.Data.Money = profile.Data.EquippedBackpack.Capacity
+	profile.Data.Money = profile.Data.EquippedBackpack.Capacity	
 	Remotes.FillupBackpack:FireClient(player)
 end
 

@@ -45,6 +45,15 @@ local Colors : {[string]: ColorsConfig} = {
 		IconName = Color3.fromRGB(212, 163, 115), 
 		IconImage = Color3.fromRGB(212, 163, 115),
 	}, 
+	Plots = {
+		BackgroundFrame = Color3.fromRGB(212, 163, 115),
+		InventoryFrame = Color3.fromRGB(250, 237, 205), 
+		EquippedFrame = Color3.fromRGB(250, 237, 205), 
+		DescriptionFrame = Color3.fromRGB(212, 163, 115), 
+		IconAmount = Color3.fromRGB(212, 163, 115), 
+		IconName = Color3.fromRGB(212, 163, 115), 
+		IconImage = Color3.fromRGB(212, 163, 115),
+	}
 
 }
 

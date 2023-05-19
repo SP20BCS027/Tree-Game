@@ -3,6 +3,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Players = game:GetService("Players")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
+local BackpackEquippingHandler = require(ServerScriptService.BackpackEquippingHandler)
 
 local TouchPart = WorkSpace:WaitForChild("SellPart")
 
@@ -20,7 +21,8 @@ TouchPart.Touched:Connect(function(touch)
 		
 		Manager.AdjustCoins(player, profile.Data.Money)
 		Manager.SellAllMoney(player)		
-		
+		BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
+
 		task.delay(DELAY, function()
 			Debounce[player] = nil
 		end)

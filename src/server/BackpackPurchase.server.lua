@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
 local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
+local BackpackEquippingHandler = require(ServerScriptService.BackpackEquippingHandler)
 
 local Remotes = ReplicatedStorage.Remotes
 
@@ -22,6 +23,7 @@ local function PurchasePack(player: Player, backpack: string)
 	if profile.Data.Coins >= BackpacksConfig[backpack].Price then 
 		Manager.PurchaseBackpack(player, backpack)
 		ChangeEquippedBackpack(player, backpack)
+		BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
 	end
 end
 
