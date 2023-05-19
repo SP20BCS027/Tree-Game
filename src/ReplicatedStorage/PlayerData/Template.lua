@@ -6,6 +6,7 @@ local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 local DungeonConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 local SeedsConfig = require(ReplicatedStorage.Configs.SeedsConfig)
 local FertilizerConfig = require(ReplicatedStorage.Configs.FertilizerConfig)
+local AchievementsConfig = require(ReplicatedStorage.Configs.AchievementsConfig)
 
 local Template = {
 	Coins = 0, 
@@ -32,6 +33,8 @@ local Template = {
 		DrawStringBag = BackpackConfig.DrawStringBag 
 	},
 	
+	Achievements = AchievementsConfig,
+
 	UnlockedDungeons = DungeonConfig, 
 }
 

@@ -7,6 +7,7 @@ local Template = require(ReplicatedStorage.PlayerData.Template)
 local TreeConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
+local AchievementInfoConfig = require(ReplicatedStorage.Configs.AchievementInfoConfig)
 
 local Manager = {}
 
@@ -212,6 +213,24 @@ function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 
 	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilMoney, plotID)
 end
+
+function Manager.UpdateAchievements(player: Player, achievementType: string, amount: number)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	print("Manager Function was called")
+
+	profile.Data.Achievements[achievementType].AmountAchieved += amount
+
+	if profile.Data.Achievements[achievementType].AmountAchieved >= profile.Data.Achievements[achievementType].AmountToAchieve then
+		profile.Data.Achievements[achievementType].CurrentAchievementNo += 1
+		profile.Data.Achievements[achievementType].AmountToAchieve = AchievementInfoConfig[achievementType][profile.Data.Achievements[achievementType].CurrentAchievementNo]
+	end
+
+	Remotes.UpdateAchievements:FireClient(player, profile.Data.Achievements)
+end
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- This function is used to get a specific directory of Data of the player 
 

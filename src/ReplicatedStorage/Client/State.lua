@@ -114,6 +114,10 @@ Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(Plots: {})
 	PlayerData.Plots = Plots
 end)
 
+Remotes.UpdateAchievements.OnClientEvent:Connect(function(Achievements: {})
+	PlayerData.Achievements = Achievements
+end)
+
 Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function(EquippedBackpack: {})
 	PlayerData.EquippedBackpack = EquippedBackpack
 end)
