@@ -23,12 +23,12 @@ end
 -- This function when called loads up the menu where the Seed to be Planted is Selected 
 -- It also makes the player unable to move 
 
-local function PlantSeed(plotId, mudPosition, animationPositionPart)
+local function PlantSeed(plotId: string, mudPosition: Vector3, animationPositionPart: Part)
 	if not State.GetData().Plots[plotId].Occupied then 
 		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
 		ChangeCharacterPosition(animationPositionPart.CFrame)
 		PlayerMovement:Movement(player, false)
-		
+		--print("This is the plantID in the plantSeed: " .. plotId)
 		print("Seed Planted")
 	else
 		print("This plot is occupied!")
@@ -51,6 +51,7 @@ local function WaterTree(plotId, animationPositionPart)
 			local wateringSound = animationPositionPart.WateringSound
 			wateringSound:Play()
 			print("Tree has been watered!")
+			--print("This is the plotID in Water: " .. plotId)
 		else
 			print("The Tree is already watered or You have no water!")
 		end
