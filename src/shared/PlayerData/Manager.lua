@@ -217,8 +217,6 @@ function Manager.UpdateAchievements(player: Player, achievementType: string, amo
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	print("Manager Function was called")
-
 	profile.Data.Achievements[achievementType].AmountAchieved += amount
 
 	if profile.Data.Achievements[achievementType].AmountAchieved >= profile.Data.Achievements[achievementType].AmountToAchieve then
@@ -253,6 +251,8 @@ end
 
 Remotes.GetData.OnServerInvoke = GetData	
 Remotes.GetAllData.OnServerInvoke = GetAllData
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Here are some functions for the Commands 
 

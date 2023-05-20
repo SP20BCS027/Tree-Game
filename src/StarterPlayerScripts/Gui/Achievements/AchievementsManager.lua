@@ -32,7 +32,7 @@ local function GenerateIcon(achievementName: string, item)
     iconClone.AchievementBarBackground.AchievementBarCompleted.Size = UDim2.new(barCompleted, 0, 1, 0) 
 end
 
-local function ClearAchivements()
+local function ClearAchievements()
     for _, icon in pairs(ScrollingFrame:GetChildren()) do 
         if icon.Name == "UIGridLayout" then continue end 
         icon:Destroy()
@@ -40,7 +40,7 @@ local function ClearAchivements()
 end
 
 function Achievements.GenerateAchievements()
-    ClearAchivements()
+    ClearAchievements()
 
     for achievementName, item in pairs(State.GetData().Achievements) do 
         GenerateIcon( achievementName ,item)

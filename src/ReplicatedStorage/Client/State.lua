@@ -130,6 +130,10 @@ Remotes.UpdateMoney.OnClientEvent:Connect(function(money: number)
 	PlayerData.Money = money
 end)
 
+Remotes.BakriQuest.OnClientEvent:Connect(function(BakriQuest)
+	PlayerData.ActiveQuests = BakriQuest
+end)
+
 Remotes.SellAllMoney.OnClientEvent:Connect(function()
 	PlayerData.Money = 0 
 end)

@@ -7,6 +7,7 @@ local DungeonConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 local SeedsConfig = require(ReplicatedStorage.Configs.SeedsConfig)
 local FertilizerConfig = require(ReplicatedStorage.Configs.FertilizerConfig)
 local AchievementsConfig = require(ReplicatedStorage.Configs.AchievementsConfig)
+local QuestsConfig = require(ReplicatedStorage.Configs.QuestsConfig)
 
 local Template = {
 	Coins = 0, 
@@ -34,6 +35,7 @@ local Template = {
 	},
 	
 	Achievements = AchievementsConfig,
+	ActiveQuests = QuestsConfig,
 
 	UnlockedDungeons = DungeonConfig, 
 }
