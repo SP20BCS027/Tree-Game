@@ -110,6 +110,10 @@ Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(OwnedBackpacks: {})
 	Remotes.Bindables.OnReset.GenerateBackpackInventory:Fire()
 end)
 
+Remotes.DeleteTree.OnClientEvent:Connect(function(Plots: {})
+	PlayerData.Plots = Plots
+end)
+
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(Plots: {})
 	PlayerData.Plots = Plots
 end)

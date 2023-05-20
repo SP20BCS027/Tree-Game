@@ -24,7 +24,6 @@ local function LoadUnloadItems(iconName)
     for _, icon in pairs(linkedIcons[iconName]) do
         icon.Visible = not icon.Visible
     end
-
 end
 
 local function GenerateIcons(item)
@@ -50,17 +49,11 @@ local function GenerateIcons(item)
         increment += 1 
     end
 
-    -- local amountAchieved = State.GetData().Achievements[achievementName].AmountAchieved 
-    -- local amountToAchieve = State.GetData().Achievements[achievementName].AmountToAchieve
-    -- local barCompleted = amountAchieved / amountToAchieve
-
     iconClone.QuestTitle.MouseButton1Down:Connect(function()
         LoadUnloadItems(iconClone.Name)
     end)
 
     iconClone.QuestTitle.Text = item.CurrentQuestInfo.QuestTitle
-    -- iconClone.AchievementBarBackground.AchievementBarText.Text = amountAchieved .. " / " .. amountToAchieve
-    -- iconClone.AchievementBarBackground.AchievementBarCompleted.Size = UDim2.new(barCompleted, 0, 1, 0) 
 end
 
 local function ClearQuests()

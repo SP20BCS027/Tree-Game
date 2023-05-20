@@ -20,6 +20,7 @@ TouchPart.Touched:Connect(function(touch)
 		if not profile then return end 
 		
 		Manager.AdjustCoins(player, profile.Data.Money)
+		Manager.UpdateAchievements(player, "CoinsEarned", profile.Data.Money)
 		Manager.SellAllMoney(player)		
 		BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
 

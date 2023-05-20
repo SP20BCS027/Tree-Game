@@ -16,6 +16,7 @@ local TreeButton = InventoryButton.Frame.Plots
 local CloseButton = MainFrame.CloseFrame.CloseButton
 local SelectedFrame = MainFrame.SelectedFrame
 local StatsFrame = SelectedFrame.Stats
+local DeleteButton = StatsFrame.DeleteButton
 local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame
 local Template = InventoryFrame.Template
@@ -35,7 +36,7 @@ local function UpdateMoneyTimer(plotIcon)
             StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
             StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", "Ready To Collect")
-            return "Break"
+            return true
         end
     end
 end
@@ -48,7 +49,7 @@ local function UpdateWaterTimer(plotIcon)
             StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
             StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", "Water Me!")
-            return "Break"
+            return true
         end
     end
 end
@@ -80,6 +81,10 @@ local function ShowStats()
     SelectedFrame.Plot_ID.Visible = true
 end
 
+local function DeleteTree(plot)
+    Remotes.DeleteTree:FireServer(plot)
+end
+
 local function LoadStats(plot)
     SelectedFrame.Plot_ID.Text = plot.Id
     StatsFrame.IconTreeName.Text = plot.Tree.Name
@@ -107,6 +112,9 @@ local function CreateIcon(plot)
         LoadedIcon = plotIcon
         LoadStats(plot)
         PreviousIcon = LoadedIcon
+    end)
+    plotIcon.DeleteButton.MouseButton1Down:Connect(function()
+        DeleteTree(plot.Id)
     end)
 end
 
@@ -154,6 +162,10 @@ CloseButton.MouseButton1Down:Connect(function()
     GeneratePlotsUI()
 end)
 
+DeleteButton.MouseButton1Down:Connect(function()
+    DeleteTree(LoadedIcon.Name)
+end)
+
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: string)
     if prompt == "LEVEL" then 
         task.delay(0, function()
@@ -172,6 +184,11 @@ Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
     --task.delay(0, generatePlotsUI)
 end)
 Remotes.UpdateOccupied.OnClientEvent:Connect(function()
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
+end)
+
+Remotes.DeleteTree.OnClientEvent:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
 end)

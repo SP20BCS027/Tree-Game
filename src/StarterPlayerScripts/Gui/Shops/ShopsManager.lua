@@ -164,7 +164,7 @@ local function BuyPlot()
     end
 
     if State.GetData().Coins >= SelectedItem.Price then 
-        Remotes.UpdateOwnedPlots:FireServer(SelectedItem    )
+        Remotes.UpdateOwnedPlots:FireServer(SelectedItem)
 		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
         print("Item Has been Bought")
         BuyButton.Text = "Owned"
