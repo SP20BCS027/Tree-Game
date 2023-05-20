@@ -19,4 +19,16 @@ local function UpdateOwnedPlots(player: Player, plot: directory)
 	end 
 end
 
+local function DeleteTree(player: Player, plotID: string)
+	Manager.DeleteTree(player, plotID)
+
+	local playerPlot = Houses.GetPlayerPlot(player, plotID)
+	if not playerPlot then return end
+
+	local plotTree = Houses.GetTreeObject(playerPlot)
+	plotTree:Destroy()
+
+end
+
+Remotes.DeleteTree.OnServerEvent:Connect(DeleteTree)
 Remotes.UpdateOwnedPlots.OnServerEvent:Connect(UpdateOwnedPlots)

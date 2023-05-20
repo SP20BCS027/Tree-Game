@@ -1,17 +1,17 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
+-- local ServerScriptService = game:GetService("ServerScriptService")
 
-local player = game.Players.LocalPlayer
+-- local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 
 local State = require(ReplicatedStorage.Client.State)
 
-local DontCheckForWaterTimer = {}
+-- local DontCheckForWaterTimer = {}
 local DontCheckForMoneyTimer = {}
 
-local function CheckWaterTimer(plot: string) 
+-- local function CheckWaterTimer(plot: string) 
     
-end
+-- end
 
 local function CheckMoneyTimer(plot: string) 
     local currentPlot = State.GetData().Plots[plot]
@@ -33,6 +33,10 @@ local function CheckMoneyTimer(plot: string)
 end
 
 local function SetCheckForMoneyTimer(discard: number, plot: string)
+    if not discard then 
+        print("Wowie something went wrong")
+    end
+    
     DontCheckForMoneyTimer[plot] = nil
 end
 

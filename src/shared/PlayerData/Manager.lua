@@ -171,6 +171,17 @@ function Manager.EquipBackpack(player: Player, backpackID: string)
 	Remotes.ChangeEquippedBackpack:FireClient(player, profile.Data.EquippedBackpack)
 end
 
+-- When this function gets called the Tree of the Plot gets Yeeted
+
+function Manager.DeleteTree(player: Player, plotID: number)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.Plots[plotID].Occupied = false
+	profile.Data.Plots[plotID].Tree = nil
+	Remotes.DeleteTree:FireClient(player, profile.Data.Plots)
+end
+
 -- When this function gets called the Water Timer of the tree get updated 
 
 function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)

@@ -64,8 +64,11 @@ end
 
 local function CollectMoney(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
-		if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
+		if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time() and State.GetData().EquippedBackpack.Capacity > State.GetData().Money then
+
+			Remotes.UpdateAchievements:FireServer("MoneyEarned", plotId)
 			Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
+
 			ChangeCharacterPosition(animationPositionPart.CFrame)
 			PlayerMovement:Movement(player, false)
 			AnimationHandler.PlayAnimation(player, character, crouchAnimID)
@@ -96,6 +99,7 @@ end
 local function GenerateUIs()
 	for name, _ in (State.GetData().Plots) do
 		local Plot = Remotes.AskUIInformation:InvokeServer(name)
+		if not Plot then return end
 		local Buttons = Template:Clone()
 		Buttons.Parent = PlotStatsUI.PlotInteractive
 		Buttons.Name = name

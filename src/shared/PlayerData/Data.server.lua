@@ -17,19 +17,18 @@ local function CreateLeaderstats(player: Player)
 	local leaderstats = Instance.new("Folder")
 	leaderstats.Parent = player
 	leaderstats.Name = "leaderstats"
-	
+
 	local coins = Instance.new("NumberValue")
 	coins.Parent = leaderstats
 	coins.Name = "Coins"
 	coins.Value = profile.Data.Coins
-	
+
 	local gems = Instance.new("NumberValue")
 	gems.Parent = leaderstats
 	gems.Name = "Gems"
 	gems.Value = profile.Data.Gems 	
 	
 end
-
 
 local function LoadData(player: Player)
 	local profile = ProfileStore:LoadProfileAsync("Player_"..player.UserId)
@@ -49,7 +48,6 @@ local function LoadData(player: Player)
 		Manager.Profiles[player] = profile
 		CreateLeaderstats(player)
 	end
-	
 end
 
 for _, player in Players:GetPlayers() do
