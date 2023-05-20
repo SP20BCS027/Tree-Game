@@ -114,6 +114,10 @@ Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(Plots: {})
 	PlayerData.Plots = Plots
 end)
 
+Remotes.UpdateAchievements.OnClientEvent:Connect(function(Achievements: {})
+	PlayerData.Achievements = Achievements
+end)
+
 Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function(EquippedBackpack: {})
 	PlayerData.EquippedBackpack = EquippedBackpack
 end)
@@ -124,6 +128,10 @@ end)
 
 Remotes.UpdateMoney.OnClientEvent:Connect(function(money: number)
 	PlayerData.Money = money
+end)
+
+Remotes.BakriQuest.OnClientEvent:Connect(function(BakriQuest)
+	PlayerData.ActiveQuests = BakriQuest
 end)
 
 Remotes.SellAllMoney.OnClientEvent:Connect(function()

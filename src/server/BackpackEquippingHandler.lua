@@ -2,7 +2,6 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
-local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 
 local Remotes = ReplicatedStorage.Remotes
 local BackpackEquipping = {}
@@ -19,8 +18,6 @@ local function GivePlayerBackpack(player: Player, BackpackID: string)
 	local backpack = ReplicatedStorage.Backpacks[BackpackID]:Clone()
 	backpack.Name = "Backpack"
 	backpack.Parent = character 
-
-	print(character.UpperTorso.BodyBackAttachment.WorldCFrame)
 
 	local moveCFrame = character.UpperTorso.CFrame * character.UpperTorso.BodyBackAttachment.CFrame
 
