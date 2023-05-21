@@ -115,12 +115,15 @@ function Manager.AdjustPlotOccupation(player: Player, PlotID: number, isOccupied
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
+	print("This function AdjustPlotOccupation Got Called" .. PlotID)
+
 	profile.Data.Plots[PlotID].Occupied = isOccupied
-	profile.Data.Plots[PlotID].Tree = TreeConfig[treeToPlant]
+	profile.Data.Plots[PlotID].Tree = table.clone(TreeConfig[treeToPlant])
+
 	profile.Data.Plots[PlotID].Tree.TimeUntilWater = os.time() + 20 
 	
 	Remotes.UpdateOccupied:FireClient(player, profile.Data.Plots[PlotID].Occupied, PlotID)
-	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotID].Tree.TimeUntilWater, PlotID, treeToPlant)
+	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotID].Tree, PlotID)
 end
 
 -- When this function gets called the plot is added to the owned plots of the player. 
@@ -181,7 +184,7 @@ function Manager.DeleteTree(player: Player, plotID: number)
 
 	profile.Data.Plots[plotID].Occupied = false
 	profile.Data.Plots[plotID].Tree = nil
-	Remotes.DeleteTree:FireClient(player, profile.Data.Plots)
+	Remotes.DeleteTree:FireClient(player, plotID)
 end
 
 -- When this function gets called the Water Timer of the tree get updated 
@@ -192,7 +195,7 @@ function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	
 	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenWater
 
-	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
+	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree, plotID)
 end
 
 -- When this function gets Called The Tree's Level or Cycle is Changed 
