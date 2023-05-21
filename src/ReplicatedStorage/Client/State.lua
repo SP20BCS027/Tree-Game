@@ -84,20 +84,11 @@ Remotes.RefillWater.OnClientEvent:Connect(function()
 	PlayerData.Water = PlayerData.EquippedWaterCan.Capacity
 end)
 
-Remotes.FillupBackpack.OnClientEvent:Connect(function()
-	PlayerData.Money = PlayerData.EquippedBackpack.Capacity
-end)
-
-Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: number, cycle: number)
-	if prompt == "LEVEL" then
-		PlayerData.Plots[plotID].Tree.CurrentLevel = PlayerData.Plots[plotID].Tree.CurrentLevel + 1 
-		PlayerData.Plots[plotID].Tree.MaxCycle = PlayerData.Plots[plotID].Tree.MaxCycle + 1
-		PlayerData.Plots[plotID].Tree.CurrentCycle = 0 
-		Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
-		Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
-	elseif prompt == "CYCLE" then
-		PlayerData.Plots[plotID].Tree.CurrentCycle = PlayerData.Plots[plotID].Tree.CurrentCycle + cycle
-	end
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: number, Tree)
+	Tree = if Tree then Tree else PlayerData.Plots[plotID].Tree
+	PlayerData.Plots[plotID].Tree = Tree 
+	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
+	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
 end)
 
 Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(OwnedWaterCans: {})

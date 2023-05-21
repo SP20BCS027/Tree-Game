@@ -7,7 +7,6 @@ local Remotes = ReplicatedStorage.Remotes
 local BackpackEquipping = {}
 
 local function GivePlayerBackpack(player: Player, BackpackID: string)
-	
 	local character = player.Character
 
 	if character then 
@@ -27,6 +26,9 @@ local function GivePlayerBackpack(player: Player, BackpackID: string)
 	weld.Parent = backpack.Part
 	weld.Part0 = backpack.Part
 	weld.Part1 = character.UpperTorso
+
+
+	BackpackEquipping.UpdatePlayerBackpackLabel(player)
 end
 
 function BackpackEquipping.UpdatePlayerBackpackLabel(player: Player)

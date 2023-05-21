@@ -78,8 +78,9 @@ end
 
 GenerateSelectableSeeds()
 
+
 local function PlantSeed()
-	Remotes.UpdateOwnedSeeds:FireServer(-1, Seed.Name)
+	Remotes.PlantedSeed:FireServer(Seed.Name)
 	Remotes.UpdateAchievements:FireServer("SeedsPlanted", 1)
 	Remotes.UpdateOccupied:FireServer(PlotID, true, Seed.Name, MudPos)
 end

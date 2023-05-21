@@ -14,7 +14,7 @@ type PlotsConfigTemp = {
 
 local Plots: {[number] : PlotsConfigTemp} = {
 	Plot_1 = {
-		Name = "FirstPlot",
+		Name = "First Plot",
 		Id = "Plot_1",
 		Occupied = false, 
 		Tree = nil, 
@@ -23,36 +23,39 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		LayoutOrder = 1, 
 	},
 	Plot_2 = {
-		Name = "SecondPlot",
+		Name = "Second Plot",
 		Id = "Plot_2",
 		Occupied = false, 
 		Tree = nil, 
-		Price = 100,
+		Price = 500,
 		LayoutOrder = 2, 
 	}, 
 	Plot_3 = {
-		Name = "ThirdPlot",
+		Name = "Third Plot",
 		Id = "Plot_3",
 		Occupied = false, 
 		Tree = nil, 
-		Price = 100,
+		Price = 2000,
 		LayoutOrder = 3, 
+
 	}, 
 	Plot_4 = {
-		Name = "FourthPlot",
+		Name = "Fourth Plot",
 		Id = "Plot_4",
 		Occupied = false, 
 		Tree = nil, 
-		Price = 100,
+		Price = 25000,
 		LayoutOrder = 4, 
+
 	}, 
 	Plot_5 = {
-		Name = "FifthPlot",
+		Name = "Fifth Plot",
 		Id = "Plot_5",
 		Occupied = false, 
 		Tree = nil, 
-		Price = 100,
+    Price = 50000,
 		LayoutOrder = 5, 
+
 	}, 
 }
 

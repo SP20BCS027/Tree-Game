@@ -101,8 +101,6 @@ local function BuyBackpack()
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedBackpacks:FireServer(SelectedItem.Name)
         Remotes.GivePlayerBackpack:FireServer(SelectedItem.Name)
-        Remotes.UpdateBackpackLabel:FireServer()
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
         print("Bought")
         BuyButton.Text = "Owned"
         return
@@ -120,9 +118,6 @@ local function BuyWaterCan()
 
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedWaterCans:FireServer(SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
-        print("Item Has been Bought")
-        BuyButton.Text = "Owned"
         return
     end
     print("Not Enough Money")
@@ -133,7 +128,6 @@ end
 local function BuySeed()
     if State.GetData().Coins >= SelectedItem.Price then
 		Remotes.UpdateOwnedSeeds:FireServer(AmountOfItems, SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price * AmountOfItems))
 		print("Bought")
 	else
 		print("You don't have enough money")
@@ -145,7 +139,6 @@ end
 local function BuyFertilizer()
     if State.GetData().Coins >= SelectedItem.Price then
 		Remotes.UpdateOwnedFertilizers:FireServer(AmountOfItems, SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price * AmountOfItems))
 		print("Bought")
 	else
 		print("You don't have enough money")
@@ -165,7 +158,6 @@ local function BuyPlot()
 
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedPlots:FireServer(SelectedItem)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
         print("Item Has been Bought")
         BuyButton.Text = "Owned"
         return
@@ -213,13 +205,15 @@ local function LoadStats(item)
         IconDescription.Text = item.Description
     end
     BuyButton.Text = "Buy"
-    if CurrentShop == "Backpack" or CurrentShop == "Watercan" then 
+    if CurrentShop == "Backpacks" or CurrentShop == "Watercans" then 
+
         if CheckForOwnerShip() then 
             BuyButton.Text = "Owned"
         end
     end
 
-    if CurrentShop == "Plot" then 
+    if CurrentShop == "Plots" then 
+
         if CheckForPlotOwnerShip() then 
             BuyButton.Text = "Owned" 
         end
@@ -296,7 +290,8 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
 
     if CurrentShop == "Plots" then 
         NumberOfPlots = 0 
-        for _, _ in pairs(State.GetData().Plots) do 
+        for _ in pairs(State.GetData().Plots) do 
+
             NumberOfPlots += 1
         end 
     end 
