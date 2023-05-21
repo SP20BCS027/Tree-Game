@@ -40,6 +40,8 @@ function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
+	print("Seeds Adjusted")
+
 	profile.Data.Seeds[seedType].Amount += amount 
 	Remotes.UpdateOwnedSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
 end
@@ -204,7 +206,7 @@ function Manager.UpdateTreeLevel(player: Player, plotID: number, cycle: number):
 		profile.Data.Plots[plotID].Tree.MaxCycle = profile.Data.Plots[plotID].Tree.MaxCycle + 1 
 		profile.Data.Plots[plotID].Tree.CurrentCycle = 0
 		
-		Remotes.UpdateTreeLevel:FireClient(player, plotID)
+		Remotes.UpdateTreeLevel:FireClient(player, plotID, profile.Data.Plots[plotID].Tree)
 		return "LEVEL"
 	else
 		profile.Data.Plots[plotID].Tree.CurrentCycle = profile.Data.Plots[plotID].Tree.CurrentCycle + cycle

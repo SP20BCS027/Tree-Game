@@ -9,6 +9,7 @@ local Remotes = ReplicatedStorage.Remotes
 local SeedPlantingAmount = 1
 
 local function UpdateSeeds(player: Player, amount: number, seedType: string)
+	print("Got Called")
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
