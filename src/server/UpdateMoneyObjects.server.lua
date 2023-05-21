@@ -1,7 +1,8 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---local Manager = require(ServerScriptService.PlayerData.Manager)
+
+local Manager = require(ServerScriptService.PlayerData.Manager)
 local Houses = require(ServerScriptService.Houses)
 
 local Remotes = ReplicatedStorage.Remotes

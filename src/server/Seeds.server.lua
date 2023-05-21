@@ -6,9 +6,6 @@ local SeedsConfig = require(ReplicatedStorage.Configs.SeedsConfig)
 
 local Remotes = ReplicatedStorage.Remotes
 
-<<<<<<< Updated upstream
-local function UpdateSeeds(player: Player, amount: number?, seedType: string)
-=======
 local SeedPlantingAmount = 1
 
 local function UpdateSeeds(player: Player, amount: number, seedType: string)
@@ -26,9 +23,7 @@ local function UpdateSeeds(player: Player, amount: number, seedType: string)
 	end
 
 	Manager.AdjustCoins(player, -(amount * SeedsConfig[seedType].Price))
->>>>>>> Stashed changes
-	Manager.AdjustSeeds(player, amount, seedType)
-end
+end 
 
 local function PlantSeed(player: Player, seedType: string)
 	local profile = Manager.Profiles[player]

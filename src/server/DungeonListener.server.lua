@@ -4,29 +4,29 @@ local Players = game:GetService("Players")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local triggerparts = WorkSpace.Dungeons:GetChildren()
-local debounce = {}
+local TriggerParts = WorkSpace.Dungeons:GetChildren()
+local Debounce = {}
 local DELAY = 5
 
 
-local function generateUI(player: Player, DungeonName)
-    if debounce[player] then return end 
+local function GenerateUI(player: Player, DungeonName: string)
+    if Debounce[player] then return end 
 
 	Remotes.GenerateDungeons:FireClient(player, DungeonName)
-    debounce[player] = true
+    Debounce[player] = true
     task.delay(DELAY, function()
-        debounce[player] = nil 
+        Debounce[player] = nil 
     end)
 end
 
 local function ListenToDungeonTouch()
-    for _, part in triggerparts do 
+    for _, part in TriggerParts do 
         local DungeonName = part.Name
         part.Touched:Connect(function(hit)
             local player = Players:GetPlayerFromCharacter(hit.Parent)
 
             if player then 
-                generateUI(player, DungeonName)
+                GenerateUI(player, DungeonName)
             end
         end)
     end

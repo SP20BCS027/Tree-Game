@@ -3,37 +3,44 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = game.Players.LocalPlayer
 local PlayerGUI = player.PlayerGui
 
-local StateManager = require(ReplicatedStorage.Client.State)
+local State = require(ReplicatedStorage.Client.State)
 local Remotes = ReplicatedStorage.Remotes
 
 local GUI = PlayerGUI:WaitForChild("Stats")
-local Outline = GUI.Frame
-local Moneyamount = Outline.MoneyFrame.Amount
+local HolderFrame = GUI.HolderFrame
+local Moneyamount = HolderFrame.MoneyFrame.TextLabel
+
+local MONEY = "Money: REPLACE"
 
 local function UpdateCurrency()
-	Moneyamount.Text = StateManager.GetData().Money .. "/" .. StateManager.GetData().EquippedBackpack.Capacity
+	Moneyamount.Text = MONEY:gsub("REPLACE", State.GetData().Money .. "/" .. State.GetData().EquippedBackpack.Capacity) 
 end
 
 UpdateCurrency()
 
-local function callingtheUpdate()
+local function CallingtheUpdate()
 	task.delay(0, function()
 		UpdateCurrency()
 	end)
 end
 
 Remotes.UpdateMoney.OnClientEvent:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
 end)
 
 Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
 end)
 
 Remotes.SellAllMoney.OnClientEvent:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
+end)
+
+Remotes.FillupBackpack.OnClientEvent:Connect(function()
+	CallingtheUpdate()
 end)
 
 Remotes.Bindables.OnReset.ResetMoney.Event:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
 end)
+

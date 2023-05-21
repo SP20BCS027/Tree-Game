@@ -6,6 +6,8 @@ local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 local DungeonConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 local SeedsConfig = require(ReplicatedStorage.Configs.SeedsConfig)
 local FertilizerConfig = require(ReplicatedStorage.Configs.FertilizerConfig)
+local AchievementsConfig = require(ReplicatedStorage.Configs.AchievementsConfig)
+local QuestsConfig = require(ReplicatedStorage.Configs.QuestsConfig)
 
 local Template = {
 	Coins = 0, 
@@ -17,26 +19,25 @@ local Template = {
 	Fertilizers = FertilizerConfig, 
 	
 	Plots = {
-		Plot_1 = PlotsConfig.Plot_1, 
-		Plot_2 = PlotsConfig.Plot_2, 
+		Plot_1 = PlotsConfig.Plot_1
 	},
 	
-	EquippedWaterCan = WaterCanConfig.MiniWateringCan, 
+	EquippedWaterCan = WaterCanConfig.SelfWateringCan, 
 	OwnedWaterCans = {
 		MiniWateringCan = WaterCanConfig.MiniWateringCan, 
-		BasicWateringCan = WaterCanConfig.BasicWateringCan, 
-		WideMouthWateringCan = WaterCanConfig.WideMouthWateringCan
+		SelfWateringCan = WaterCanConfig.SelfWateringCan,
 	},
 	
-	EquippedBackpack = BackpackConfig.BasicBackpack,
+	EquippedBackpack = BackpackConfig.DrawStringBag,
 	OwnedBackpacks = {
-		BasicBackpack = BackpackConfig.BasicBackpack, 
-		SmallPouch = BackpackConfig.SmallPouch, 
-		DrawStringBag = BackpackConfig.DrawStringBag
+		BasicBackpack = BackpackConfig.BasicBackpack,
+		DrawStringBag = BackpackConfig.DrawStringBag 
 	},
 	
-	UnlockedDungeons = DungeonConfig, 
+	Achievements = AchievementsConfig,
+	ActiveQuests = QuestsConfig,
 
+	UnlockedDungeons = DungeonConfig, 
 }
 
 export type PlayerData = typeof(Template)

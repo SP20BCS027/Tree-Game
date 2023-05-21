@@ -1,4 +1,4 @@
-type FertilizerConfig = {
+type FertilizerConfigTemp = {
 	Name: string, 
 	Amount: number, 
 	Price: number, 
@@ -7,7 +7,7 @@ type FertilizerConfig = {
 	Cycles: number, 
 }
 
-local FertilizerConfig :{ [string] : FertilizerConfig } = {
+local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 	Basic = {
 		Name = "Basic", 
 		Amount = 1, 

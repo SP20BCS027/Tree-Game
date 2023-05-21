@@ -19,9 +19,7 @@ local BattleButton = SelectFrame.BattleButton
 local Heading = SelectFrame.Heading
 local Description = SelectFrame.Description 
 
-local function updateSelectFrame(DungeonName)
-
-
+local function UpdateSelectFrame(DungeonName)
     Heading.Text = DungeonsConfig[DungeonName].Name
     Description.Text = DungeonsConfig[DungeonName].Description
     BattleButton.MouseButton1Down:Connect(function()
@@ -31,7 +29,7 @@ local function updateSelectFrame(DungeonName)
     end)
 end
 
-local function generateUI(DungeonName)
+local function GenerateUI(DungeonName)
     DungeonUI.Enabled = true
 
     for _, child in ScrollingFrame:GetChildren() do 
@@ -55,7 +53,7 @@ local function generateUI(DungeonName)
         end 
         
         FloorIcon.Button.MouseButton1Down:Connect(function()
-            updateSelectFrame(DungeonName)
+            UpdateSelectFrame(DungeonName)
         end)
     end
 end
@@ -65,5 +63,5 @@ CloseButton.MouseButton1Down:Connect(function()
 end)
 
 Remotes.GenerateDungeons.OnClientEvent:Connect(function(DungeonName)
-    generateUI(DungeonName)
+    GenerateUI(DungeonName)
 end)

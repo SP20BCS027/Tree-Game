@@ -2,9 +2,9 @@ local Animation = {}
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+local PlayerCharacterMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 
-function Animation.playAnimation(player, character, animID)
+function Animation.PlayAnimation(player: Player, character: Model, animID: string)
 
     local animation = Instance.new("Animation")
 	animation.AnimationId = animID
@@ -16,7 +16,7 @@ function Animation.playAnimation(player, character, animID)
 	animTrack:Play()
 	animTrack.Ended:Connect(function()
 		print("Animation Ended")
-		PlayerMovement:Movement(player, true)
+		PlayerCharacterMovement:Movement(player, true)
 		animTrack:Destroy()
 	end)
 end

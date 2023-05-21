@@ -1,4 +1,4 @@
-export type TreeConfig = {
+export type TreeConfigTemp = {
 	Name: string,
 	Rarity: string, 
 	CurrentLevel: number, 
@@ -10,7 +10,7 @@ export type TreeConfig = {
 	TimeUntilMoney: number
 }
 
-local Config: {[string]: TreeConfig} = {
+local TreeConfig: {[string]: TreeConfigTemp} = {
 	CashTree = {
 		Name = "CashTree",
 		Rarity = "Basic", 
@@ -166,13 +166,5 @@ local Config: {[string]: TreeConfig} = {
 		TimeUntilWater = 0,
 	}
 }
-
-<<<<<<< Updated upstream
-local Trees = {}
-
-Trees = Config
-
-return Trees
-=======
 return TreeConfig
->>>>>>> Stashed changes
+

@@ -7,21 +7,21 @@ local House = require(game.ServerScriptService.Classes.House)
 local Houses = {}
 local HouseModule = {}
 
-local function createHouses()
+local function CreateHouses()
     for _, houseFolder in pairs(workspace.Houses:GetChildren()) do 
         local houseObj = House.new(houseFolder, Houses)
         table.insert(Houses, houseObj)
     end
 end
 
-createHouses()
+CreateHouses()
 
 function HouseModule.GetPlayerPlot(player: Player, plot: string)
-	for _, HouseOb in pairs(Houses) do
-		if not HouseOb.owner then return end 
-        if HouseOb.owner ~= player then return end 
+	for _, house in pairs(Houses) do
+		if not house.owner then return end 
+        if house.owner ~= player then return end 
 
-        return HouseOb.Plots[plot]
+        return house.Plots[plot]
 	end
 end
 
@@ -34,7 +34,7 @@ function HouseModule.ReturnPlayerWell(player: Player)
 	end
 end
 
-local function getTreeObject(plotObject)
+function HouseModule.GetTreeObject(plotObject: Model)
 	for _, child in pairs (plotObject:GetChildren()) do 
 		if string.find(child.Name, "Tree") then 
 			return child 
@@ -42,7 +42,14 @@ local function getTreeObject(plotObject)
 	end 
 end
 
-local function getNewTree(nameOfTree)
+function HouseModule.CheckForOwnerShip(player: Player)
+	for _, house in pairs(Houses) do 
+		if house.owner == player then return true end
+	end
+	return false
+end
+
+local function GetNewTree(nameOfTree: string)
 	for _, desc in pairs (Trees:GetDescendants()) do 
 		if desc.Name == nameOfTree then 
 			return desc
@@ -50,19 +57,24 @@ local function getNewTree(nameOfTree)
 	end
 end
 
-function HouseModule.ChangeTreeModel(plotObject)
-	print(plotObject)
-	local plantedTree = getTreeObject(plotObject)
+function HouseModule.ChangeTreeModel(plotObject: Model)
+	local plantedTree = HouseModule.GetTreeObject(plotObject)
 	local treeName = plantedTree.Name 
 
 	local baseName = string.sub(treeName, 1, string.find(treeName, "_") - 1)
 	local level = string.sub(treeName, -1)
 	level += 1 
 
-	local updatedTree = getNewTree(baseName .. "_" ..level)
+	local updatedTree = GetNewTree(baseName .. "_" .. level):Clone()
 	updatedTree.Parent = plantedTree.Parent 
 	updatedTree:PivotTo(CFrame.new(plantedTree:GetPivot().p))
 	plantedTree:Destroy()
+end
+
+function HouseModule.SetTreeHarvestTransparency(treeObject: Model, transparency: number)
+	for _, valuable in pairs(treeObject.Money:GetChildren()) do 
+		valuable.Transparency = transparency
+	end
 end
 
 Remotes.AskUIInformation.OnServerInvoke = HouseModule.GetPlayerPlot
@@ -71,7 +83,7 @@ Remotes.GetHouseWell.OnServerInvoke = HouseModule.ReturnPlayerWell
 task.spawn(function()
     while wait(1)  do
         for _, HouseOb in pairs(Houses) do
-            HouseOb:update()
+            HouseOb:Update()
         end
     end
 end)

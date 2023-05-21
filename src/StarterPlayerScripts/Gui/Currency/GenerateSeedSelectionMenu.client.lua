@@ -8,52 +8,59 @@ local character = player.CharacterAdded:Wait()
 
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 
-local StateManager = require(ReplicatedStorage.Client.State)
+local State= require(ReplicatedStorage.Client.State)
+
 local UI = player.PlayerGui:WaitForChild("SeedSelection")
-local closeButton = UI.CloseFrame.CloseButton
 local MainFrame = UI.MainFrame
-local InternalFrame = MainFrame.InternalFrame
-local scrollingFrame = InternalFrame.ScrollingFrame
-local InformationFrame = InternalFrame.InformationFrame.Frame
-local template = scrollingFrame.Template
+local CloseButton = MainFrame.CloseFrame.CloseButton
+local InventoryFrame = MainFrame.InventoryFrame
+local ScrollingFrame = InventoryFrame.ScrollingFrame
+local SelectedFrame = MainFrame.SelectedFrame
+local StatsFrame = SelectedFrame.Stats
+local Template = InventoryFrame.Template
 
-local Seeds = StateManager.GetData().Seeds
+local Seeds = State.GetData().Seeds
 
-local seedthing 
-local plotId
+local Seed 
+local PlotID
 local MudPos
 local AnimPart
 
+local AMOUNT = "Amount: REPLACE"
+local NAME = "Name: REPLACE"
+
 local crouchAnimID = "rbxassetid://13248889864"
 
-
-local function loadStats(seed)
-	InformationFrame.SeedDescription.Text = seed.Description 
-	seedthing = seed
+local function LoadStats(seedReceived)
+	StatsFrame.Description.IconDescription.Text = seedReceived.Description 
+	StatsFrame.IconAmount.Text = AMOUNT:gsub("REPLACE", seedReceived.Amount)
+	StatsFrame.IconName.Text = NAME:gsub("REPLACE", seedReceived.Name)
+	Seed = seedReceived
 end
 
-local function createSeedIcon(seed)
-	local seedIcon = template:Clone()
+local function CreateSeedIcon(seed)
+	local seedIcon = Template:Clone()
 	seedIcon.Visible = true 
-	seedIcon.Parent = scrollingFrame.IconsFolder
-	seedIcon.Amount.Text = seed.Amount
-	seedIcon.Label.Text = seed.Name
+	seedIcon.Parent = ScrollingFrame
+	seedIcon.ItemName.Text = seed.Name
 	seedIcon.Name = seed.Name
 	
-	seedIcon.TextButton.MouseButton1Down:Connect(function()
-		loadStats(seed)
+	seedIcon.MouseButton1Down:Connect(function()
+		LoadStats(seed)
 	end)	
 end
 
-local function updateSeedIcons(plotIdrcv, mudPosition, animationPositionPart)
-	plotId = plotIdrcv
+local function UpdateSeedIcons(plotReceived, mudPosition, animationPositionPart)
+	PlotID = plotReceived
 	MudPos = mudPosition
 	AnimPart = animationPositionPart
-	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
+
+	Seeds = State.GetData().Seeds
+
+	for _, Icon in ScrollingFrame:GetChildren() do
 
 		if Icon.Name == "UIGridLayout" then continue end
 
-		Icon.Amount.Text = Seeds[Icon.Name].Amount 
 		if Seeds[Icon.Name].Amount <= 0 then
 			Icon.Visible = false
 		else 
@@ -63,37 +70,32 @@ local function updateSeedIcons(plotIdrcv, mudPosition, animationPositionPart)
 	UI.Enabled = true
 end
 
-local function generateSelectableSeeds()
-	for _,seed in (Seeds) do
-		createSeedIcon(seed)
+local function GenerateSelectableSeeds()
+	for _, seed in (Seeds) do
+		CreateSeedIcon(seed)
 	end
 end
 
-generateSelectableSeeds()
+GenerateSelectableSeeds()
 
-<<<<<<< Updated upstream
-local function plantSeed()
-	Remotes.UpdateOwnedSeeds:FireServer(-1, seedthing.Name)
-	Remotes.UpdateOccupied:FireServer(plotId, true, seedthing.Name, MudPos)
-=======
+
 local function PlantSeed()
 	Remotes.PlantedSeed:FireServer(Seed.Name)
 	Remotes.UpdateAchievements:FireServer("SeedsPlanted", 1)
 	Remotes.UpdateOccupied:FireServer(PlotID, true, Seed.Name, MudPos)
->>>>>>> Stashed changes
 end
 
-InformationFrame.PlantButton.MouseButton1Down:Connect(function()
+StatsFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
-	plantSeed() 	
-	AnimationHandler.playAnimation(player, character, crouchAnimID)
+	PlantSeed() 	
+	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 	local plantingSound = AnimPart.WateringSound
 	plantingSound:Play()
 end)
 
-closeButton.MouseButton1Down:Connect(function()
+CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
 	PlayerMovement:Movement(player, true)
 end)
 
-Remotes.Bindables.SelectSeed.Event:Connect(updateSeedIcons)
+Remotes.Bindables.SelectSeed.Event:Connect(UpdateSeedIcons)

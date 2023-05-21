@@ -95,7 +95,6 @@ end
 local function BuyBackpack()
     if CheckForOwnerShip() then 
         print("Item Already owned")
-        BuyButton.Text = "Owned"
         return
     end
 
@@ -119,7 +118,6 @@ local function BuyWaterCan()
 
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedWaterCans:FireServer(SelectedItem.Name)
-        print("Item Has been Bought")
         return
     end
     print("Not Enough Money")
@@ -208,12 +206,14 @@ local function LoadStats(item)
     end
     BuyButton.Text = "Buy"
     if CurrentShop == "Backpacks" or CurrentShop == "Watercans" then 
+
         if CheckForOwnerShip() then 
             BuyButton.Text = "Owned"
         end
     end
 
     if CurrentShop == "Plots" then 
+
         if CheckForPlotOwnerShip() then 
             BuyButton.Text = "Owned" 
         end
@@ -291,6 +291,7 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     if CurrentShop == "Plots" then 
         NumberOfPlots = 0 
         for _ in pairs(State.GetData().Plots) do 
+
             NumberOfPlots += 1
         end 
     end 

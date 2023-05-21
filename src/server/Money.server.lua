@@ -2,16 +2,12 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
+local Houses = require(ServerScriptService.Houses)
+local BackpackEquippingHandler = require(ServerScriptService.BackpackEquippingHandler)
 
 local Remotes = ReplicatedStorage.Remotes
 
-<<<<<<< Updated upstream
-local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotId: number)
-	local backpackIsFull = Manager.AdjustPlayerMoney(player, plotId)
-	
-	if not backpackIsFull then 
-		Manager.UpdateTreeMoneyTimer(player, plotId)
-=======
+
 local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -26,12 +22,11 @@ local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotID: number
 			local tree = Houses.GetTreeObject(plot)
 			Houses.SetTreeHarvestTransparency(tree, 1)
 		end	
->>>>>>> Stashed changes
 	end
-end
 
-local function SellAllMoney(player:Player)
+local function SellAllMoney(player: Player)
 	Manager.SellAllMoney(player)
+	BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
 end
 
 Remotes.UpdateTreeMoneyTimer.OnServerEvent:Connect(UpdateTreeMoneyTimerAndUpdateMoney)

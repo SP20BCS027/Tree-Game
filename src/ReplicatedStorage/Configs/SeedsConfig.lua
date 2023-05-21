@@ -1,11 +1,11 @@
-type SeedsConfig = {
+type SeedsConfigTemp = {
 	Name: string, 
 	Amount: number, 
 	Price: number, 
 	Description: string,
 }
 
-local SeedsConfig :{ [string] : SeedsConfig } = {
+local SeedsConfig: {[string] : SeedsConfigTemp} = {
 	Basic = {
 		Name = "Basic", 
 		Amount = 10, 
@@ -32,11 +32,7 @@ local SeedsConfig :{ [string] : SeedsConfig } = {
 	}, 
 	Mythical = {
 		Name = "Mythical", 
-<<<<<<< Updated upstream
-		Amount = 0, 
-=======
 		Amount = 10, 
->>>>>>> Stashed changes
 		Description = "This will plant a Mythical Tree", 
 		Price = 1000000,
 	}

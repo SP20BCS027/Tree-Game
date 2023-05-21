@@ -1,0 +1,57 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+-- local ServerScriptService = game:GetService("ServerScriptService")
+
+-- local player = game.Players.LocalPlayer
+local Remotes = ReplicatedStorage.Remotes
+
+local State = require(ReplicatedStorage.Client.State)
+
+-- local DontCheckForWaterTimer = {}
+local DontCheckForMoneyTimer = {}
+
+-- local function CheckWaterTimer(plot: string) 
+    
+-- end
+
+local function CheckMoneyTimer(plot: string) 
+    local currentPlot = State.GetData().Plots[plot]
+    if currentPlot.Occupied then 
+        local endTime = currentPlot.Tree.TimeUntilMoney
+        if (endTime - os.time()) > 0 then
+            print("NOT Ready for harvest" .. plot)
+            Remotes.UpdateMoneyObjectsOnTimerExpire:FireServer(plot, 1)
+            DontCheckForMoneyTimer[plot] = true
+            task.delay(endTime - os.time(), function()
+                DontCheckForMoneyTimer[plot] = nil
+            end)
+        else
+            print("Ready for harvest" .. plot)
+            DontCheckForMoneyTimer[plot] = true
+            Remotes.UpdateMoneyObjectsOnTimerExpire:FireServer(plot, 0)
+        end
+    end
+end
+
+local function SetCheckForMoneyTimer(discard: number, plot: string)
+    if not discard then 
+        print("Wowie something went wrong")
+    end
+    
+    DontCheckForMoneyTimer[plot] = nil
+end
+
+local function TimeCheckSpawner()
+    task.spawn(function()
+        repeat 
+            for plotID, _ in pairs(State.GetData().Plots) do 
+                if not DontCheckForMoneyTimer[plotID] then
+                    CheckMoneyTimer(plotID)
+                end
+            end
+        until not task.wait(1)
+    end)
+end
+
+Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(SetCheckForMoneyTimer)
+
+TimeCheckSpawner()

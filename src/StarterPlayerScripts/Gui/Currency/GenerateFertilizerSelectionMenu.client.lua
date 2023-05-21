@@ -8,84 +8,111 @@ local character = player.CharacterAdded:Wait()
 
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 
-local StateManager = require(ReplicatedStorage.Client.State)
-local UI = player.PlayerGui:WaitForChild("FertilizerSelection")
-local closeButton = UI.CloseFrame.CloseButton
-local MainFrame = UI.MainFrame
-local InternalFrame = MainFrame.InternalFrame
-local scrollingFrame = InternalFrame.ScrollingFrame
-local InformationFrame = InternalFrame.InformationFrame.Frame
-local template = scrollingFrame.Template
+local State = require(ReplicatedStorage.Client.State)
 
-local Fertilizers = StateManager.GetData().Fertilizers
+local UI = player.PlayerGui:WaitForChild("FertilizerSelection")
+local MainFrame = UI.MainFrame
+local CloseButton = MainFrame.CloseFrame.CloseButton
+local InventoryFrame = MainFrame.InventoryFrame
+local ScrollingFrame = InventoryFrame.ScrollingFrame
+local SelectedFrame = MainFrame.SelectedFrame
+local StatsFrame = SelectedFrame.Stats
+local Template = InventoryFrame.Template
+
+local Fertilizers = State.GetData().Fertilizers
 
 local Fertilizer
-local plotId
+local PlotID
 local AnimPart
 
+local AMOUNT = "Amount: REPLACE"
+local NAME = "Name: REPLACE"
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 local crouchAnimID = "rbxassetid://13248889864"
 
-local function loadStats(fertilizer)
-	InformationFrame.SeedDescription.Text = fertilizer.Description 
+local function LoadStats(fertilizer)
+	StatsFrame.Description.IconDescription.Text = fertilizer.Description 
+	StatsFrame.IconName.Text = AMOUNT:gsub("REPLACE", fertilizer.Name) 
+	StatsFrame.IconAmount.Text = NAME:gsub("REPLACE", fertilizer.Amount) 
 	Fertilizer = fertilizer
 end
 
-local function createFertilizerIcon(fertilizer)
-	local seedIcon = template:Clone()
+local function ScaleUI(currentScale)
+	local newScale = UDim2.new(currentScale.X.Scale * 1.1, currentScale.X.Offset, currentScale.Y.Scale * 1.1, currentScale.Y.Offset)
+	return newScale
+end 
+
+local function CreateFertilizerIcon(fertilizer)
+	local seedIcon = Template:Clone()
 	seedIcon.Visible = true 
-	seedIcon.Parent = scrollingFrame.IconsFolder
-	seedIcon.Label.Text = fertilizer.Name
+	seedIcon.Parent = ScrollingFrame
+	seedIcon.ItemName.Text = fertilizer.Name
 	seedIcon.Name = fertilizer.Name
+
+	local currentScale = seedIcon.Size
+	local newScale = UDim2.new(currentScale.X.Scale * 1.1, currentScale.X.Offset, currentScale.Y.Scale * 1.1, currentScale.Y.Offset)
 	
-	seedIcon.TextButton.MouseButton1Down:Connect(function()
-		loadStats(fertilizer)
+	seedIcon.MouseButton1Down:Connect(function()
+		LoadStats(fertilizer)
+		seedIcon.Size = newScale
 	end)	
+	seedIcon.MouseEnter:Connect(function()
+		seedIcon.Size = newScale
+	end)
+	seedIcon.MouseLeave:Connect(function()
+		seedIcon.Size = currentScale
+	end)
 end
 
-local function updateFertilizerIcons(plotIdrcv, animationPositionPart)
-	plotId = plotIdrcv
+local function UpdateFertilizerIcons(plotReceived: string, animationPositionPart)
+	PlotID = plotReceived
 	AnimPart = animationPositionPart
-	for _, Icon in scrollingFrame.IconsFolder:GetChildren() do
-		if Icon.Name == "UIGridLayout" then continue end  
-		Icon.Amount.Text = Fertilizers[Icon.Name].Amount		
-		if Fertilizers[Icon.Name].Amount <= 0 then
-			Icon.Visible = false
+
+	Fertilizers = State.GetData().Fertilizers
+
+	for _, icon in ScrollingFrame:GetChildren() do
+		if icon.Name == "UIGridLayout" then continue end  
+		--icon.Amount.Text = Fertilizers[icon.Name].Amount		
+		if Fertilizers[icon.Name].Amount <= 0 then
+			icon.Visible = false
 		else 
-			Icon.Visible = true
+			icon.Visible = true
 		end	
 	end
 	UI.Enabled = true
 end
 
-local function generateSelectableSeeds()
+local function GenerateSelectableSeeds()
 	for _, fertilizer in (Fertilizers) do
-		createFertilizerIcon(fertilizer)
+		CreateFertilizerIcon(fertilizer)
 	end
 end
 
-generateSelectableSeeds()
+GenerateSelectableSeeds()
 
-<<<<<<< Updated upstream
-local function fertilizePlot()
-	Remotes.UpdateOwnedFertilizers:FireServer(-1, Fertilizer.Name)
-	Remotes.FertilizeTree:FireServer(plotId, Fertilizer.Cycles)
-=======
 local function FertilizePlot()
 	Remotes.FertilizeTree:FireServer(PlotID, Fertilizer.Name)
->>>>>>> Stashed changes
 end
 
-InformationFrame.PlantButton.MouseButton1Down:Connect(function()
+StatsFrame.PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
-	fertilizePlot() 	
-	AnimationHandler.playAnimation(player, character, crouchAnimID)
+	FertilizePlot() 	
+	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 	local fertilizingSound = AnimPart.WateringSound
 	fertilizingSound:Play()
 end)
 
-closeButton.MouseButton1Down:Connect(function()
+CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
 	PlayerMovement:Movement(player, true)
 end)
 
-Remotes.Bindables.SelectFertilizer.Event:Connect(updateFertilizerIcons)
+CloseButton.MouseEnter:Connect(function()
+	CloseButton.Size = ScaleUI(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+	CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
+end)
+
+Remotes.Bindables.SelectFertilizer.Event:Connect(UpdateFertilizerIcons)

@@ -212,7 +212,6 @@ EquipButton.MouseButton1Down:Connect(function()
     if CurrentInventory == "Backpacks" then 
         ReplicatedStorage.Remotes.ChangeEquippedBackpack:FireServer(SelectedItem)
         ReplicatedStorage.Remotes.GivePlayerBackpack:FireServer(SelectedItem)
-
     end
     if CurrentInventory == "WaterCans" then 
         ReplicatedStorage.Remotes.ChangeEquippedWateringCan:FireServer(SelectedItem)

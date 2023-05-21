@@ -5,17 +5,6 @@ local Manager = require(ServerScriptService.PlayerData.Manager)
 local Houses = require(ServerScriptService.Houses)
 local Remotes = ReplicatedStorage.Remotes
 
-<<<<<<< Updated upstream
-local function UpdateTreeWaterTimer(player: Player, plotId: number)
-	Manager.UpdateTreeWaterTimer(player, plotId)
-end
-
-local function UpdateTreeLevel(player: Player, plotId: number)
-	local Evaluation = Manager.UpdateTreeLevel(player, plotId, 1)
-	if Evaluation == "LEVEL" then 
-		local plotObject = Houses.GetPlayerPlot(player, plotId)
-		Houses.ChangeTreeModel(plotObject)
-=======
 local WATERCYCLE = 1
 
 local function UpdateTreeWaterTimerAndTreeLevel(player: Player, plotID: number)
@@ -36,7 +25,6 @@ local function UpdateTreeWaterTimerAndTreeLevel(player: Player, plotID: number)
 			Houses.ChangeTreeModel(plotObject)
 		end
 		Manager.AdjustWater(player)
->>>>>>> Stashed changes
 	end
 end
 

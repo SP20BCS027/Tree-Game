@@ -27,10 +27,13 @@ local function GivePlayerBackpack(player: Player, BackpackID: string)
 	weld.Part0 = backpack.Part
 	weld.Part1 = character.UpperTorso
 
+
 	BackpackEquipping.UpdatePlayerBackpackLabel(player)
 end
 
 function BackpackEquipping.UpdatePlayerBackpackLabel(player: Player)
+	print("Money Backpack Label got updated")
+
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 

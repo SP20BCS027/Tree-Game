@@ -3,37 +3,39 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = game.Players.LocalPlayer
 local PlayerGUI = player.PlayerGui
 
-local StateManager = require(ReplicatedStorage.Client.State)
+local State = require(ReplicatedStorage.Client.State)
 local Remotes = ReplicatedStorage.Remotes
 
 local GUI = PlayerGUI:WaitForChild("Stats")
-local Outline = GUI.Frame
-local Wateramount = Outline.WaterFrame.Amount
+local HolderFrame = GUI.HolderFrame
+local Wateramount = HolderFrame.WaterFrame.TextLabel
+
+local WATER = "Water: REPLACE"
 
 local function UpdateWater()
-	Wateramount.Text = StateManager.GetData().Water .. "/" .. StateManager.GetData().EquippedWaterCan.Capacity
+	Wateramount.Text = WATER:gsub("REPLACE", State.GetData().Water .. "/" .. State.GetData().EquippedWaterCan.Capacity)
 end
 
 UpdateWater()
 
-local function callingtheUpdate()
+local function CallingtheUpdate()
 	task.delay(0, function()
 		UpdateWater()
 	end)
 end
 
 Remotes.UpdateWater.OnClientEvent:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
 end)
 
 Remotes.ChangeEquippedWateringCan.OnClientEvent:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
 end)
 
 Remotes.RefillWater.OnClientEvent:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
 end)
 
 Remotes.Bindables.OnReset.ResetWater.Event:Connect(function()
-	callingtheUpdate()
+	CallingtheUpdate()
 end)

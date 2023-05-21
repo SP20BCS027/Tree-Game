@@ -2,55 +2,58 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
-local StateManager = require(ReplicatedStorage.Client.State)
+
+local State = require(ReplicatedStorage.Client.State)
 local FormatTime = require(ReplicatedStorage.Libs.FormatTime)
 
-local PlotsGui = player.PlayerGui:WaitForChild("PlotStatistics")
-local InventoryButtons = player.PlayerGui:WaitForChild("InventoryButtons")
+local PlotsGUI = player.PlayerGui:WaitForChild("Plots_Stats")
+local MainFrame = PlotsGUI.MainFrame
 
-local TreeButton = InventoryButtons.ButtonsHolder.TreeButton.TreeInventoryButton
+local InventoryButton = player.PlayerGui:WaitForChild("InventoryButton")
 
-local CloseButton = PlotsGui.CloseFrame.CloseButton
-local MainFrame = PlotsGui.MainFrame
-local InternalFrame = MainFrame.InternalFrame
-local ScrollingFrame = InternalFrame.ScrollingFrame
-local Template = InternalFrame.Template
+local TreeButton = InventoryButton.Frame.Plots
+
+local CloseButton = MainFrame.CloseFrame.CloseButton
+local SelectedFrame = MainFrame.SelectedFrame
+local StatsFrame = SelectedFrame.Stats
+local DeleteButton = StatsFrame.DeleteButton
+local InventoryFrame = MainFrame.InventoryFrame
+local ScrollingFrame = InventoryFrame.ScrollingFrame
+local Template = InventoryFrame.Template
 
 local TIMER = "Time:  XYZ"
 local LEVEL = "Level: AMOUNT"
 local CYCLE = "Cycle: AMOUNT"
 
+local LoadedIcon
+local PreviousIcon
 
-local plotIcons = {}
-
-local function updateMoneyTimer(plotIcon)
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateMoneyTimer(plotIcon)
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
     if currentPlot.Occupied then 
         local endTime = currentPlot.Tree.TimeUntilMoney
         if (endTime - os.time()) > 0 then 
-            plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
+            StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
-            plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", "Ready To Collect")
+            StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", "Ready To Collect")
+            return true
         end
     end
 end
 
-local function updateWaterTimer(plotIcon)
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateWaterTimer(plotIcon)
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
     if currentPlot.Occupied then 
         local endTime = currentPlot.Tree.TimeUntilWater
         if (endTime - os.time()) > 0 then 
-            plotIcon.WaterBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
+            StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
-            plotIcon.WaterBar.Text = TIMER:gsub("XYZ", "Water Me!")
+            StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", "Water Me!")
+            return true
         end
     end
 end
 
-<<<<<<< Updated upstream
-local function createIcon(plot)
-    print(plot)
-=======
 local function UpdateTimers(plot)
     task.spawn(function()
         repeat
@@ -88,7 +91,6 @@ local function LoadStats(plot)
 
     StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
     StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle)
-
     ShowStats()
 
     if PreviousIcon then 
@@ -101,75 +103,95 @@ local function LoadStats(plot)
 end
 
 local function CreateIcon(plot)
->>>>>>> Stashed changes
     local plotIcon = Template:Clone()
     plotIcon.Parent = ScrollingFrame
     plotIcon.Visible = true 
     plotIcon.Name = plot.Id
 
-    plotIcons[plot.Id] =  plotIcon
 
-    local moneyTime = plot.Tree.TimeUntilMoney
-    local waterTime = plot.Tree.TimeUntilWater
-    plotIcon.MoneyBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(moneyTime - os.time()))
-    plotIcon.WaterBar.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(waterTime - os.time()))
+    ShowStats()
 
-    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
-    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle) 
-    
+    if PreviousIcon then 
+        if LoadedIcon.Name == PreviousIcon.Name then return end 
+        UpdateTimers(plot)
+    end 
 
+    UpdateTimers(plot)
 end
 
-local function generatePlotsUI()
-    for _, plot in (StateManager.GetData().Plots) do 
+local function CreateIcon(plot)
+    local plotIcon = Template:Clone()
+    plotIcon.Parent = ScrollingFrame
+    plotIcon.Visible = true 
+    plotIcon.Name = plot.Id
+    plotIcon:WaitForChild("ItemName").Text = plot.Id 
+    plotIcon.MouseButton1Down:Connect(function()
+        LoadedIcon = plotIcon
+        LoadStats(plot)
+        PreviousIcon = LoadedIcon
+    end)
+    plotIcon.DeleteButton.MouseButton1Down:Connect(function()
+        DeleteTree(plot.Id)
+    end)
+end
+
+local function GeneratePlotsUI()
+    for _, plot in (State.GetData().Plots) do 
         if plot.Occupied then 
-            createIcon(plot)
+            CreateIcon(plot)
         end
     end
 end
 
-local function clearPlotIcons()
+local function ClearPlotIcons()
     for _, icon in pairs (ScrollingFrame:GetChildren()) do 
         if icon.Name == "UIGridLayout" then continue end 
         icon:Destroy()
     end
-    table.clear(plotIcons)
+    HideStats()
 end
 
-generatePlotsUI()
+GeneratePlotsUI()
 
-local function updateLevelLabel(plotIconId)
-    local plotIcon = plotIcons[plotIconId]
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateLevelLabel(plotIconID)
+    local plotIcon = ScrollingFrame[plotIconID]
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
 
-    plotIcon.LevelBar.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
-
+    StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
 end
 
-local function updateCycleLabel(plotIconId)
-    local plotIcon = plotIcons[plotIconId]
-    local currentPlot = StateManager.GetData().Plots[plotIcon.Name]
+local function UpdateCycleLabel(plotIconID)
+    local plotIcon = ScrollingFrame[plotIconID]
+    local currentPlot = State.GetData().Plots[plotIcon.Name]
 
-    plotIcon.CycleBar.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle.." / "..currentPlot.Tree.MaxCycle) 
+    StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle .. " / " .. currentPlot.Tree.MaxCycle) 
 end
 
 TreeButton.MouseButton1Down:Connect(function()
-    PlotsGui.Enabled = not PlotsGui.Enabled
+    PlotsGUI.Enabled = not PlotsGUI.Enabled
+    ClearPlotIcons()
+    GeneratePlotsUI()
 end)
 
 CloseButton.MouseButton1Down:Connect(function()
-    PlotsGui.Enabled = false
+    PlotsGUI.Enabled = false
+    ClearPlotIcons()
+    GeneratePlotsUI()
 end)
 
-Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt, plotID)
+DeleteButton.MouseButton1Down:Connect(function()
+    DeleteTree(LoadedIcon.Name)
+end)
+
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: string)
     if prompt == "LEVEL" then 
         task.delay(0, function()
-            updateLevelLabel(plotID)
+            UpdateLevelLabel(plotID)
         end)
     end
     if prompt == "CYCLE" then 
         task.delay(0, function()
-            updateCycleLabel(plotID)
+            UpdateCycleLabel(plotID)
         end)
     end
 end)
@@ -179,20 +201,18 @@ Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
     --task.delay(0, generatePlotsUI)
 end)
 Remotes.UpdateOccupied.OnClientEvent:Connect(function()
-    clearPlotIcons()
-    task.delay(0, generatePlotsUI)
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
+end)
+
+Remotes.DeleteTree.OnClientEvent:Connect(function()
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
 end)
 
 Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
-    clearPlotIcons()
-    task.delay(0, generatePlotsUI)
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
 end)
 
-task.spawn(function()
-	while task.wait(1) do 
-		for _, plotIcon in (plotIcons) do 
-			updateMoneyTimer(plotIcon)
-			updateWaterTimer(plotIcon)
-		end
-	end
-end)
+
