@@ -23,7 +23,8 @@ local function UpdateSeeds(player: Player, amount: number, seedType: string)
 	end
 
 	Manager.AdjustCoins(player, -(amount * SeedsConfig[seedType].Price))
-end 
+	Manager.AdjustSeeds(player, amount, seedType)
+end
 
 local function PlantSeed(player: Player, seedType: string)
 	local profile = Manager.Profiles[player]

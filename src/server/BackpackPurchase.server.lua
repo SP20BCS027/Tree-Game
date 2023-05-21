@@ -7,21 +7,6 @@ local BackpackEquippingHandler = require(ServerScriptService.BackpackEquippingHa
 
 local Remotes = ReplicatedStorage.Remotes
 
-local function ChangeEquippedBackpack(player: Player, backpack: string)
-	local profile = Manager.Profiles[player]
-	if not profile then return end
-
-	if profile.Data.OwnedBackpacks[backpack] then 
-		Manager.EquipBackpack(player, backpack)
-	end
-end
-
-local function PurchasePack(player: Player, backpack: string)
-	local profile = Manager.Profiles[player]
-	if not profile then return end
-
-	if profile.Data.Coins >= BackpacksConfig[backpack].Price then 
-		Manager.PurchaseBackpack(player, backpack)
 local function PurchasePack(player: Player, backpack: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -30,10 +15,6 @@ local function PurchasePack(player: Player, backpack: string)
 	if not BackpacksConfig[backpack] then 
 		print("The Backpack " .. backpack .. " does not exist ~~ Server")
 		return
-
-		ChangeEquippedBackpack(player, backpack)
-		BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
-
 	end
 	if profile.Data.OwnedBackpacks[backpack] then 
 		print("The player " .. player.Name .. " already owns this backpack " .. backpack .. " ~~ Server")

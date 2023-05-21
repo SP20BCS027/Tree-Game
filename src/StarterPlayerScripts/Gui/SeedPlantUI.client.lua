@@ -40,6 +40,7 @@ end
 local function WaterTree(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
 		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
+			
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
 
 			ChangeCharacterPosition(animationPositionPart.CFrame)
@@ -58,25 +59,6 @@ local function WaterTree(plotId, animationPositionPart)
 	end
 end
 
-
--- This function when called collects the money from the tree in the Current Plot and renders the player motionless until the animation is complete 
-
-local function CollectMoney(plotId, animationPositionPart)
-	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
-		if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time() and State.GetData().EquippedBackpack.Capacity > State.GetData().Money then
-			Remotes.UpdateAchievements:FireServer("MoneyEarned", plotId)
-			Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
-
-			ChangeCharacterPosition(animationPositionPart.CFrame)
-			PlayerMovement:Movement(player, false)
-			AnimationHandler.PlayAnimation(player, character, crouchAnimID)
-			local collectingSound = animationPositionPart.WateringSound
-			collectingSound:Play()
-			print("Money has been collected")
-		else
-			print("No money to be collected!")
-		end
-	else
 -- This function when called collects the money from the tree in the Current Plot and renders the player motionless until the animation is complete 
 
 local function CollectMoney(plotId, animationPositionPart)

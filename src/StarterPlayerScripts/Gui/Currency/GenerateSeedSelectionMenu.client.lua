@@ -78,7 +78,6 @@ end
 
 GenerateSelectableSeeds()
 
-
 local function PlantSeed()
 	Remotes.PlantedSeed:FireServer(Seed.Name)
 	Remotes.UpdateAchievements:FireServer("SeedsPlanted", 1)
