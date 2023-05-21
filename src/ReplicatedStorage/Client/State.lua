@@ -85,7 +85,6 @@ Remotes.RefillWater.OnClientEvent:Connect(function()
 end)
 
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: number, Tree)
-	Tree = if Tree then Tree else PlayerData.Plots[plotID].Tree
 	PlayerData.Plots[plotID].Tree = Tree 
 	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
 	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)

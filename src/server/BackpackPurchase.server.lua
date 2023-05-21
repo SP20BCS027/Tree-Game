@@ -27,8 +27,11 @@ local function PurchasePack(player: Player, backpack: string)
 
 	Manager.PurchaseBackpack(player, backpack)
 	Manager.AdjustCoins(player, -BackpacksConfig[backpack].Price)
-	Manager.EquipBackpack(player, backpack)
-	BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
+
+	if profile.Data.EquippedBackpack.Capacity < BackpacksConfig[backpack].Capacity then 
+		Manager.EquipBackpack(player, backpack)
+		BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
+	end
 end
 
 Remotes.UpdateOwnedBackpacks.OnServerEvent:Connect(PurchasePack) 

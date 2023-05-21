@@ -26,7 +26,10 @@ local function PurchaseCan(player: Player, waterCan: string)
 
 	Manager.PurchaseWaterCan(player, waterCan)
 	Manager.AdjustCoins(player, -WaterCanConfig[waterCan].Price)
-	Manager.EquipWaterCan(player, waterCan)
+
+	if profile.Data.EquippedWaterCan.Capacity < WaterCanConfig[waterCan].Capacity then 
+		Manager.EquipWaterCan(player, waterCan)
+	end
 end
 
 Remotes.UpdateOwnedWaterCans.OnServerEvent:Connect(PurchaseCan)

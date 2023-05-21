@@ -119,6 +119,8 @@ local function BuyWaterCan()
 
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedWaterCans:FireServer(SelectedItem.Name)
+        BuyButton.Text = "Owned"
+
         print("Item Has been Bought")
         return
     end
@@ -207,7 +209,7 @@ local function LoadStats(item)
         IconDescription.Text = item.Description
     end
     BuyButton.Text = "Buy"
-    if CurrentShop == "Backpacks" or CurrentShop == "Watercans" then 
+    if CurrentShop == "Backpacks" or CurrentShop == "WaterCans" then 
         if CheckForOwnerShip() then 
             BuyButton.Text = "Owned"
         end
