@@ -91,29 +91,13 @@ local function LoadStats(plot)
 
     StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
     StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle)
+
     ShowStats()
 
     if PreviousIcon then 
         if LoadedIcon.Name == PreviousIcon.Name then return end 
         UpdateTimers(plot)
         return
-    end 
-
-    UpdateTimers(plot)
-end
-
-local function CreateIcon(plot)
-    local plotIcon = Template:Clone()
-    plotIcon.Parent = ScrollingFrame
-    plotIcon.Visible = true 
-    plotIcon.Name = plot.Id
-
-
-    ShowStats()
-
-    if PreviousIcon then 
-        if LoadedIcon.Name == PreviousIcon.Name then return end 
-        UpdateTimers(plot)
     end 
 
     UpdateTimers(plot)

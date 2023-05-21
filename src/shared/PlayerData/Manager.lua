@@ -188,16 +188,9 @@ function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.Plots[PlotId].Tree.TimeUntilWater = os.time() + 10
-	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[PlotId].Tree.TimeUntilWater, PlotId)
-
 	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenWater
 
 	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
-
-	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + 10
-	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
-
 end
 
 -- When this function gets Called The Tree's Level or Cycle is Changed 
@@ -210,11 +203,13 @@ function Manager.UpdateTreeLevel(player: Player, plotID: number, cycle: number):
 		profile.Data.Plots[plotID].Tree.CurrentLevel = profile.Data.Plots[plotID].Tree.CurrentLevel + 1 
 		profile.Data.Plots[plotID].Tree.MaxCycle = profile.Data.Plots[plotID].Tree.MaxCycle + 1 
 		profile.Data.Plots[plotID].Tree.CurrentCycle = 0
-	
+		
+		Remotes.UpdateTreeLevel:FireClient(player, plotID)
 		return "LEVEL"
 	else
 		profile.Data.Plots[plotID].Tree.CurrentCycle = profile.Data.Plots[plotID].Tree.CurrentCycle + cycle
 		
+		Remotes.UpdateTreeLevel:FireClient(player, plotID, profile.Data.Plots[plotID].Tree)
 		return "CYCLE"
 	end
 end

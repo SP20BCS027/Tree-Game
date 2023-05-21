@@ -7,7 +7,6 @@ local BackpackEquippingHandler = require(ServerScriptService.BackpackEquippingHa
 
 local Remotes = ReplicatedStorage.Remotes
 
-
 local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -23,6 +22,7 @@ local function UpdateTreeMoneyTimerAndUpdateMoney(player: Player, plotID: number
 			Houses.SetTreeHarvestTransparency(tree, 1)
 		end	
 	end
+end
 
 local function SellAllMoney(player: Player)
 	Manager.SellAllMoney(player)
