@@ -141,8 +141,14 @@ function Manager.UpdateTreeWaterTimer(player: Player, PlotId: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
+<<<<<<< Updated upstream
 	profile.Data.Plots[PlotId].Tree.TimeUntilWater = os.time() + 10
 	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[PlotId].Tree.TimeUntilWater, PlotId)
+=======
+	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenWater
+
+	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
+>>>>>>> Stashed changes
 end
 
 function Manager.UpdateTreeLevel(player: Player, PlotId: number, cycle: number)
@@ -154,12 +160,20 @@ function Manager.UpdateTreeLevel(player: Player, PlotId: number, cycle: number)
 		profile.Data.Plots[PlotId].Tree.MaxCycle = profile.Data.Plots[PlotId].Tree.MaxCycle + 1 
 		profile.Data.Plots[PlotId].Tree.CurrentCycle = 0
 		
+<<<<<<< Updated upstream
 		Remotes.UpdateTreeLevel:FireClient(player, "LEVEL", PlotId, cycle)
+=======
+		Remotes.UpdateTreeLevel:FireClient(player, plotID)
+>>>>>>> Stashed changes
 		return "LEVEL"
 	else
 		profile.Data.Plots[PlotId].Tree.CurrentCycle = profile.Data.Plots[PlotId].Tree.CurrentCycle + cycle
 		
+<<<<<<< Updated upstream
 		Remotes.UpdateTreeLevel:FireClient(player, "CYCLE", PlotId, cycle)
+=======
+		Remotes.UpdateTreeLevel:FireClient(player, plotID, profile.Data.Plots[plotID].Tree)
+>>>>>>> Stashed changes
 		return "CYCLE"
 	end
 end
@@ -168,7 +182,7 @@ function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.Plots[plotID].Tree.TimeUntilMoney = os.time() + 20
+	profile.Data.Plots[plotID].Tree.TimeUntilMoney = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenMoney
 
 	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilMoney, plotID)
 end

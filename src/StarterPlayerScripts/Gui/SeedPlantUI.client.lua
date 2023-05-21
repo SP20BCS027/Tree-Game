@@ -30,12 +30,19 @@ local function plantSeed(plotId, mudPosition, animationPositionPart)
 	end
 end
 
+<<<<<<< Updated upstream
 local function waterTree(plotId, animationPositionPart)
 	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
 		if StateManager.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and StateManager.GetData().Water > 0 then
+=======
+-- This function when called Waters the tree in the selected Plot and renders the player motionless until the animation is complete 
+
+local function WaterTree(plotId, animationPositionPart)
+	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
+		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
+			
+>>>>>>> Stashed changes
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
-			Remotes.UpdateTreeLevel:FireServer(plotId)
-			Remotes.UpdateWater:FireServer()
 
 			changeCharacterPosition(animationPositionPart.CFrame)
 			PlayerMovement:Movement(player, false)
@@ -52,6 +59,7 @@ local function waterTree(plotId, animationPositionPart)
 	end
 end
 
+<<<<<<< Updated upstream
 local function collectMoney(plotId, animationPositionPart)
 	if StateManager.GetData().Plots[plotId].Occupied and StateManager.GetData().Plots[plotId].Tree then
 		if StateManager.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
@@ -66,7 +74,32 @@ local function collectMoney(plotId, animationPositionPart)
 			print("No money to be collected!")
 		end
 	else
+=======
+-- This function when called collects the money from the tree in the Current Plot and renders the player motionless until the animation is complete 
+
+local function CollectMoney(plotId, animationPositionPart)
+	if not State.GetData().Plots[plotId].Occupied and not State.GetData().Plots[plotId].Tree then
+>>>>>>> Stashed changes
 		print("The plot is unoccupied or the tree does not exist")
+		return
+	end
+	if State.GetData().EquippedBackpack.Capacity <= State.GetData().Money then 
+		print("Backpack is Full!")
+		return
+	end
+	if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time() then
+
+		Remotes.UpdateAchievements:FireServer("MoneyEarned", plotId)
+		Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
+
+		ChangeCharacterPosition(animationPositionPart.CFrame)
+		PlayerMovement:Movement(player, false)
+		AnimationHandler.PlayAnimation(player, character, crouchAnimID)
+		local collectingSound = animationPositionPart.WateringSound
+		collectingSound:Play()
+		print("Money has been collected")
+	else
+		print("Harvest is not Ready!")
 	end
 end
 

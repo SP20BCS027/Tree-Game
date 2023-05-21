@@ -78,6 +78,7 @@ Remotes.RefillWater.OnClientEvent:Connect(function()
 	PlayerData.Water = PlayerData.EquippedWaterCan.Capacity
 end)
 
+<<<<<<< Updated upstream
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(Prompt: string, plotId: number, cycle: number)
 	if Prompt == "LEVEL" then
 		PlayerData.Plots[plotId].Tree.CurrentLevel = PlayerData.Plots[plotId].Tree.CurrentLevel + 1 
@@ -88,6 +89,17 @@ Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(Prompt: string, plotId: n
 	elseif Prompt == "CYCLE" then
 		PlayerData.Plots[plotId].Tree.CurrentCycle = PlayerData.Plots[plotId].Tree.CurrentCycle + cycle
 	end
+=======
+Remotes.FillupBackpack.OnClientEvent:Connect(function()
+	PlayerData.Money = PlayerData.EquippedBackpack.Capacity
+end)
+
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: number, Tree)
+	Tree = if Tree then Tree else PlayerData.Plots[plotID].Tree
+	PlayerData.Plots[plotID].Tree = Tree 
+	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
+	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
+>>>>>>> Stashed changes
 end)
 
 Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(ownedCans)

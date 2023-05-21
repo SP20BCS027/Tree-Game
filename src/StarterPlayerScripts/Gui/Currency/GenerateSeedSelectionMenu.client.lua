@@ -71,9 +71,16 @@ end
 
 generateSelectableSeeds()
 
+<<<<<<< Updated upstream
 local function plantSeed()
 	Remotes.UpdateOwnedSeeds:FireServer(-1, seedthing.Name)
 	Remotes.UpdateOccupied:FireServer(plotId, true, seedthing.Name, MudPos)
+=======
+local function PlantSeed()
+	Remotes.PlantedSeed:FireServer(Seed.Name)
+	Remotes.UpdateAchievements:FireServer("SeedsPlanted", 1)
+	Remotes.UpdateOccupied:FireServer(PlotID, true, Seed.Name, MudPos)
+>>>>>>> Stashed changes
 end
 
 InformationFrame.PlantButton.MouseButton1Down:Connect(function()

@@ -47,8 +47,61 @@ local function updateWaterTimer(plotIcon)
     end
 end
 
+<<<<<<< Updated upstream
 local function createIcon(plot)
     print(plot)
+=======
+local function UpdateTimers(plot)
+    task.spawn(function()
+        repeat
+            local updateMoney = UpdateMoneyTimer(LoadedIcon)
+            local updateWater = UpdateWaterTimer(LoadedIcon)
+            print("Repeating")
+
+            if updateMoney and updateWater then break end
+            if LoadedIcon.Name ~= plot.Id then break end 
+            if PlotsGUI.Enabled == false then break end 
+
+        until not task.wait(1) 
+        return
+    end)
+end 
+
+local function HideStats()
+    SelectedFrame.Stats.Visible = false
+    SelectedFrame.Plot_ID.Visible = false
+    PreviousIcon = nil 
+end 
+
+local function ShowStats()
+    SelectedFrame.Stats.Visible = true
+    SelectedFrame.Plot_ID.Visible = true
+end
+
+local function DeleteTree(plot)
+    Remotes.DeleteTree:FireServer(plot)
+end
+
+local function LoadStats(plot)
+    SelectedFrame.Plot_ID.Text = plot.Id
+    StatsFrame.IconTreeName.Text = plot.Tree.Name
+
+    StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
+    StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle)
+
+    ShowStats()
+
+    if PreviousIcon then 
+        if LoadedIcon.Name == PreviousIcon.Name then return end 
+        UpdateTimers(plot)
+        return
+    end 
+
+    UpdateTimers(plot)
+end
+
+local function CreateIcon(plot)
+>>>>>>> Stashed changes
     local plotIcon = Template:Clone()
     plotIcon.Parent = ScrollingFrame
     plotIcon.Visible = true 

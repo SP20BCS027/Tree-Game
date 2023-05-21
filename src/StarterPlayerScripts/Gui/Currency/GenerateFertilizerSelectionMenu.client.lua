@@ -65,9 +65,14 @@ end
 
 generateSelectableSeeds()
 
+<<<<<<< Updated upstream
 local function fertilizePlot()
 	Remotes.UpdateOwnedFertilizers:FireServer(-1, Fertilizer.Name)
 	Remotes.FertilizeTree:FireServer(plotId, Fertilizer.Cycles)
+=======
+local function FertilizePlot()
+	Remotes.FertilizeTree:FireServer(PlotID, Fertilizer.Name)
+>>>>>>> Stashed changes
 end
 
 InformationFrame.PlantButton.MouseButton1Down:Connect(function()
