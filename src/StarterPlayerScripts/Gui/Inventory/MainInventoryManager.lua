@@ -4,20 +4,20 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local State = require(ReplicatedStorage.Client.State)
 
-<<<<<<< Updated upstream
-=======
 local player = game.Players.LocalPlayer
 
 local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
->>>>>>> Stashed changes
 local Configs = {}
 
 local CurrentDirectory
 
 local MainInventoryUI = player.PlayerGui:WaitForChild("MainInventory")
 local MainFrame = MainInventoryUI.MainFrame
+
+local BackgroundFrame = MainFrame.BackgroundFrame
+
 local CloseButton = MainFrame.CloseFrame.CloseButton
 
 local InventoryFrame = MainFrame.InventoryFrame
@@ -93,6 +93,18 @@ local function ShowStats(item)
         EquipButton.Text = "Equipped"
     end
     IconImage.Visible = true
+end
+
+-- This Function Updates the Colors of the Inventory UI 
+
+local function ChangeColors()
+    BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].BackgroundFrame
+    InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].InventoryFrame    
+    EquippedFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].EquippedFrame
+    DescriptionFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].DescriptionFrame
+    IconAmount.BackgroundColor3 = InventoryUIColors[CurrentInventory].IconAmount
+    IconName.BackgroundColor3 = InventoryUIColors[CurrentInventory].IconName
+    IconImage.BackgroundColor3 = InventoryUIColors[CurrentInventory].IconImage
 end
 
 -- This Function Resets the Trasparency of back to 0 for all icons
@@ -183,11 +195,8 @@ function MainInventory.GenerateInventory(setID)
 
     CurrentInventory = setID
 
-<<<<<<< Updated upstream
-=======
     ChangeColors()
     
->>>>>>> Stashed changes
     for _, item in CurrentDirectory do 
         CreateIcon(item)
     end 
@@ -211,10 +220,7 @@ EquipButton.MouseButton1Down:Connect(function()
     
     if CurrentInventory == "Backpacks" then 
         ReplicatedStorage.Remotes.ChangeEquippedBackpack:FireServer(SelectedItem)
-<<<<<<< Updated upstream
-=======
         ReplicatedStorage.Remotes.GivePlayerBackpack:FireServer(SelectedItem)
->>>>>>> Stashed changes
     end
     if CurrentInventory == "WaterCans" then 
         ReplicatedStorage.Remotes.ChangeEquippedWateringCan:FireServer(SelectedItem)

@@ -6,6 +6,7 @@ local Template = require(ReplicatedStorage.PlayerData.Template)
 local TreeConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
+local AchievementInfoConfig = require(ReplicatedStorage.Configs.AchievementInfoConfig)
 
 local Manager = {}
 
@@ -39,6 +40,8 @@ function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
+	print("Seeds Adjusted")
+
 	profile.Data.Seeds[seedType].Amount += amount 
 	Remotes.UpdateOwnedSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
 end
@@ -112,12 +115,15 @@ function Manager.AdjustPlotOccupation(player: Player, PlotID: number, isOccupied
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
+	print("This function AdjustPlotOccupation Got Called" .. PlotID)
+
 	profile.Data.Plots[PlotID].Occupied = isOccupied
-	profile.Data.Plots[PlotID].Tree = TreeConfig[treeToPlant]
+	profile.Data.Plots[PlotID].Tree = table.clone(TreeConfig[treeToPlant])
+
 	profile.Data.Plots[PlotID].Tree.TimeUntilWater = os.time() + 20 
 	
 	Remotes.UpdateOccupied:FireClient(player, profile.Data.Plots[PlotID].Occupied, PlotID)
-	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotID].Tree.TimeUntilWater, PlotID, treeToPlant)
+	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotID].Tree, PlotID)
 end
 
 -- When this function gets called the plot is added to the owned plots of the player. 
@@ -170,14 +176,26 @@ function Manager.EquipBackpack(player: Player, backpackID: string)
 	Remotes.ChangeEquippedBackpack:FireClient(player, profile.Data.EquippedBackpack)
 end
 
+-- When this function gets called the Tree of the Plot gets Yeeted
+
+function Manager.DeleteTree(player: Player, plotID: number)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.Plots[plotID].Occupied = false
+	profile.Data.Plots[plotID].Tree = nil
+	Remotes.DeleteTree:FireClient(player, plotID)
+end
+
 -- When this function gets called the Water Timer of the tree get updated 
 
 function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + 10
-	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
+	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenWater
+
+	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree, plotID)
 end
 
 -- When this function gets Called The Tree's Level or Cycle is Changed 
@@ -191,12 +209,12 @@ function Manager.UpdateTreeLevel(player: Player, plotID: number, cycle: number):
 		profile.Data.Plots[plotID].Tree.MaxCycle = profile.Data.Plots[plotID].Tree.MaxCycle + 1 
 		profile.Data.Plots[plotID].Tree.CurrentCycle = 0
 		
-		Remotes.UpdateTreeLevel:FireClient(player, "LEVEL", plotID, cycle)
+		Remotes.UpdateTreeLevel:FireClient(player, plotID, profile.Data.Plots[plotID].Tree)
 		return "LEVEL"
 	else
 		profile.Data.Plots[plotID].Tree.CurrentCycle = profile.Data.Plots[plotID].Tree.CurrentCycle + cycle
 		
-		Remotes.UpdateTreeLevel:FireClient(player, "CYCLE", plotID, cycle)
+		Remotes.UpdateTreeLevel:FireClient(player, plotID, profile.Data.Plots[plotID].Tree)
 		return "CYCLE"
 	end
 end
@@ -207,10 +225,26 @@ function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.Plots[plotID].Tree.TimeUntilMoney = os.time() + 20
+	profile.Data.Plots[plotID].Tree.TimeUntilMoney = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenMoney
 
 	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilMoney, plotID)
 end
+
+function Manager.UpdateAchievements(player: Player, achievementType: string, amount: number)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.Achievements[achievementType].AmountAchieved += amount
+
+	if profile.Data.Achievements[achievementType].AmountAchieved >= profile.Data.Achievements[achievementType].AmountToAchieve then
+		profile.Data.Achievements[achievementType].CurrentAchievementNo += 1
+		profile.Data.Achievements[achievementType].AmountToAchieve = AchievementInfoConfig[achievementType][profile.Data.Achievements[achievementType].CurrentAchievementNo]
+	end
+
+	Remotes.UpdateAchievements:FireClient(player, profile.Data.Achievements)
+end
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- This function is used to get a specific directory of Data of the player 
 
@@ -235,6 +269,8 @@ end
 Remotes.GetData.OnServerInvoke = GetData	
 Remotes.GetAllData.OnServerInvoke = GetAllData
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- Here are some functions for the Commands 
 
 -- This function Resets all the player Data back to the Default Template  
@@ -253,7 +289,7 @@ function Manager.FillupBackpack(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	profile.Data.Money = profile.Data.EquippedBackpack.Capacity
+	profile.Data.Money = profile.Data.EquippedBackpack.Capacity	
 	Remotes.FillupBackpack:FireClient(player)
 end
 

@@ -5,15 +5,28 @@ local Manager = require(ServerScriptService.PlayerData.Manager)
 local Houses = require(ServerScriptService.Houses)
 local Remotes = ReplicatedStorage.Remotes
 
-local function UpdateTreeWaterTimer(player: Player, plotID: number)
-	Manager.UpdateTreeWaterTimer(player, plotID)
-end
+local WATERCYCLE = 1
 
-local function UpdateTreeLevel(player: Player, plotID: number)
-	local Evaluation = Manager.UpdateTreeLevel(player, plotID, 1)
-	if Evaluation == "LEVEL" then 
-		local plotObject = Houses.GetPlayerPlot(player, plotID)
-		Houses.ChangeTreeModel(plotObject)
+local function UpdateTreeWaterTimerAndTreeLevel(player: Player, plotID: number)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	print(plotID)
+
+	if profile.Data.Water <= 0 then 
+		print("The Player " .. player .. " does not have water ~~ Server")
+		return
+	end 
+
+	if profile.Data.Plots[plotID].Tree.TimeUntilWater < os.time() then 
+		Manager.UpdateTreeWaterTimer(player, plotID)
+
+		local Evaluation = Manager.UpdateTreeLevel(player, plotID, WATERCYCLE)
+		if Evaluation == "LEVEL" then 
+			local plotObject = Houses.GetPlayerPlot(player, plotID)
+			Houses.ChangeTreeModel(plotObject)
+		end
+		Manager.AdjustWater(player)
 	end
 end
 
@@ -21,11 +34,5 @@ local function RefillWater(player: Player)
 	Manager.RefillWater(player)
 end
 
-local function DeductWater(player: Player)
-	Manager.AdjustWater(player)
-end
-
-Remotes.UpdateTreeWaterTimer.OnServerEvent:Connect(UpdateTreeWaterTimer)
-Remotes.UpdateTreeLevel.OnServerEvent:Connect(UpdateTreeLevel)
+Remotes.UpdateTreeWaterTimer.OnServerEvent:Connect(UpdateTreeWaterTimerAndTreeLevel)
 Remotes.RefillWater.OnServerEvent:Connect(RefillWater)
-Remotes.UpdateWater.OnServerEvent:Connect(DeductWater)

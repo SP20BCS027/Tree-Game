@@ -23,12 +23,12 @@ end
 -- This function when called loads up the menu where the Seed to be Planted is Selected 
 -- It also makes the player unable to move 
 
-local function PlantSeed(plotId, mudPosition, animationPositionPart)
+local function PlantSeed(plotId: string, mudPosition: Vector3, animationPositionPart: Part)
 	if not State.GetData().Plots[plotId].Occupied then 
 		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
 		ChangeCharacterPosition(animationPositionPart.CFrame)
 		PlayerMovement:Movement(player, false)
-		
+		--print("This is the plantID in the plantSeed: " .. plotId)
 		print("Seed Planted")
 	else
 		print("This plot is occupied!")
@@ -40,9 +40,8 @@ end
 local function WaterTree(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
 		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
+			
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
-			Remotes.UpdateTreeLevel:FireServer(plotId)
-			Remotes.UpdateWater:FireServer()
 
 			ChangeCharacterPosition(animationPositionPart.CFrame)
 			PlayerMovement:Movement(player, false)
@@ -51,6 +50,7 @@ local function WaterTree(plotId, animationPositionPart)
 			local wateringSound = animationPositionPart.WateringSound
 			wateringSound:Play()
 			print("Tree has been watered!")
+			--print("This is the plotID in Water: " .. plotId)
 		else
 			print("The Tree is already watered or You have no water!")
 		end
@@ -62,20 +62,27 @@ end
 -- This function when called collects the money from the tree in the Current Plot and renders the player motionless until the animation is complete 
 
 local function CollectMoney(plotId, animationPositionPart)
-	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
-		if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time()  then
-			Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
-			ChangeCharacterPosition(animationPositionPart.CFrame)
-			PlayerMovement:Movement(player, false)
-			AnimationHandler.PlayAnimation(player, character, crouchAnimID)
-			local collectingSound = animationPositionPart.WateringSound
-			collectingSound:Play()
-			print("Money has been collected")
-		else
-			print("No money to be collected!")
-		end
-	else
+	if not State.GetData().Plots[plotId].Occupied and not State.GetData().Plots[plotId].Tree then
 		print("The plot is unoccupied or the tree does not exist")
+		return
+	end
+	if State.GetData().EquippedBackpack.Capacity <= State.GetData().Money then 
+		print("Backpack is Full!")
+		return
+	end
+	if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time() then
+
+		Remotes.UpdateAchievements:FireServer("MoneyEarned", plotId)
+		Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
+
+		ChangeCharacterPosition(animationPositionPart.CFrame)
+		PlayerMovement:Movement(player, false)
+		AnimationHandler.PlayAnimation(player, character, crouchAnimID)
+		local collectingSound = animationPositionPart.WateringSound
+		collectingSound:Play()
+		print("Money has been collected")
+	else
+		print("Harvest is not Ready!")
 	end
 end
 
@@ -95,6 +102,7 @@ end
 local function GenerateUIs()
 	for name, _ in (State.GetData().Plots) do
 		local Plot = Remotes.AskUIInformation:InvokeServer(name)
+		if not Plot then return end
 		local Buttons = Template:Clone()
 		Buttons.Parent = PlotStatsUI.PlotInteractive
 		Buttons.Name = name

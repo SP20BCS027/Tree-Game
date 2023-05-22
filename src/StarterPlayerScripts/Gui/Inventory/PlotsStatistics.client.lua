@@ -17,6 +17,7 @@ local TreeButton = InventoryButton.Frame.Plots
 local CloseButton = MainFrame.CloseFrame.CloseButton
 local SelectedFrame = MainFrame.SelectedFrame
 local StatsFrame = SelectedFrame.Stats
+local DeleteButton = StatsFrame.DeleteButton
 local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame
 local Template = InventoryFrame.Template
@@ -39,7 +40,7 @@ local function UpdateMoneyTimer(plotIcon)
             StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
             StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", "Ready To Collect")
-            return "Break"
+            return true
         end
     end
 end
@@ -52,7 +53,7 @@ local function UpdateWaterTimer(plotIcon)
             StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
         else
             StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", "Water Me!")
-            return "Break"
+            return true
         end
     end
 end
@@ -84,6 +85,10 @@ local function ShowStats()
     SelectedFrame.Plot_ID.Visible = true
 end
 
+local function DeleteTree(plot)
+    Remotes.DeleteTree:FireServer(plot)
+end
+
 local function LoadStats(plot)
     SelectedFrame.Plot_ID.Text = plot.Id
     StatsFrame.IconTreeName.Text = plot.Tree.Name
@@ -96,6 +101,7 @@ local function LoadStats(plot)
     if PreviousIcon then 
         if LoadedIcon.Name == PreviousIcon.Name then return end 
         UpdateTimers(plot)
+        return
     end 
 
     UpdateTimers(plot)
@@ -112,8 +118,6 @@ local function CreateIcon(plot)
         LoadStats(plot)
         PreviousIcon = LoadedIcon
     end)
-<<<<<<< Updated upstream
-=======
 
     local ORIGINAL_SIZE_OF_PLOTDELETEBUTTON = plotIcon.DeleteButton.Size
 
@@ -128,7 +132,6 @@ local function CreateIcon(plot)
         plotIcon.DeleteButton.Size = ORIGINAL_SIZE_OF_PLOTDELETEBUTTON
     end)
 
->>>>>>> Stashed changes
 end
 
 local function GeneratePlotsUI()
@@ -175,8 +178,6 @@ CloseButton.MouseButton1Down:Connect(function()
     GeneratePlotsUI()
 end)
 
-<<<<<<< Updated upstream
-=======
 CloseButton.MouseEnter:Connect(function()
     CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
@@ -197,7 +198,6 @@ DeleteButton.MouseLeave:Connect(function()
     DeleteButton.Size = ORIGINAL_SIZE_OF_DELETEBUTTON
 end) 
 
->>>>>>> Stashed changes
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: string)
     if prompt == "LEVEL" then 
         task.delay(0, function()
@@ -220,18 +220,12 @@ Remotes.UpdateOccupied.OnClientEvent:Connect(function()
     task.delay(0, GeneratePlotsUI)
 end)
 
-<<<<<<< Updated upstream
-Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
-=======
 Remotes.DeleteTree.OnClientEvent:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
 end)
 
 Remotes.ResetData.OnClientEvent:Connect(function()
->>>>>>> Stashed changes
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
 end)
-
-

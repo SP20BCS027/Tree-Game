@@ -8,17 +8,14 @@ local Configs = ReplicatedStorage.Configs
 
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 local State = require(ReplicatedStorage.Client.State)
-<<<<<<< Updated upstream
-=======
 local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
->>>>>>> Stashed changes
 
 local ShopUI = player.PlayerGui:WaitForChild("ShopTemplate")
 local MainFrame = ShopUI.MainFrame
 local CloseButton = MainFrame.CloseFrame.CloseButton
-
+local BackgroundFrame = MainFrame.BackgroundFrame
 local SelectedFrame = MainFrame.SelectedFrame
 local IconImage = SelectedFrame.IconImage
 local IconStats = SelectedFrame.Stats
@@ -26,6 +23,13 @@ local IconName = IconStats.IconName
 local IconPrice = IconStats.IconPrice
 local IconAmount = IconStats.IconAmount
 local BuyButton = IconStats.BuyButton
+local BuyFrame = IconStats.BuyFrame 
+local NumberBuyButton = BuyFrame.BuyButton
+local AdditionFrame = BuyFrame.AdditionFrame
+local AmountLabel = AdditionFrame.AmountLabel 
+local MinusButton = AdditionFrame.MinusButtonFrame.MinusButton
+local PlusButton = AdditionFrame.PlusButtonFrame.PlusButton 
+
 local DescriptionFrame = IconStats.Description
 local IconDescription = IconStats.Description.IconDescription
 
@@ -40,6 +44,7 @@ local CAPACITY_TEXT = "Capacity: REPLACE"
 local SelectedItem
 local CurrentShop
 local NumberOfPlots
+local AmountOfItems = 1 
 
 local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 local ORIGINAL_SIZE_OF_BUYBUTTON = BuyButton.Size
@@ -51,27 +56,15 @@ local Shops = {}
 -- This function loads the Configs into the Shops Table
 
 local function GetDataFromConfigs()
-    Shops["Backpack"] = require(Configs.BackpacksConfig)
-    Shops["Fertilizer"] = require(Configs.FertilizerConfig)
-    Shops["Plot"] = require(Configs.PlotsConfig)
-    Shops["Seed"] = require(Configs.SeedsConfig)
-    Shops["Watercan"] = require(Configs.WaterCanConfig)
+    Shops["Backpacks"] = require(Configs.BackpacksConfig)
+    Shops["Fertilizers"] = require(Configs.FertilizerConfig)
+    Shops["Plots"] = require(Configs.PlotsConfig)
+    Shops["Seeds"] = require(Configs.SeedsConfig)
+    Shops["WaterCans"] = require(Configs.WaterCanConfig)
 end
 
 GetDataFromConfigs()
 
-<<<<<<< Updated upstream
--- Thsi function Checks for owner of the Watering Can or the Bacpack and returns a boolean Value
-
-local function CheckForOwnerShip()
-    if CurrentShop == "Backpack" then 
-        if State.GetData().OwnedBackpacks[SelectedItem.Name] then 
-            return true
-        end
-    end
-    if CurrentShop == "Watercan" then 
-        if State.GetData().OwnedWaterCans[SelectedItem.Name] then 
-=======
 local function ChangeColors()
     BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].BackgroundFrame
     InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].InventoryFrame    
@@ -94,7 +87,6 @@ local function CheckForOwnerShip(item)
     end
     if CurrentShop == "WaterCans" then 
         if State.GetData().OwnedWaterCans[item] then 
->>>>>>> Stashed changes
             return true
         end
     end
@@ -114,12 +106,13 @@ end
 local function BuyBackpack()
     if CheckForOwnerShip() then 
         print("Item Already owned")
+        BuyButton.Text = "Owned"
         return
     end
 
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedBackpacks:FireServer(SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
+        Remotes.GivePlayerBackpack:FireServer(SelectedItem.Name)
         print("Bought")
         BuyButton.Text = "Owned"
         return
@@ -137,9 +130,9 @@ local function BuyWaterCan()
 
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedWaterCans:FireServer(SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
-        print("Item Has been Bought")
         BuyButton.Text = "Owned"
+
+        print("Item Has been Bought")
         return
     end
     print("Not Enough Money")
@@ -149,8 +142,7 @@ end
 
 local function BuySeed()
     if State.GetData().Coins >= SelectedItem.Price then
-		Remotes.UpdateOwnedSeeds:FireServer(1, SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
+		Remotes.UpdateOwnedSeeds:FireServer(AmountOfItems, SelectedItem.Name)
 		print("Bought")
 	else
 		print("You don't have enough money")
@@ -161,8 +153,7 @@ end
 
 local function BuyFertilizer()
     if State.GetData().Coins >= SelectedItem.Price then
-		Remotes.UpdateOwnedFertilizers:FireServer(1, SelectedItem.Name)
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
+		Remotes.UpdateOwnedFertilizers:FireServer(AmountOfItems, SelectedItem.Name)
 		print("Bought")
 	else
 		print("You don't have enough money")
@@ -181,14 +172,17 @@ local function BuyPlot()
     end
 
     if State.GetData().Coins >= SelectedItem.Price then 
-        Remotes.UpdateOwnedPlots:FireServer(SelectedItem    )
-		Remotes.UpdateCoins:FireServer(-(SelectedItem.Price))
+        Remotes.UpdateOwnedPlots:FireServer(SelectedItem)
         print("Item Has been Bought")
         BuyButton.Text = "Owned"
         return
     end
     print("Not Enough Money")
 end
+
+local function SetAmountLabelText()
+    AmountLabel.Text = AmountOfItems
+end 
 
 -- This funcion shows all the stats of the Information Frame 
 
@@ -198,8 +192,6 @@ local function ShowStats()
     IconAmount.Visible = true 
     DescriptionFrame.Visible = true
     BuyButton.Visible = true
-<<<<<<< Updated upstream
-=======
     if CurrentShop == "Seeds" or CurrentShop == "Fertilizers" then 
         BuyButton.Visible = false
         BuyFrame.Visible = true 
@@ -208,8 +200,9 @@ local function ShowStats()
     if CurrentShop == "Plots" then 
         IconAmount.Visible = false
     end
->>>>>>> Stashed changes
     IconImage.Visible = true 
+    AmountLabel.Text = 1
+    AmountOfItems = 1 
 end
 
 -- This function Hides all the stats of the Information Frame 
@@ -220,6 +213,7 @@ local function HideStats()
     IconAmount.Visible = false
     DescriptionFrame.Visible = false 
     BuyButton.Visible = false
+    BuyFrame.Visible = false 
     IconImage.Visible = false
 end
 
@@ -232,18 +226,14 @@ local function LoadStats(item)
         IconDescription.Text = item.Description
     end
     BuyButton.Text = "Buy"
-<<<<<<< Updated upstream
-    if CurrentShop == "Backpack" or CurrentShop == "Watercan" then 
-=======
     if CurrentShop == "Backpacks" or CurrentShop == "WaterCans" then 
         IconAmount.Text = CAPACITY_TEXT:gsub("REPLACE", item.Capacity)
->>>>>>> Stashed changes
         if CheckForOwnerShip() then 
             BuyButton.Text = "Owned"
         end
     end
 
-    if CurrentShop == "Plot" then 
+    if CurrentShop == "Plots" then 
         if CheckForPlotOwnerShip() then 
             BuyButton.Text = "Owned" 
         end
@@ -276,7 +266,7 @@ local function CreateIcon(item)
         icon.LayoutOrder = item.LayoutOrder
     end
 
-    if CurrentShop == "Plot" then 
+    if CurrentShop == "Plots" then 
         icon.Name = item.Id
         if CheckForPlotOwnerShip(icon.Name) then 
             icon.EquippedIcon.Visible = true 
@@ -322,9 +312,11 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     CurrentShop = shopID
     ShopUI.Enabled = true
 
-    if CurrentShop == "Plot" then 
+    ChangeColors()
+
+    if CurrentShop == "Plots" then 
         NumberOfPlots = 0 
-        for _, _ in pairs(State.GetData().Plots) do 
+        for _ in pairs(State.GetData().Plots) do 
             NumberOfPlots += 1
         end 
     end 
@@ -353,30 +345,20 @@ end)
 -- When the Buy Button is pressed calls the desired Buy Function
 
 BuyButton.MouseButton1Down:Connect(function()
-    if CurrentShop == "Backpack" then 
+    if CurrentShop == "Backpacks" then 
         BuyBackpack()
         return
     end
-    if CurrentShop == "Watercan" then 
+    if CurrentShop == "WaterCans" then 
         BuyWaterCan() 
         return
     end
-    if CurrentShop == "Seed" then 
-        BuySeed()
-        return
-    end
-    if CurrentShop == "Fertilizer" then 
-        BuyFertilizer()
-        return
-    end
-    if CurrentShop == "Plot" then 
+    if CurrentShop == "Plots" then 
         BuyPlot()
         return 
     end 
 end)
 
-<<<<<<< Updated upstream
-=======
 BuyButton.MouseEnter:Connect(function()
     BuyButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_BUYBUTTON)
 end)
@@ -421,5 +403,4 @@ PlusButton.MouseButton1Down:Connect(function()
     SetAmountLabelText()
 end)
 
->>>>>>> Stashed changes
 return ShopsManager

@@ -15,6 +15,9 @@ local function selectTree(seed)
 			table.insert(sortedTrees, tree)
 		end
 	end
+
+	-- Make A Better Random Selecting Algorithm
+
 	local randomIndex = math.random(table.maxn(sortedTrees))	
 	return sortedTrees[randomIndex]
 end
@@ -27,7 +30,24 @@ end
 
 local function ChangeOccupationStatus(player: Player, plotID: number, isOccupied: boolean, seed, spawnPosition)
 	-- add a server side check to check plot occupation maybe? 
-	print(plotID)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	if not profile.Data.Plots[plotID] then 
+		print("This plot does not exist ~~ Server")
+		return
+	end
+
+	if profile.Data.Plots[plotID].Occupied then 
+		print("This plot is occupied ~~ Server")
+		return
+	end
+
+	if profile.Data.Seeds[seed].Amount < 0 then 
+		print("You don't have the Seed ~~ Server")
+		return
+	end
+
 	local treeToPlant = selectTree(seed).Name
 	local plotObject = Houses.GetPlayerPlot(player, plotID)
 	spawnTree(spawnPosition, treeToPlant, seed, plotObject)

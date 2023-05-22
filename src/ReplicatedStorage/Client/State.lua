@@ -2,7 +2,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Remotes = ReplicatedStorage.Remotes
 local Template = require(ReplicatedStorage.PlayerData.Template)
-local TreeConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local IsDataLoaded = false 
 
 local PlayerData : Template.PlayerData
@@ -53,19 +52,18 @@ Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotID: n
 	PlayerData.Plots[plotID].Occupied = occupy
 end)
 
-Remotes.UpdateTree.OnClientEvent:Connect(function(timeTillThirst: number, plotID: number, tree: string)
-	PlayerData.Plots[plotID].Tree = TreeConfig[tree]
-	PlayerData.Plots[plotID].Tree.TimeUntilWater = timeTillThirst
+Remotes.UpdateTree.OnClientEvent:Connect(function(Tree, plotID: number)
+	PlayerData.Plots[plotID].Tree = Tree
 	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
 	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
 end)
 
-Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(timeTillThirst: number, plotID: number)
-	PlayerData.Plots[plotID].Tree.TimeUntilWater = timeTillThirst
+Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(Tree, plotID: number)
+	PlayerData.Plots[plotID].Tree = Tree
 end)
 
-Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(function(timeTillMoney: number, plotID: number)
-	PlayerData.Plots[plotID].Tree.TimeUntilMoney = timeTillMoney
+Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(function(Tree, plotID: number)
+	PlayerData.Plots[plotID].Tree = Tree
 end)
 
 Remotes.UpdateWater.OnClientEvent:Connect(function(water: number)
@@ -76,20 +74,10 @@ Remotes.RefillWater.OnClientEvent:Connect(function()
 	PlayerData.Water = PlayerData.EquippedWaterCan.Capacity
 end)
 
-Remotes.FillupBackpack.OnClientEvent:Connect(function()
-	PlayerData.Money = PlayerData.EquippedBackpack.Capacity
-end)
-
-Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: number, cycle: number)
-	if prompt == "LEVEL" then
-		PlayerData.Plots[plotID].Tree.CurrentLevel = PlayerData.Plots[plotID].Tree.CurrentLevel + 1 
-		PlayerData.Plots[plotID].Tree.MaxCycle = PlayerData.Plots[plotID].Tree.MaxCycle + 1
-		PlayerData.Plots[plotID].Tree.CurrentCycle = 0 
-		Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
-		Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
-	elseif prompt == "CYCLE" then
-		PlayerData.Plots[plotID].Tree.CurrentCycle = PlayerData.Plots[plotID].Tree.CurrentCycle + cycle
-	end
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: number, Tree)
+	PlayerData.Plots[plotID].Tree = Tree 
+	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
+	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
 end)
 
 Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(OwnedWaterCans: {})
@@ -102,8 +90,16 @@ Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(OwnedBackpacks: {})
 	Remotes.Bindables.OnReset.GenerateBackpackInventory:Fire()
 end)
 
+Remotes.DeleteTree.OnClientEvent:Connect(function(plotID: string)
+	PlayerData.Plots[plotID].Tree = nil 
+end)
+
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function(Plots: {})
 	PlayerData.Plots = Plots
+end)
+
+Remotes.UpdateAchievements.OnClientEvent:Connect(function(Achievements: {})
+	PlayerData.Achievements = Achievements
 end)
 
 Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function(EquippedBackpack: {})
@@ -116,6 +112,10 @@ end)
 
 Remotes.UpdateMoney.OnClientEvent:Connect(function(money: number)
 	PlayerData.Money = money
+end)
+
+Remotes.BakriQuest.OnClientEvent:Connect(function(BakriQuest)
+	PlayerData.ActiveQuests = BakriQuest
 end)
 
 Remotes.SellAllMoney.OnClientEvent:Connect(function()

@@ -1,11 +1,12 @@
 local WorkSpace = game:GetService("Workspace")
 local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
-local BackpackEquippingHandler = require(ServerScriptService.BackpackEquippingHandler)
+local QuestLogNPC = require(ReplicatedStorage.Configs.QuestLogNPC)
 
-local TouchPart = WorkSpace:WaitForChild("SellPart")
+local TouchPart = WorkSpace:WaitForChild("QuestPart")
 
 local Debounce = {}
 local DELAY = 2
@@ -19,10 +20,10 @@ TouchPart.Touched:Connect(function(touch)
 		local profile = Manager.Profiles[player]
 		if not profile then return end 
 		
-		Manager.AdjustCoins(player, profile.Data.Money)
-		Manager.UpdateAchievements(player, "CoinsEarned", profile.Data.Money)
-		Manager.SellAllMoney(player)		
-		BackpackEquippingHandler.UpdatePlayerBackpackLabel(player)
+		profile.Data.ActiveQuests["Bakri"].CurrentQuestInfo = QuestLogNPC["Bakri"]["Quest_1"]
+		profile.Data.ActiveQuests["Ghora"].CurrentQuestInfo = QuestLogNPC["Ghora"]["Quest_1"]
+
+		ReplicatedStorage.Remotes.BakriQuest:FireClient(player, profile.Data.ActiveQuests)
 
 		task.delay(DELAY, function()
 			Debounce[player] = nil
