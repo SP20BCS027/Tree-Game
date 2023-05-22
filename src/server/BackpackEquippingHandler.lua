@@ -17,8 +17,10 @@ local function GivePlayerBackpack(player: Player, BackpackID: string)
 	local backpack = ReplicatedStorage.Backpacks[BackpackID]:Clone()
 	backpack.Name = "Backpack"
 	backpack.Parent = character 
+	local upperTorso = character:WaitForChild("UpperTorso")
 
-	local moveCFrame = character.UpperTorso.CFrame * character.UpperTorso.BodyBackAttachment.CFrame
+	local moveCFrame = upperTorso.CFrame * upperTorso.BodyBackAttachment.CFrame
+
 
 	backpack:PivotTo(moveCFrame)
 

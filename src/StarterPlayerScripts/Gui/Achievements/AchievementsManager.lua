@@ -4,6 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = game.Players.LocalPlayer
 
 local State = require(ReplicatedStorage.Client.State)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
 local AchievementsUI = player.PlayerGui:WaitForChild("AchievementTemplate")
 local MainFrame = AchievementsUI.MainFrame
@@ -16,6 +17,8 @@ local CloseButton = CloseFrame.CloseButton
 local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame 
 local Template = InventoryFrame.Template
+
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
 local function GenerateIcon(achievementName: string, item)
     local iconClone = Template:Clone()
@@ -51,4 +54,13 @@ CloseButton.MouseButton1Down:Connect(function()
     AchievementsUI.Enabled = false
 end)
 
+CloseButton.MouseEnter:Connect(function()
+    CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+    CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
+end)
+
 return Achievements
+

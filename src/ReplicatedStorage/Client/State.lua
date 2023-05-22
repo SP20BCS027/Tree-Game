@@ -46,14 +46,6 @@ end)
 
 Remotes.ResetData.OnClientEvent:Connect(function()
 	PlayerData = Template
-	
-	Remotes.Bindables.OnReset.GenerateOwnedPlots:Fire()
-	Remotes.Bindables.OnReset.ResetMoney:Fire()
-	Remotes.Bindables.OnReset.ResetWater:Fire()
-	Remotes.Bindables.OnReset.ResetGems:Fire()
-	Remotes.Bindables.OnReset.GenerateBackpackInventory:Fire()
-	Remotes.Bindables.OnReset.GenerateWaterCanInventory:Fire()
-	Remotes.Bindables.OnReset.GenerateMainInventory:Fire()
 end)
 
 Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotID: number)
@@ -69,14 +61,10 @@ end)
 
 Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(Tree, plotID: number)
 	PlayerData.Plots[plotID].Tree = Tree
-	print("Water Timer Got Updated")
-	print(State.GetData().Plots)
 end)
 
 Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(function(Tree, plotID: number)
 	PlayerData.Plots[plotID].Tree = Tree
-	print("Money Timer Got  Updated")
-	print(State.GetData().Plots)
 end)
 
 Remotes.UpdateWater.OnClientEvent:Connect(function(water: number)
@@ -89,8 +77,6 @@ end)
 
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: number, Tree)
 	PlayerData.Plots[plotID].Tree = Tree 
-	print("Tree Level Got Updated")
-	print(State.GetData().Plots)
 	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
 	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
 end)

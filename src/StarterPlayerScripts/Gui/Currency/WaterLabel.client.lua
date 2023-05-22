@@ -36,6 +36,6 @@ Remotes.RefillWater.OnClientEvent:Connect(function()
 	CallingtheUpdate()
 end)
 
-Remotes.Bindables.OnReset.ResetWater.Event:Connect(function()
+Remotes.ResetData.OnClientEvent:Connect(function()
 	CallingtheUpdate()
 end)

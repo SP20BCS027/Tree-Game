@@ -4,6 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = game.Players.LocalPlayer
 
 local State = require(ReplicatedStorage.Client.State)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
 local QuestsUI = player.PlayerGui:WaitForChild("QuestsTemplate")
 local MainFrame = QuestsUI.MainFrame
@@ -19,6 +20,8 @@ local Template = InventoryFrame.Template
 local TaskTemplate = InventoryFrame.TaskTemplate
 
 local linkedIcons = {}
+
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
 local function LoadUnloadItems(iconName)
     for _, icon in pairs(linkedIcons[iconName]) do
@@ -73,6 +76,10 @@ end
 
 CloseButton.MouseButton1Down:Connect(function()
     QuestsUI.Enabled = false
+end)
+
+CloseButton.MouseEnter:Connect(function()
+    CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
 return Achievements

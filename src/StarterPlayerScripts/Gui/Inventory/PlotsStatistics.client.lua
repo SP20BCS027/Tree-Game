@@ -5,6 +5,7 @@ local Remotes = ReplicatedStorage.Remotes
 
 local State = require(ReplicatedStorage.Client.State)
 local FormatTime = require(ReplicatedStorage.Libs.FormatTime)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
 local PlotsGUI = player.PlayerGui:WaitForChild("Plots_Stats")
 local MainFrame = PlotsGUI.MainFrame
@@ -24,6 +25,9 @@ local Template = InventoryFrame.Template
 local TIMER = "Time:  XYZ"
 local LEVEL = "Level: AMOUNT"
 local CYCLE = "Cycle: AMOUNT"
+
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size 
+local ORIGINAL_SIZE_OF_DELETEBUTTON = DeleteButton.Size
 
 local LoadedIcon
 local PreviousIcon
@@ -114,9 +118,20 @@ local function CreateIcon(plot)
         LoadStats(plot)
         PreviousIcon = LoadedIcon
     end)
+
+    local ORIGINAL_SIZE_OF_PLOTDELETEBUTTON = plotIcon.DeleteButton.Size
+
     plotIcon.DeleteButton.MouseButton1Down:Connect(function()
         DeleteTree(plot.Id)
     end)
+
+    plotIcon.DeleteButton.MouseEnter:Connect(function()
+        plotIcon.DeleteButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_PLOTDELETEBUTTON)
+    end)
+    plotIcon.DeleteButton.MouseLeave:Connect(function()
+        plotIcon.DeleteButton.Size = ORIGINAL_SIZE_OF_PLOTDELETEBUTTON
+    end)
+
 end
 
 local function GeneratePlotsUI()
@@ -163,9 +178,26 @@ CloseButton.MouseButton1Down:Connect(function()
     GeneratePlotsUI()
 end)
 
+CloseButton.MouseEnter:Connect(function()
+    CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+    CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
+end)
+
+
 DeleteButton.MouseButton1Down:Connect(function()
     DeleteTree(LoadedIcon.Name)
 end)
+
+DeleteButton.MouseEnter:Connect(function()
+    DeleteButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_DELETEBUTTON)
+end)
+
+DeleteButton.MouseLeave:Connect(function()
+    DeleteButton.Size = ORIGINAL_SIZE_OF_DELETEBUTTON
+end) 
 
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: string)
     if prompt == "LEVEL" then 
@@ -199,4 +231,7 @@ Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
     task.delay(0, GeneratePlotsUI)
 end)
 
-
+Remotes.ResetData.OnClientEvent:Connect(function()
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
+end)

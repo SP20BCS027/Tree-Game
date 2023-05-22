@@ -40,7 +40,7 @@ Remotes.FillupBackpack.OnClientEvent:Connect(function()
 	CallingtheUpdate()
 end)
 
-Remotes.Bindables.OnReset.ResetMoney.Event:Connect(function()
+Remotes.ResetData.OnClientEvent:Connect(function()
 	CallingtheUpdate()
 end)
 

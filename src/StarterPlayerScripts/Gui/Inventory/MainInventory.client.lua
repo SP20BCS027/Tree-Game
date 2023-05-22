@@ -36,15 +36,28 @@ end)
 
 InventoryButton.MouseButton1Down:Connect(function()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
-    if currentInventory then 
-        MainInventoryManager.GenerateInventory(currentInventory)
-    end 
+    currentInventory = if currentInventory then currentInventory else "Backpacks"
+    MainInventoryManager.GenerateInventory(currentInventory)
     MainInventoryUI.Enabled = not MainInventoryUI.Enabled
 end)
 
-ReplicatedStorage.Remotes.Bindables.OnReset.GenerateMainInventory.Event:Connect(function()
+ReplicatedStorage.Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function() 
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     if currentInventory then 
-        MainInventoryManager.GenerateInventory(currentInventory)
+        task.delay(0, MainInventoryManager.GenerateInventory(currentInventory))
+    end 
+end)
+
+ReplicatedStorage.Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function()
+    local currentInventory = MainInventoryManager.GetCurrentInventory()
+    if currentInventory then 
+        task.delay(0, MainInventoryManager.GenerateInventory(currentInventory))
+    end 
+end)
+
+ReplicatedStorage.Remotes.ResetData.OnClientEvent:Connect(function()
+    local currentInventory = MainInventoryManager.GetCurrentInventory()
+    if currentInventory then 
+        task.delay(0, MainInventoryManager.GenerateInventory(currentInventory))
     end 
 end) 

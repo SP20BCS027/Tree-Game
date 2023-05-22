@@ -7,6 +7,7 @@ local player = game.Players.LocalPlayer
 local character = player.CharacterAdded:Wait()
 
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
 local State = require(ReplicatedStorage.Client.State)
 
@@ -17,6 +18,7 @@ local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame
 local SelectedFrame = MainFrame.SelectedFrame
 local StatsFrame = SelectedFrame.Stats
+local PlantButton = StatsFrame.PlantButton
 local Template = InventoryFrame.Template
 
 local Fertilizers = State.GetData().Fertilizers
@@ -28,6 +30,7 @@ local AnimPart
 local AMOUNT = "Amount: REPLACE"
 local NAME = "Name: REPLACE"
 local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
+local ORIGINAL_SIZE_OF_PLANTBUTTON = PlantButton.Size
 local crouchAnimID = "rbxassetid://13248889864"
 
 local function LoadStats(fertilizer)
@@ -37,31 +40,16 @@ local function LoadStats(fertilizer)
 	Fertilizer = fertilizer
 end
 
-local function ScaleUI(currentScale)
-	local newScale = UDim2.new(currentScale.X.Scale * 1.1, currentScale.X.Offset, currentScale.Y.Scale * 1.1, currentScale.Y.Offset)
-	return newScale
-end 
-
 local function CreateFertilizerIcon(fertilizer)
 	local seedIcon = Template:Clone()
 	seedIcon.Visible = true 
 	seedIcon.Parent = ScrollingFrame
 	seedIcon.ItemName.Text = fertilizer.Name
 	seedIcon.Name = fertilizer.Name
-
-	local currentScale = seedIcon.Size
-	local newScale = UDim2.new(currentScale.X.Scale * 1.1, currentScale.X.Offset, currentScale.Y.Scale * 1.1, currentScale.Y.Offset)
 	
 	seedIcon.MouseButton1Down:Connect(function()
 		LoadStats(fertilizer)
-		seedIcon.Size = newScale
 	end)	
-	seedIcon.MouseEnter:Connect(function()
-		seedIcon.Size = newScale
-	end)
-	seedIcon.MouseLeave:Connect(function()
-		seedIcon.Size = currentScale
-	end)
 end
 
 local function UpdateFertilizerIcons(plotReceived: string, animationPositionPart)
@@ -94,12 +82,20 @@ local function FertilizePlot()
 	Remotes.FertilizeTree:FireServer(PlotID, Fertilizer.Name)
 end
 
-StatsFrame.PlantButton.MouseButton1Down:Connect(function()
+PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	FertilizePlot() 	
 	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 	local fertilizingSound = AnimPart.WateringSound
 	fertilizingSound:Play()
+end)
+
+PlantButton.MouseEnter:Connect(function()
+	PlantButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_PLANTBUTTON)
+end)
+
+PlantButton.MouseLeave:Connect(function()
+	PlantButton.Size = ORIGINAL_SIZE_OF_PLANTBUTTON
 end)
 
 CloseButton.MouseButton1Down:Connect(function()
@@ -108,7 +104,7 @@ CloseButton.MouseButton1Down:Connect(function()
 end)
 
 CloseButton.MouseEnter:Connect(function()
-	CloseButton.Size = ScaleUI(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+	CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
 CloseButton.MouseLeave:Connect(function()
