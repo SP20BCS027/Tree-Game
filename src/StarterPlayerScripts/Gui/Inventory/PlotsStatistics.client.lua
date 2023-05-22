@@ -186,6 +186,7 @@ CloseButton.MouseLeave:Connect(function()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
+
 DeleteButton.MouseButton1Down:Connect(function()
     DeleteTree(LoadedIcon.Name)
 end)
@@ -221,6 +222,11 @@ Remotes.UpdateOccupied.OnClientEvent:Connect(function()
 end)
 
 Remotes.DeleteTree.OnClientEvent:Connect(function()
+    ClearPlotIcons()
+    task.delay(0, GeneratePlotsUI)
+end)
+
+Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
 end)

@@ -9,6 +9,7 @@ local player = game.Players.LocalPlayer
 local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
+
 local Configs = {}
 
 local CurrentDirectory
@@ -196,7 +197,6 @@ function MainInventory.GenerateInventory(setID)
     CurrentInventory = setID
 
     ChangeColors()
-    
     for _, item in CurrentDirectory do 
         CreateIcon(item)
     end 

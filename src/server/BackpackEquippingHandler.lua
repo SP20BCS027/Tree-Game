@@ -21,6 +21,7 @@ local function GivePlayerBackpack(player: Player, BackpackID: string)
 
 	local moveCFrame = upperTorso.CFrame * upperTorso.BodyBackAttachment.CFrame
 
+
 	backpack:PivotTo(moveCFrame)
 
 	local weld = Instance.new("WeldConstraint")

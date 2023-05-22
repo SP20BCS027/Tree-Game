@@ -8,7 +8,7 @@ local TriggerPart = WorkSpace.FertilizerShop
 local Debounce = {}
 local DELAY = 5
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
-local SHOP_ID = "Fertilizer"
+local SHOP_ID = "Fertilizers"
 
 local function GenerateUI(player: Player)
     if Debounce[player] then return end 

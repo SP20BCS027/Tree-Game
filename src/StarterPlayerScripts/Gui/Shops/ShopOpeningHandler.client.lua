@@ -18,7 +18,7 @@ Remotes.OpenPlotsShop.OnClientEvent:Connect(ShopOpener)
 
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
     task.delay(0, function()
-        ShopOpener("Plot", false)
+        ShopOpener("Plots", false)
     end)
 end)
 

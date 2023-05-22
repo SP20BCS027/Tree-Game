@@ -7,6 +7,6 @@ return function (context, player: Player?)
 
 	PlayerData.FillupBackpack(player)
 	
-	return "Player's Backpack has been Filledup"
+	return "Player's Backpack has been Filled up"
 	
 end

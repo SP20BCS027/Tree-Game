@@ -79,8 +79,7 @@ end
 GenerateSelectableSeeds()
 
 local function FertilizePlot()
-	Remotes.UpdateOwnedFertilizers:FireServer(-1, Fertilizer.Name)
-	Remotes.FertilizeTree:FireServer(PlotID, Fertilizer.Cycles)
+	Remotes.FertilizeTree:FireServer(PlotID, Fertilizer.Name)
 end
 
 PlantButton.MouseButton1Down:Connect(function()

@@ -11,7 +11,6 @@ local State = require(ReplicatedStorage.Client.State)
 local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
-
 local ShopUI = player.PlayerGui:WaitForChild("ShopTemplate")
 local MainFrame = ShopUI.MainFrame
 local CloseButton = MainFrame.CloseFrame.CloseButton
@@ -50,7 +49,6 @@ local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 local ORIGINAL_SIZE_OF_BUYBUTTON = BuyButton.Size
 local ORIGINAL_SIZE_OF_NUMBERBUYBUTTON = NumberBuyButton.Size
 
-
 local Shops = {}
 
 -- This function loads the Configs into the Shops Table
@@ -87,6 +85,7 @@ local function CheckForOwnerShip(item)
     end
     if CurrentShop == "WaterCans" then 
         if State.GetData().OwnedWaterCans[item] then 
+
             return true
         end
     end
@@ -199,6 +198,7 @@ local function ShowStats()
     end
     if CurrentShop == "Plots" then 
         IconAmount.Visible = false
+
     end
     IconImage.Visible = true 
     AmountLabel.Text = 1
@@ -366,6 +366,7 @@ end)
 BuyButton.MouseLeave:Connect(function()
     BuyButton.Size = ORIGINAL_SIZE_OF_BUYBUTTON
 end)
+
 
 NumberBuyButton.MouseButton1Down:Connect(function()
     if CurrentShop == "Seeds" then 

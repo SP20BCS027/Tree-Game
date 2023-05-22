@@ -50,6 +50,7 @@ end)
 
 Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotID: number)
 	PlayerData.Plots[plotID].Occupied = occupy
+	print(State.GetData().Plots)
 end)
 
 Remotes.UpdateTree.OnClientEvent:Connect(function(Tree, plotID: number)
