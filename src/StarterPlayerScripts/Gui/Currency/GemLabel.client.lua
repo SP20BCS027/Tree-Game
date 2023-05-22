@@ -23,6 +23,6 @@ end
 
 CallingtheUpdate()
 
-Remotes.Bindables.OnReset.ResetGems.Event:Connect(function()
+Remotes.ResetData.OnClientEvent:Connect(function()
 	CallingtheUpdate()
 end)

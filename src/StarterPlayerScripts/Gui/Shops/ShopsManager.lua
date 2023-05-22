@@ -8,6 +8,12 @@ local Configs = ReplicatedStorage.Configs
 
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 local State = require(ReplicatedStorage.Client.State)
+<<<<<<< Updated upstream
+=======
+local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+
+>>>>>>> Stashed changes
 
 local ShopUI = player.PlayerGui:WaitForChild("ShopTemplate")
 local MainFrame = ShopUI.MainFrame
@@ -18,6 +24,7 @@ local IconImage = SelectedFrame.IconImage
 local IconStats = SelectedFrame.Stats
 local IconName = IconStats.IconName
 local IconPrice = IconStats.IconPrice
+local IconAmount = IconStats.IconAmount
 local BuyButton = IconStats.BuyButton
 local DescriptionFrame = IconStats.Description
 local IconDescription = IconStats.Description.IconDescription
@@ -28,10 +35,16 @@ local Template = InventoryFrame.Template
 
 local NAME_TEXT = "Name: REPLACE"
 local PRICE_TEXT = "Price: REPLACE"
+local CAPACITY_TEXT = "Capacity: REPLACE"
 
 local SelectedItem
 local CurrentShop
 local NumberOfPlots
+
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
+local ORIGINAL_SIZE_OF_BUYBUTTON = BuyButton.Size
+local ORIGINAL_SIZE_OF_NUMBERBUYBUTTON = NumberBuyButton.Size
+
 
 local Shops = {}
 
@@ -47,6 +60,7 @@ end
 
 GetDataFromConfigs()
 
+<<<<<<< Updated upstream
 -- Thsi function Checks for owner of the Watering Can or the Bacpack and returns a boolean Value
 
 local function CheckForOwnerShip()
@@ -57,6 +71,30 @@ local function CheckForOwnerShip()
     end
     if CurrentShop == "Watercan" then 
         if State.GetData().OwnedWaterCans[SelectedItem.Name] then 
+=======
+local function ChangeColors()
+    BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].BackgroundFrame
+    InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].InventoryFrame    
+    SelectedFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].EquippedFrame
+    DescriptionFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].DescriptionFrame
+    IconPrice.BackgroundColor3 = InventoryUIColors[CurrentShop].IconPrice
+    IconAmount.BackgroundColor3 = InventoryUIColors[CurrentShop].IconAmount
+    IconName.BackgroundColor3 = InventoryUIColors[CurrentShop].IconName
+    IconImage.BackgroundColor3 = InventoryUIColors[CurrentShop].IconImage
+end
+
+-- Thsi function Checks for owner of the Watering Can or the Bacpack and returns a boolean Value
+
+local function CheckForOwnerShip(item)
+    item = if item then item else SelectedItem.Name
+    if CurrentShop == "Backpacks" then 
+        if State.GetData().OwnedBackpacks[item] then 
+            return true
+        end
+    end
+    if CurrentShop == "WaterCans" then 
+        if State.GetData().OwnedWaterCans[item] then 
+>>>>>>> Stashed changes
             return true
         end
     end
@@ -157,8 +195,20 @@ end
 local function ShowStats()
     IconName.Visible = true
     IconPrice.Visible = true
+    IconAmount.Visible = true 
     DescriptionFrame.Visible = true
     BuyButton.Visible = true
+<<<<<<< Updated upstream
+=======
+    if CurrentShop == "Seeds" or CurrentShop == "Fertilizers" then 
+        BuyButton.Visible = false
+        BuyFrame.Visible = true 
+        IconAmount.Visible = false
+    end
+    if CurrentShop == "Plots" then 
+        IconAmount.Visible = false
+    end
+>>>>>>> Stashed changes
     IconImage.Visible = true 
 end
 
@@ -167,6 +217,7 @@ end
 local function HideStats()
     IconName.Visible = false
     IconPrice.Visible = false
+    IconAmount.Visible = false
     DescriptionFrame.Visible = false 
     BuyButton.Visible = false
     IconImage.Visible = false
@@ -181,7 +232,12 @@ local function LoadStats(item)
         IconDescription.Text = item.Description
     end
     BuyButton.Text = "Buy"
+<<<<<<< Updated upstream
     if CurrentShop == "Backpack" or CurrentShop == "Watercan" then 
+=======
+    if CurrentShop == "Backpacks" or CurrentShop == "WaterCans" then 
+        IconAmount.Text = CAPACITY_TEXT:gsub("REPLACE", item.Capacity)
+>>>>>>> Stashed changes
         if CheckForOwnerShip() then 
             BuyButton.Text = "Owned"
         end
@@ -229,6 +285,12 @@ local function CreateIcon(item)
             icon.EquippedIcon.Text = "🔒"
             icon.EquippedIcon.Visible = true
         end 
+    end
+
+    if CurrentShop == "Backpacks" or CurrentShop == "WaterCans" then 
+        if CheckForOwnerShip(icon.Name) then 
+            icon.EquippedIcon.Visible = true
+        end
     end
 
     icon.MouseButton1Down:Connect(function()
@@ -279,6 +341,15 @@ CloseButton.MouseButton1Down:Connect(function()
     ShopUI.Enabled = false
 end)
 
+CloseButton.MouseEnter:Connect(function()
+    CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+    CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
+end)
+
+
 -- When the Buy Button is pressed calls the desired Buy Function
 
 BuyButton.MouseButton1Down:Connect(function()
@@ -304,4 +375,51 @@ BuyButton.MouseButton1Down:Connect(function()
     end 
 end)
 
+<<<<<<< Updated upstream
+=======
+BuyButton.MouseEnter:Connect(function()
+    BuyButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_BUYBUTTON)
+end)
+
+BuyButton.MouseLeave:Connect(function()
+    BuyButton.Size = ORIGINAL_SIZE_OF_BUYBUTTON
+end)
+
+NumberBuyButton.MouseButton1Down:Connect(function()
+    if CurrentShop == "Seeds" then 
+        BuySeed()
+        return
+    end
+    if CurrentShop == "Fertilizers" then 
+        BuyFertilizer()
+        return
+    end
+end)
+
+NumberBuyButton.MouseEnter:Connect(function()
+    NumberBuyButton.Size = ScalingUI.IncreaseBy5Percent(ORIGINAL_SIZE_OF_NUMBERBUYBUTTON)
+end)
+NumberBuyButton.MouseLeave:Connect(function()
+    NumberBuyButton.Size = ORIGINAL_SIZE_OF_NUMBERBUYBUTTON
+end)
+
+MinusButton.MouseButton1Down:Connect(function()
+    if AmountOfItems < 2 then
+        AmountOfItems = 1 
+    else 
+        AmountOfItems -= 1 
+    end
+    SetAmountLabelText()
+end)
+
+PlusButton.MouseButton1Down:Connect(function()
+    if AmountOfItems > 9 then 
+        AmountOfItems = 10 
+    else 
+        AmountOfItems += 1
+    end
+    SetAmountLabelText()
+end)
+
+>>>>>>> Stashed changes
 return ShopsManager

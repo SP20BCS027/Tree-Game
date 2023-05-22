@@ -4,11 +4,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local State = require(ReplicatedStorage.Client.State)
 
+<<<<<<< Updated upstream
+=======
+local player = game.Players.LocalPlayer
+
+local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+
+>>>>>>> Stashed changes
 local Configs = {}
 
 local CurrentDirectory
-
-local player = game.Players.LocalPlayer
 
 local MainInventoryUI = player.PlayerGui:WaitForChild("MainInventory")
 local MainFrame = MainInventoryUI.MainFrame
@@ -29,6 +35,9 @@ local EquipButton = EquippedFrame.Stats.EquipButton
 local ITEM_NAME = "Name: REPLACE"
 local ITEM_AMOUNT = "Amount: REPLACE"
 local ITEM_CAPACITY = "Capacity: REPLACE"
+
+local ORIGINAL_SIZE_OF_EQUIPBUTTON = EquipButton.Size
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
 local SelectedItem
 local CurrentInventory
@@ -81,7 +90,7 @@ local function ShowStats(item)
     HideEquipButton()
 
     if item.Name == EquippedItem then 
-        EquipButton.Text = "Already Equipped"
+        EquipButton.Text = "Equipped"
     end
     IconImage.Visible = true
 end
@@ -117,6 +126,11 @@ local function CreateIcon(item)
     icon.Parent = ScrollingFrame
     icon.Name = item.Name
     icon.ItemName.Text = item.Name
+
+    if item.LayoutOrder then 
+        icon.LayoutOrder = item.LayoutOrder
+    end
+
 	if icon.Name == Configs["EquippedBackpack"].Name or icon.Name == Configs["EquippedWaterCan"].Name  then 
         icon.EquippedIcon.Visible = true 
         EquippedItem = item.Name
@@ -133,7 +147,6 @@ local function CreateIcon(item)
         ResetTransparency()
         SelectedItem = item.Name
         icon.BackgroundTransparency = 0.5
-
         LoadStats(item)
     end)
 end
@@ -157,7 +170,6 @@ function MainInventory.ChangeEquipped()
         if item.Name == Configs["EquippedBackpack"].Name or item.Name == Configs["EquippedWaterCan"].Name then 
             item.EquippedIcon.Visible = true
         end
-        EquipButton.Text = "Already Equipped"
     end
 end
 
@@ -171,6 +183,11 @@ function MainInventory.GenerateInventory(setID)
 
     CurrentInventory = setID
 
+<<<<<<< Updated upstream
+=======
+    ChangeColors()
+    
+>>>>>>> Stashed changes
     for _, item in CurrentDirectory do 
         CreateIcon(item)
     end 
@@ -186,16 +203,31 @@ end
 
 EquipButton.MouseButton1Down:Connect(function()
     if not SelectedItem then return end
-    if SelectedItem == EquippedItem then return end 
+    if SelectedItem == EquippedItem then 
+        print("The Selected Item is Already Equipped")
+    end 
 
     EquippedItem = SelectedItem
     
     if CurrentInventory == "Backpacks" then 
         ReplicatedStorage.Remotes.ChangeEquippedBackpack:FireServer(SelectedItem)
+<<<<<<< Updated upstream
+=======
+        ReplicatedStorage.Remotes.GivePlayerBackpack:FireServer(SelectedItem)
+>>>>>>> Stashed changes
     end
     if CurrentInventory == "WaterCans" then 
         ReplicatedStorage.Remotes.ChangeEquippedWateringCan:FireServer(SelectedItem)
     end
+    EquipButton.Text = "Equipped"
+end)
+
+EquipButton.MouseEnter:Connect(function()
+    EquipButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_EQUIPBUTTON)
+end)
+
+EquipButton.MouseLeave:Connect(function()
+    EquipButton.Size = ORIGINAL_SIZE_OF_EQUIPBUTTON
 end)
 
 -- This updates the Inventory after a Delay 
@@ -214,6 +246,14 @@ end)
 
 CloseButton.MouseButton1Down:Connect(function()
     MainInventoryUI.Enabled = false 
+end)
+
+CloseButton.MouseEnter:Connect(function()
+    CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+    CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
 return MainInventory

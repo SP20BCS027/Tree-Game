@@ -7,6 +7,7 @@ local player = game.Players.LocalPlayer
 local character = player.CharacterAdded:Wait()
 
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
 local State= require(ReplicatedStorage.Client.State)
 
@@ -17,6 +18,7 @@ local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame
 local SelectedFrame = MainFrame.SelectedFrame
 local StatsFrame = SelectedFrame.Stats
+local PlantButton = StatsFrame.PlantButton
 local Template = InventoryFrame.Template
 
 local Seeds = State.GetData().Seeds
@@ -28,6 +30,9 @@ local AnimPart
 
 local AMOUNT = "Amount: REPLACE"
 local NAME = "Name: REPLACE"
+
+local ORIGINAL_SIZE_OF_PLANTBUTTON = PlantButton.Size
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
 local crouchAnimID = "rbxassetid://13248889864"
 
@@ -83,7 +88,7 @@ local function PlantSeed()
 	Remotes.UpdateOccupied:FireServer(PlotID, true, Seed.Name, MudPos)
 end
 
-StatsFrame.PlantButton.MouseButton1Down:Connect(function()
+PlantButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false
 	PlantSeed() 	
 	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
@@ -91,9 +96,24 @@ StatsFrame.PlantButton.MouseButton1Down:Connect(function()
 	plantingSound:Play()
 end)
 
+PlantButton.MouseEnter:Connect(function()
+	PlantButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_PLANTBUTTON)
+end) 
+PlantButton.MouseLeave:Connect(function()
+	PlantButton.Size = ORIGINAL_SIZE_OF_PLANTBUTTON
+end)
+
 CloseButton.MouseButton1Down:Connect(function()
 	UI.Enabled = false 
 	PlayerMovement:Movement(player, true)
+end)
+
+CloseButton.MouseEnter:Connect(function()
+	CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+	CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
 Remotes.Bindables.SelectSeed.Event:Connect(UpdateSeedIcons)
