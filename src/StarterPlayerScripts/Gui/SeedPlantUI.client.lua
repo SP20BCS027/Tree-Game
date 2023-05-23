@@ -38,6 +38,7 @@ end
 -- This function when called Waters the tree in the selected Plot and renders the player motionless until the animation is complete 
 
 local function WaterTree(plotId, animationPositionPart)
+	print(State.GetData().Plots)
 	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
 		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
 			

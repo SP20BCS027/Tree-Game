@@ -227,7 +227,7 @@ function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 	
 	profile.Data.Plots[plotID].Tree.TimeUntilMoney = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenMoney
 
-	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilMoney, plotID)
+	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree, plotID)
 end
 
 function Manager.UpdateAchievements(player: Player, achievementType: string, amount: number)

@@ -44,20 +44,26 @@ end)
 ReplicatedStorage.Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function() 
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     if currentInventory then 
-        task.delay(0, MainInventoryManager.GenerateInventory(currentInventory))
+        task.delay(0, function()
+            MainInventoryManager.GenerateInventory(currentInventory)
+        end)
     end 
 end)
 
 ReplicatedStorage.Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     if currentInventory then 
-        task.delay(0, MainInventoryManager.GenerateInventory(currentInventory))
-    end 
+        task.delay(0, function()
+            MainInventoryManager.GenerateInventory(currentInventory)
+        end)    
+    end
 end)
 
 ReplicatedStorage.Remotes.ResetData.OnClientEvent:Connect(function()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     if currentInventory then 
-        task.delay(0, MainInventoryManager.GenerateInventory(currentInventory))
+        task.delay(0, function()
+            MainInventoryManager.GenerateInventory(currentInventory)
+        end)    
     end 
 end) 
