@@ -13,6 +13,8 @@ local MainFrame = PlotsGUI.MainFrame
 local InventoryButton = player.PlayerGui:WaitForChild("InventoryButton")
 
 local TreeButton = InventoryButton.Frame.Plots
+local HarvestAlert = TreeButton.Alerts.HarvestAlert 
+local WaterAlert = TreeButton.Alerts.WaterAlert
 
 local CloseButton = MainFrame.CloseFrame.CloseButton
 local SelectedFrame = MainFrame.SelectedFrame
@@ -31,6 +33,34 @@ local ORIGINAL_SIZE_OF_DELETEBUTTON = DeleteButton.Size
 
 local LoadedIcon
 local PreviousIcon
+
+local function ToggleHarvestAlertNotification()
+    local numberOfHarvestReadyPlots = 0
+    for _, plot in pairs (State.GetData().Plots) do 
+        if not plot.Tree then continue end 
+        if plot.Tree.TimeUntilMoney - os.time() <= 0 then 
+            numberOfHarvestReadyPlots += 1 
+        end
+    end
+    HarvestAlert.Visible = false
+    if numberOfHarvestReadyPlots > 0 then 
+        HarvestAlert.Visible = true 
+    end
+end
+
+local function ToggleWaterAlertNotification()
+    local numberOfWaterReadyPlots = 0
+    for _, plot in State.GetData().Plots do 
+        if not plot.Tree then continue end 
+        if plot.Tree.TimeUntilWater - os.time() <= 0 then 
+            numberOfWaterReadyPlots += 1 
+        end
+    end
+    WaterAlert.Visible = false
+    if numberOfWaterReadyPlots > 0 then 
+        WaterAlert.Visible = true 
+    end
+end
 
 local function UpdateMoneyTimer(plotIcon)
     local currentPlot = State.GetData().Plots[plotIcon.Name]
@@ -97,13 +127,11 @@ local function LoadStats(plot)
     StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle)
 
     ShowStats()
-
     if PreviousIcon then 
         if LoadedIcon.Name == PreviousIcon.Name then return end 
         UpdateTimers(plot)
         return
     end 
-
     UpdateTimers(plot)
 end
 
@@ -112,6 +140,7 @@ local function CreateIcon(plot)
     plotIcon.Parent = ScrollingFrame
     plotIcon.Visible = true 
     plotIcon.Name = plot.Id
+    plotIcon.LayoutOrder = plot.LayoutOrder
     plotIcon:WaitForChild("ItemName").Text = plot.Id 
     plotIcon.MouseButton1Down:Connect(function()
         LoadedIcon = plotIcon
@@ -131,7 +160,6 @@ local function CreateIcon(plot)
     plotIcon.DeleteButton.MouseLeave:Connect(function()
         plotIcon.DeleteButton.Size = ORIGINAL_SIZE_OF_PLOTDELETEBUTTON
     end)
-
 end
 
 local function GeneratePlotsUI()
@@ -229,6 +257,11 @@ end)
 Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
+end)
+
+Remotes.Bindables.UpdateAlert.Event:Connect(function()
+    ToggleWaterAlertNotification()
+    ToggleHarvestAlertNotification()
 end)
 
 Remotes.ResetData.OnClientEvent:Connect(function()
