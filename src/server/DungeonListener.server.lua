@@ -33,6 +33,3 @@ local function ListenToDungeonTouch()
 end
 
 ListenToDungeonTouch()
-
-
-

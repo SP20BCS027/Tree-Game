@@ -1,11 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local SoundService = game:GetService("SoundService")
 
 local player = game.Players.LocalPlayer
 
 local Remotes = ReplicatedStorage.Remotes
 
 local State = require(ReplicatedStorage.Client.State)
+
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
 local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
 local SettingsButton = InventoryButtonUI.Frame.Settings
@@ -29,7 +30,6 @@ local CROSS_BACKGROUND_COLOR = Color3.fromRGB(206, 47, 36)
 local TICK_POSITION = UDim2.new(0.55, 0, 0.5, 0)
 local CROSS_POSITION = UDim2.new(0.05, 0, 0.5, 0)
 
-local Sound = SoundService.Switch
 
 local function LinkingClickEvents()
     for _, setting in ScrollingFrame:GetChildren() do 
@@ -70,12 +70,11 @@ UpdateIconStatus()
 LinkingClickEvents()
 
 CloseButton.MouseButton1Down:Connect(function()
-    if Sound and State.GetData().Settings["SoundEffects"] then 
-        Sound:Play()
-    end   
+    SoundsManager.PlayPressSound()
     SettingsUI.Enabled = false 
 end)
 
 SettingsButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
     SettingsUI.Enabled = not SettingsUI.Enabled
 end)

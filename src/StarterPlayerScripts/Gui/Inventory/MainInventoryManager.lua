@@ -8,7 +8,7 @@ local player = game.Players.LocalPlayer
 
 local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
-
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
 local Configs = {}
 
@@ -157,6 +157,7 @@ local function CreateIcon(item)
     end
 
     icon.MouseButton1Down:Connect(function()
+        SoundsManager.PlayPressSound()
         ResetTransparency()
         SelectedItem = item.Name
         icon.BackgroundTransparency = 0.5
@@ -213,8 +214,12 @@ end
 EquipButton.MouseButton1Down:Connect(function()
     if not SelectedItem then return end
     if SelectedItem == EquippedItem then 
+        SoundsManager.PlayPressSound()
         print("The Selected Item is Already Equipped")
+        return
     end 
+
+    SoundsManager.PlayPressSound()
 
     EquippedItem = SelectedItem
     
@@ -229,10 +234,12 @@ EquipButton.MouseButton1Down:Connect(function()
 end)
 
 EquipButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
     EquipButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_EQUIPBUTTON)
 end)
 
 EquipButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     EquipButton.Size = ORIGINAL_SIZE_OF_EQUIPBUTTON
 end)
 
@@ -251,14 +258,17 @@ end)
 -- This when pressed closes the Inventory Menu
 
 CloseButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayCloseSound()
     MainInventoryUI.Enabled = false 
 end)
 
 CloseButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
     CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
 CloseButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 

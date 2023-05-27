@@ -26,7 +26,6 @@ local SeedsConfig: {[string] : SeedsConfigTemp} = {
 		Description = "This will plant a Rare Tree",
 		Price = 2500,
 		LayoutOrder = 3, 
-		Price = 2500,
 	}, 
 	Legendary = {
 		Name = "Legendary", 
