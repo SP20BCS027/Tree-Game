@@ -244,6 +244,15 @@ function Manager.UpdateAchievements(player: Player, achievementType: string, amo
 	Remotes.UpdateAchievements:FireClient(player, profile.Data.Achievements)
 end
 
+function Manager.UpdateSettings(player: Player, setting: string)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.Settings[setting] = not profile.Data.Settings[setting]
+
+	Remotes.UpdateSettings:FireClient(player, profile.Data.Settings)
+end
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- This function is used to get a specific directory of Data of the player 

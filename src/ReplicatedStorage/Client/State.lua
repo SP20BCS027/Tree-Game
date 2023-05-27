@@ -123,4 +123,8 @@ Remotes.SellAllMoney.OnClientEvent:Connect(function()
 	PlayerData.Money = 0 
 end)
 
+Remotes.UpdateSettings.OnClientEvent:Connect(function(Settings: {})
+	PlayerData.Settings = Settings
+end)
+
 return State

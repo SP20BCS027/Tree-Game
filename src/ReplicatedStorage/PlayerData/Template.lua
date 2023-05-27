@@ -8,6 +8,7 @@ local SeedsConfig = require(ReplicatedStorage.Configs.SeedsConfig)
 local FertilizerConfig = require(ReplicatedStorage.Configs.FertilizerConfig)
 local AchievementsConfig = require(ReplicatedStorage.Configs.AchievementsConfig)
 local QuestsConfig = require(ReplicatedStorage.Configs.QuestsConfig)
+local SettingsConfig = require(ReplicatedStorage.Configs.SettingsConfig)
 
 local Template = {
 	Coins = 0, 
@@ -38,6 +39,9 @@ local Template = {
 	ActiveQuests = QuestsConfig,
 
 	UnlockedDungeons = DungeonConfig, 
+
+	Settings = SettingsConfig, 
+
 }
 
 export type PlayerData = typeof(Template)

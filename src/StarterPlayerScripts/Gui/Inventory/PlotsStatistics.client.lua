@@ -142,6 +142,14 @@ local function CreateIcon(plot)
     plotIcon.Name = plot.Id
     plotIcon.LayoutOrder = plot.LayoutOrder
     plotIcon:WaitForChild("ItemName").Text = plot.Id 
+    if plot.Tree then 
+        if plot.Tree.TimeUntilMoney - os.time() <= 0 then 
+            plotIcon.AlertFrame.WaterAlert.Visible = true
+        end 
+        if plot.Tree.TimeUntilWater - os.time() <= 0 then 
+            plotIcon.AlertFrame.HarvestAlert.Visible = true
+        end 
+    end
     plotIcon.MouseButton1Down:Connect(function()
         LoadedIcon = plotIcon
         LoadStats(plot)
@@ -262,6 +270,8 @@ end)
 Remotes.Bindables.UpdateAlert.Event:Connect(function()
     ToggleWaterAlertNotification()
     ToggleHarvestAlertNotification()
+    ClearPlotIcons()
+    GeneratePlotsUI()
 end)
 
 Remotes.ResetData.OnClientEvent:Connect(function()
