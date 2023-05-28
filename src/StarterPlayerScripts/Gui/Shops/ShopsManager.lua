@@ -105,18 +105,21 @@ end
 
 local function BuyBackpack()
     if CheckForOwnerShip() then 
+        SoundsManager.PlayDenialSound()
         print("Item Already owned")
         BuyButton.Text = "Owned"
         return
     end
 
     if State.GetData().Coins >= SelectedItem.Price then 
+        SoundsManager.PlayPressSound()
         Remotes.UpdateOwnedBackpacks:FireServer(SelectedItem.Name)
         Remotes.GivePlayerBackpack:FireServer(SelectedItem.Name)
         print("Bought")
         BuyButton.Text = "Owned"
         return
     end
+    SoundsManager.PlayDenialSound()
     print("Not Enough Money")
 end
 
@@ -124,6 +127,7 @@ end
 
 local function BuyWaterCan()
     if CheckForOwnerShip() then 
+        SoundsManager.PlayDenialSound()
         print("Item Already Owned")
         return
     end 
@@ -131,10 +135,11 @@ local function BuyWaterCan()
     if State.GetData().Coins >= SelectedItem.Price then 
         Remotes.UpdateOwnedWaterCans:FireServer(SelectedItem.Name)
         BuyButton.Text = "Owned"
-
+        SoundsManager.PlayPressSound()
         print("Item Has been Bought")
         return
     end
+    SoundsManager.PlayDenialSound()
     print("Not Enough Money")
 end
 
@@ -142,9 +147,11 @@ end
 
 local function BuySeed()
     if State.GetData().Coins >= SelectedItem.Price then
+        SoundsManager.PlayPressSound()
 		Remotes.UpdateOwnedSeeds:FireServer(AmountOfItems, SelectedItem.Name)
 		print("Bought")
 	else
+        SoundsManager.PlayDenialSound()
 		print("You don't have enough money")
 	end
 end
@@ -153,30 +160,36 @@ end
 
 local function BuyFertilizer()
     if State.GetData().Coins >= SelectedItem.Price then
+        SoundsManager.PlayPressSound()
 		Remotes.UpdateOwnedFertilizers:FireServer(AmountOfItems, SelectedItem.Name)
 		print("Bought")
 	else
+        SoundsManager.PlayDenialSound()
 		print("You don't have enough money")
 	end
 end
 
 local function BuyPlot()
     if CheckForPlotOwnerShip() then 
+        SoundsManager.PlayDenialSound()
         print("Item Already Owned")
         return
     end 
 
     if SelectedItem.LayoutOrder > NumberOfPlots + 1 then 
+        SoundsManager.PlayDenialSound()
         print("Item is Locked")
         return 
     end
 
     if State.GetData().Coins >= SelectedItem.Price then 
+        SoundsManager.PlayPressSound()
         Remotes.UpdateOwnedPlots:FireServer(SelectedItem)
         print("Item Has been Bought")
         BuyButton.Text = "Owned"
         return
     end
+    SoundsManager.PlayDenialSound()
     print("Not Enough Money")
 end
 
@@ -350,7 +363,6 @@ end)
 -- When the Buy Button is pressed calls the desired Buy Function
 
 BuyButton.MouseButton1Down:Connect(function()
-    SoundsManager.PlayPressSound()
     if CurrentShop == "Backpacks" then 
         BuyBackpack()
         return
@@ -397,7 +409,6 @@ NumberBuyButton.MouseLeave:Connect(function()
 end)
 
 MinusButton.MouseButton1Down:Connect(function()
-
     SoundsManager.PlayPressSound()
 
     if AmountOfItems < 2 then
@@ -409,7 +420,6 @@ MinusButton.MouseButton1Down:Connect(function()
 end)
 
 PlusButton.MouseButton1Down:Connect(function()
-
     SoundsManager.PlayPressSound()
 
     if AmountOfItems > 9 then 

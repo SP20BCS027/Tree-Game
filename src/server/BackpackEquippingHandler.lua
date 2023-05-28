@@ -7,7 +7,7 @@ local Remotes = ReplicatedStorage.Remotes
 local BackpackEquipping = {}
 
 local function GivePlayerBackpack(player: Player, BackpackID: string)
-	local character = player.Character
+	local character = player.Character or player.CharacterAdded:Wait()
 
 	if character then 
 		if character:FindFirstChild("Backpack") then 
@@ -36,7 +36,7 @@ function BackpackEquipping.UpdatePlayerBackpackLabel(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	local character = player.Character
+	local character = player.Character or player.CharacterAdded:Wait()
 
 	if not character then return end
 	if not character:FindFirstChild("Backpack") then return end

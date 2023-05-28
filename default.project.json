@@ -58,6 +58,12 @@
           "$className": "Folder",
           "$path": "src/StarterPlayerScripts/Gui"
         }
+      }, 
+      "StarterCharacterScripts": {
+        "$className": "StarterCharacterScripts",
+        "$path": "src/StarterCharacterScripts",
+        "$ignoreUnknownInstances": true
+        
       }
     },
 

@@ -16,6 +16,7 @@ until game:IsLoaded()
 
 SkipButton.MouseButton1Down:Connect(function()
     LoadingScreenUI.Enabled = false
+    SKIPPED = true
 end)
 
 task.spawn(function()
@@ -25,7 +26,6 @@ task.spawn(function()
     while task.wait() do 
         if os.time() > EndTime then 
             SkipButton.Visible = true
-            SKIPPED = true
         end
     end
 end)
@@ -36,7 +36,7 @@ for i = 1, #Assets do
     ContentProvider:PreloadAsync({asset})
     LoadingText.Text = "Loading: " .. asset.Name ..  " [" .. i .. "/" .. #Assets .. "]"
     
-    if SKIPPED == true then  break end
+    if SKIPPED == true then break end
 end
 
 LoadingScreenUI.Enabled = false
