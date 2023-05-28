@@ -25,6 +25,20 @@ function HouseModule.GetPlayerPlot(player: Player, plot: string)
 	end
 end
 
+function HouseModule.GetAllHouses()
+	return Houses
+end
+
+function HouseModule.GetNoOwnerHouseClaimParts()
+	local NoOwnerHouses = {}
+	for _, house in pairs(Houses) do 
+		if house.owner == nil then 
+			NoOwnerHouses[house.Name] = house.claimPart
+		end
+	end
+	return NoOwnerHouses
+end
+
 function HouseModule.ReturnPlayerWell(player: Player)
 	for _, HouseOb in pairs(Houses) do
 		if not HouseOb.owner then return end 
@@ -79,6 +93,9 @@ end
 
 Remotes.AskUIInformation.OnServerInvoke = HouseModule.GetPlayerPlot
 Remotes.GetHouseWell.OnServerInvoke = HouseModule.ReturnPlayerWell
+Remotes.GetAllHouses.OnServerInvoke = HouseModule.GetAllHouses
+Remotes.GetNoOwnerHouses.OnServerInvoke = HouseModule.GetNoOwnerHouseClaimParts
+Remotes.IsPlayerOwner.OnServerInvoke = HouseModule.CheckForOwnerShip
 
 task.spawn(function()
     while wait(1)  do
