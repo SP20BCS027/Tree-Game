@@ -4,6 +4,8 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes 
 
 local DungeonsConfig = require(ReplicatedStorage.Configs.DungeonConfig)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
 local DungeonUI = player.PlayerGui:WaitForChild("DungeonSelectMenu")
 local CloseFrame = DungeonUI.CloseFrame
@@ -19,10 +21,13 @@ local BattleButton = SelectFrame.BattleButton
 local Heading = SelectFrame.Heading
 local Description = SelectFrame.Description 
 
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
+
 local function UpdateSelectFrame(DungeonName)
     Heading.Text = DungeonsConfig[DungeonName].Name
     Description.Text = DungeonsConfig[DungeonName].Description
     BattleButton.MouseButton1Down:Connect(function()
+        SoundsManager.PlayPressSound()
         local playerModel = player.Character
         playerModel.HumanoidRootPart.CFrame = CFrame.new(-80.5, 20.5, 82.7)
         DungeonUI.Enabled = false
@@ -53,13 +58,25 @@ local function GenerateUI(DungeonName)
         end 
         
         FloorIcon.Button.MouseButton1Down:Connect(function()
+            SoundsManager.PlayPressSound()
             UpdateSelectFrame(DungeonName)
         end)
     end
 end
 
 CloseButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayCloseSound()
     DungeonUI.Enabled = false
+end)
+
+CloseButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
+    CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
+    ScalingUI.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
 Remotes.GenerateDungeons.OnClientEvent:Connect(function(DungeonName)

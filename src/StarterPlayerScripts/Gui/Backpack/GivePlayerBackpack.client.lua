@@ -8,4 +8,3 @@ local State = require(ReplicatedStorage.Client.State)
 
 Remotes.GivePlayerBackpack:FireServer(State.GetData().EquippedBackpack.Name)
 Remotes.UpdateBackpackLabel:FireServer()
-

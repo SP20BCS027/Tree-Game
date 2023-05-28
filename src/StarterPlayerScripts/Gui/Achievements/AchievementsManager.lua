@@ -5,6 +5,7 @@ local player = game.Players.LocalPlayer
 
 local State = require(ReplicatedStorage.Client.State)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
 local AchievementsUI = player.PlayerGui:WaitForChild("AchievementTemplate")
 local MainFrame = AchievementsUI.MainFrame
@@ -51,14 +52,17 @@ function Achievements.GenerateAchievements()
 end
 
 CloseButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayCloseSound()
     AchievementsUI.Enabled = false
 end)
 
 CloseButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
     CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
 CloseButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 

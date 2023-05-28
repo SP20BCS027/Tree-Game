@@ -35,6 +35,3 @@ local function ListenToWaterShopTouch()
 end
 
 ListenToWaterShopTouch()
-
-
-

@@ -10,6 +10,7 @@ local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 local State = require(ReplicatedStorage.Client.State)
 local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
 local ShopUI = player.PlayerGui:WaitForChild("ShopTemplate")
 local MainFrame = ShopUI.MainFrame
@@ -284,6 +285,7 @@ local function CreateIcon(item)
     end
 
     icon.MouseButton1Down:Connect(function()
+        SoundsManager.PlayPressSound()
         ResetTransparency()
         SelectedItem = item
         icon.BackgroundTransparency = 0.5
@@ -329,15 +331,18 @@ end
 -- This closes the menu when the X button is pressed 
 
 CloseButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
     PlayerMovement:Movement(player, true)
     ShopUI.Enabled = false
 end)
 
 CloseButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
     CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
 CloseButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
@@ -345,6 +350,7 @@ end)
 -- When the Buy Button is pressed calls the desired Buy Function
 
 BuyButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
     if CurrentShop == "Backpacks" then 
         BuyBackpack()
         return
@@ -360,10 +366,12 @@ BuyButton.MouseButton1Down:Connect(function()
 end)
 
 BuyButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
     BuyButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_BUYBUTTON)
 end)
 
 BuyButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     BuyButton.Size = ORIGINAL_SIZE_OF_BUYBUTTON
 end)
 
@@ -380,13 +388,18 @@ NumberBuyButton.MouseButton1Down:Connect(function()
 end)
 
 NumberBuyButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
     NumberBuyButton.Size = ScalingUI.IncreaseBy5Percent(ORIGINAL_SIZE_OF_NUMBERBUYBUTTON)
 end)
 NumberBuyButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     NumberBuyButton.Size = ORIGINAL_SIZE_OF_NUMBERBUYBUTTON
 end)
 
 MinusButton.MouseButton1Down:Connect(function()
+
+    SoundsManager.PlayPressSound()
+
     if AmountOfItems < 2 then
         AmountOfItems = 1 
     else 
@@ -396,6 +409,9 @@ MinusButton.MouseButton1Down:Connect(function()
 end)
 
 PlusButton.MouseButton1Down:Connect(function()
+
+    SoundsManager.PlayPressSound()
+
     if AmountOfItems > 9 then 
         AmountOfItems = 10 
     else 
