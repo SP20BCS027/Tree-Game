@@ -4,6 +4,7 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 
 local QuestsManager = require(player:WaitForChild("PlayerScripts").Gui.Quests.QuestsManager)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
 local QuestsUI = player.PlayerGui:WaitForChild("QuestsTemplate")
 local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
@@ -11,6 +12,7 @@ local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
 local QuestButton = InventoryButtonUI.Frame.Quests
 
 QuestButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
     QuestsManager.GenerateQuests()
 
     QuestsUI.Enabled = not QuestsUI.Enabled

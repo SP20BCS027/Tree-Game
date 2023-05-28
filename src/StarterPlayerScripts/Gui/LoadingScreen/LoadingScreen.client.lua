@@ -7,6 +7,8 @@ local LoadingScreenUI = player.PlayerGui:WaitForChild("LoadingScreen")
 local LoadingText = LoadingScreenUI.Frame.LoadingText
 local SkipButton = LoadingScreenUI.Frame.SkipButton
 
+LoadingScreenUI.Enabled = true
+
 local SKIPPED = false
 
 repeat task.wait(1) 

@@ -214,7 +214,7 @@ end
 EquipButton.MouseButton1Down:Connect(function()
     if not SelectedItem then return end
     if SelectedItem == EquippedItem then 
-        SoundsManager.PlayPressSound()
+        SoundsManager.PlayDenialSound()
         print("The Selected Item is Already Equipped")
         return
     end 

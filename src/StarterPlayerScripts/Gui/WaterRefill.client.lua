@@ -6,6 +6,9 @@ local character = player.CharacterAdded:Wait()
 
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
+local State = require(ReplicatedStorage.Client.State)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+
 
 local UI = player.PlayerGui:WaitForChild("WaterRefill")
 local RefillIcon = UI.IconHolder
@@ -16,6 +19,13 @@ local crouchAnimID = "rbxassetid://13248889864"
 -- This function Refills the Water and changes the player position, plays refill animation and makes the player unable to move 
 
 local function RefillWater(animationPosition)
+
+	if State.GetData().Water >= State.GetData().EquippedWaterCan.Capacity then 
+		print("The Water Can is already full")
+		SoundsManager.PlayDenialSound()	
+		return 
+	end
+
 	Remotes.RefillWater:FireServer()
 
 	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
@@ -24,7 +34,9 @@ local function RefillWater(animationPosition)
 	PlayerMovement:Movement(player, false)
 	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 	
+	SoundsManager.PlayPressSound()
 	animationPosition.WateringSound:Play()
+	
 end
 
 -- This function gets the well object from the player's house 

@@ -8,6 +8,7 @@ local character = player.CharacterAdded:Wait()
 
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
 local State= require(ReplicatedStorage.Client.State)
 
@@ -51,6 +52,7 @@ local function CreateSeedIcon(seed)
 	seedIcon.Name = seed.Name
 	
 	seedIcon.MouseButton1Down:Connect(function()
+		SoundsManager.PlayPressSound()
 		LoadStats(seed)
 	end)	
 end
@@ -90,6 +92,7 @@ local function PlantSeed()
 end
 
 PlantButton.MouseButton1Down:Connect(function()
+	SoundsManager.PlayPressSound()
 	UI.Enabled = false
 	PlantSeed() 	
 	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
@@ -98,22 +101,27 @@ PlantButton.MouseButton1Down:Connect(function()
 end)
 
 PlantButton.MouseEnter:Connect(function()
+	SoundsManager.PlayEnterSound()
 	PlantButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_PLANTBUTTON)
 end) 
 PlantButton.MouseLeave:Connect(function()
+	SoundsManager.PlayLeaveSound()
 	PlantButton.Size = ORIGINAL_SIZE_OF_PLANTBUTTON
 end)
 
 CloseButton.MouseButton1Down:Connect(function()
+	SoundsManager.PlayCloseSound()
 	UI.Enabled = false 
 	PlayerMovement:Movement(player, true)
 end)
 
 CloseButton.MouseEnter:Connect(function()
+	SoundsManager.PlayEnterSound()
 	CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
 CloseButton.MouseLeave:Connect(function()
+	SoundsManager.PlayLeaveSound()
 	CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 

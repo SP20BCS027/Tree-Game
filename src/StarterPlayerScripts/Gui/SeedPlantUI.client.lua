@@ -6,6 +6,7 @@ local character = player.CharacterAdded:Wait()
 
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
 local State = require(ReplicatedStorage.Client.State)
 local PlotStatsUI = player.PlayerGui:WaitForChild("PlotStats")
@@ -30,7 +31,9 @@ local function PlantSeed(plotId: string, mudPosition: Vector3, animationPosition
 		PlayerMovement:Movement(player, false)
 		--print("This is the plantID in the plantSeed: " .. plotId)
 		print("Seed Planted")
+		SoundsManager.PlayPressSound()
 	else
+		SoundsManager.PlayDenialSound()
 		print("This plot is occupied!")
 	end
 end
@@ -38,7 +41,6 @@ end
 -- This function when called Waters the tree in the selected Plot and renders the player motionless until the animation is complete 
 
 local function WaterTree(plotId, animationPositionPart)
-	print(State.GetData().Plots)
 	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
 		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
 			
@@ -51,12 +53,15 @@ local function WaterTree(plotId, animationPositionPart)
 			local wateringSound = animationPositionPart.WateringSound
 			wateringSound:Play()
 			print("Tree has been watered!")
+			SoundsManager.PlayPressSound()
 			--print("This is the plotID in Water: " .. plotId)
 		else
 			print("The Tree is already watered or You have no water!")
+			SoundsManager.PlayDenialSound()
 		end
 	else
 		print("The plot is unoccupied or the tree does not exist")
+		SoundsManager.PlayDenialSound()
 	end
 end
 
@@ -82,8 +87,10 @@ local function CollectMoney(plotId, animationPositionPart)
 		local collectingSound = animationPositionPart.WateringSound
 		collectingSound:Play()
 		print("Money has been collected")
+		SoundsManager.PlayPressSound()
 	else
 		print("Harvest is not Ready!")
+		SoundsManager.PlayDenialSound()
 	end
 end
 

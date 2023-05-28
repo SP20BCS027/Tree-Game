@@ -5,6 +5,7 @@ local Remotes = ReplicatedStorage.Remotes
 
 local State = require(ReplicatedStorage.Client.State)
 local FormatTime = require(ReplicatedStorage.Libs.FormatTime)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 
 local PlotsGUI = player.PlayerGui:WaitForChild("Plots_Stats")
@@ -151,6 +152,7 @@ local function CreateIcon(plot)
         end 
     end
     plotIcon.MouseButton1Down:Connect(function()
+        SoundsManager.PlayPressSound()
         LoadedIcon = plotIcon
         LoadStats(plot)
         PreviousIcon = LoadedIcon
@@ -159,13 +161,16 @@ local function CreateIcon(plot)
     local ORIGINAL_SIZE_OF_PLOTDELETEBUTTON = plotIcon.DeleteButton.Size
 
     plotIcon.DeleteButton.MouseButton1Down:Connect(function()
+        SoundsManager.PlayPressSound()
         DeleteTree(plot.Id)
     end)
 
     plotIcon.DeleteButton.MouseEnter:Connect(function()
+        SoundsManager.PlayEnterSound()
         plotIcon.DeleteButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_PLOTDELETEBUTTON)
     end)
     plotIcon.DeleteButton.MouseLeave:Connect(function()
+        SoundsManager.PlayLeaveSound()
         plotIcon.DeleteButton.Size = ORIGINAL_SIZE_OF_PLOTDELETEBUTTON
     end)
 end
@@ -203,35 +208,42 @@ local function UpdateCycleLabel(plotIconID)
 end
 
 TreeButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
     PlotsGUI.Enabled = not PlotsGUI.Enabled
     ClearPlotIcons()
     GeneratePlotsUI()
 end)
 
 CloseButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayCloseSound()
     PlotsGUI.Enabled = false
     ClearPlotIcons()
     GeneratePlotsUI()
 end)
 
 CloseButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
     CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
 CloseButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
 
 DeleteButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
     DeleteTree(LoadedIcon.Name)
 end)
 
 DeleteButton.MouseEnter:Connect(function()
+    SoundsManager.MouseEnter()
     DeleteButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_DELETEBUTTON)
 end)
 
 DeleteButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
     DeleteButton.Size = ORIGINAL_SIZE_OF_DELETEBUTTON
 end) 
 
