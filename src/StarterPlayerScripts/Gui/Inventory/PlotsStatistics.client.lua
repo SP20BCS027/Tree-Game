@@ -38,7 +38,7 @@ local PreviousIcon
 local function ToggleHarvestAlertNotification()
     local numberOfHarvestReadyPlots = 0
     for _, plot in pairs (State.GetData().Plots) do 
-        if not plot.Tree then continue end 
+        if plot.Tree == nil then continue end 
         if plot.Tree.TimeUntilMoney - os.time() <= 0 then 
             numberOfHarvestReadyPlots += 1 
         end
@@ -52,7 +52,7 @@ end
 local function ToggleWaterAlertNotification()
     local numberOfWaterReadyPlots = 0
     for _, plot in State.GetData().Plots do 
-        if not plot.Tree then continue end 
+        if plot.Tree == nil then continue end 
         if plot.Tree.TimeUntilWater - os.time() <= 0 then 
             numberOfWaterReadyPlots += 1 
         end
@@ -65,7 +65,7 @@ end
 
 local function UpdateMoneyTimer(plotIcon)
     local currentPlot = State.GetData().Plots[plotIcon.Name]
-    if currentPlot.Occupied then 
+    if currentPlot.Tree then 
         local endTime = currentPlot.Tree.TimeUntilMoney
         if (endTime - os.time()) > 0 then 
             StatsFrame.TimeUntilMoney.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
@@ -78,7 +78,7 @@ end
 
 local function UpdateWaterTimer(plotIcon)
     local currentPlot = State.GetData().Plots[plotIcon.Name]
-    if currentPlot.Occupied then 
+    if currentPlot.Tree then 
         local endTime = currentPlot.Tree.TimeUntilWater
         if (endTime - os.time()) > 0 then 
             StatsFrame.TimeUntilWater.Text = TIMER:gsub("XYZ", FormatTime.convertToHMS(endTime - os.time()))
@@ -143,14 +143,12 @@ local function CreateIcon(plot)
     plotIcon.Name = plot.Id
     plotIcon.LayoutOrder = plot.LayoutOrder
     plotIcon:WaitForChild("ItemName").Text = plot.Id 
-    if plot.Tree then 
-        if plot.Tree.TimeUntilMoney - os.time() <= 0 then 
-            plotIcon.AlertFrame.WaterAlert.Visible = true
-        end 
-        if plot.Tree.TimeUntilWater - os.time() <= 0 then 
-            plotIcon.AlertFrame.HarvestAlert.Visible = true
-        end 
-    end
+    if plot.Tree.TimeUntilMoney - os.time() <= 0 then 
+        plotIcon.AlertFrame.WaterAlert.Visible = true
+    end 
+    if plot.Tree.TimeUntilWater - os.time() <= 0 then 
+        plotIcon.AlertFrame.HarvestAlert.Visible = true
+    end 
     plotIcon.MouseButton1Down:Connect(function()
         SoundsManager.PlayPressSound()
         LoadedIcon = plotIcon
@@ -177,9 +175,8 @@ end
 
 local function GeneratePlotsUI()
     for _, plot in (State.GetData().Plots) do 
-        if plot.Occupied then 
-            CreateIcon(plot)
-        end
+        if plot.Tree == nil then continue end
+        CreateIcon(plot)
     end
 end
 
@@ -238,7 +235,7 @@ DeleteButton.MouseButton1Down:Connect(function()
 end)
 
 DeleteButton.MouseEnter:Connect(function()
-    SoundsManager.MouseEnter()
+    SoundsManager.PlayEnterSound()
     DeleteButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_DELETEBUTTON)
 end)
 

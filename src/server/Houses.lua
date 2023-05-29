@@ -18,10 +18,9 @@ CreateHouses()
 
 function HouseModule.GetPlayerPlot(player: Player, plot: string)
 	for _, house in pairs(Houses) do
-		if not house.owner then return end 
-        if house.owner ~= player then return end 
-
-        return house.Plots[plot]
+		if house.owner == player then 
+			return house.Plots[plot]
+		end
 	end
 end
 
@@ -40,11 +39,12 @@ function HouseModule.GetNoOwnerHouseClaimParts()
 end
 
 function HouseModule.ReturnPlayerWell(player: Player)
+	print(Houses)
 	for _, HouseOb in pairs(Houses) do
-		if not HouseOb.owner then return end 
-        if HouseOb.owner ~= player then return end 
-
-        return HouseOb.well
+		if HouseOb.owner == player then 
+			print("Player is the owner of this house " .. HouseOb.Name .. ".")	
+			return HouseOb.well
+		end 
 	end
 end
 
