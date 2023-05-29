@@ -25,7 +25,7 @@ end
 -- It also makes the player unable to move 
 
 local function PlantSeed(plotId: string, mudPosition: Vector3, animationPositionPart: Part)
-	if not State.GetData().Plots[plotId].Occupied then 
+	if State.GetData().Plots[plotId].Tree == nil  then 
 		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
 		ChangeCharacterPosition(animationPositionPart.CFrame)
 		PlayerMovement:Movement(player, false)
@@ -41,7 +41,7 @@ end
 -- This function when called Waters the tree in the selected Plot and renders the player motionless until the animation is complete 
 
 local function WaterTree(plotId, animationPositionPart)
-	if State.GetData().Plots[plotId].Occupied and State.GetData().Plots[plotId].Tree then
+	if State.GetData().Plots[plotId].Tree ~= nil then
 		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
 			
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
@@ -60,7 +60,7 @@ local function WaterTree(plotId, animationPositionPart)
 			SoundsManager.PlayDenialSound()
 		end
 	else
-		print("The plot is unoccupied or the tree does not exist")
+		print("There is no Tree in the Plot")
 		SoundsManager.PlayDenialSound()
 	end
 end
@@ -68,8 +68,8 @@ end
 -- This function when called collects the money from the tree in the Current Plot and renders the player motionless until the animation is complete 
 
 local function CollectMoney(plotId, animationPositionPart)
-	if not State.GetData().Plots[plotId].Occupied and not State.GetData().Plots[plotId].Tree then
-		print("The plot is unoccupied or the tree does not exist")
+	if State.GetData().Plots[plotId].Tree == nil then
+		print("The is no Tree in this Plot")
 		return
 	end
 	if State.GetData().EquippedBackpack.Capacity <= State.GetData().Money then 
@@ -97,8 +97,7 @@ end
 -- This function when called Opens the fertilization selection Menu and Fertilizes the plot. 
 
 local function FertilizePlot(plotId, animationPositionPart)
-	if not State.GetData().Plots[plotId].Occupied then return end
-	if not State.GetData().Plots[plotId].Tree then return end 
+	if State.GetData().Plots[plotId].Tree == nil then return end 
 	Remotes.Bindables.SelectFertilizer:Fire(plotId, animationPositionPart)
 	PlayerMovement:Movement(player, false)
 	ChangeCharacterPosition(animationPositionPart.CFrame)

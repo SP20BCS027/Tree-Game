@@ -28,7 +28,7 @@ local function spawnTree(spawnPosition, tree, seed, plotObject)
 	treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
 end
 
-local function ChangeOccupationStatus(player: Player, plotID: number, isOccupied: boolean, seed, spawnPosition)
+local function ChangeOccupationStatus(player: Player, plotID: number, seed, spawnPosition)
 	-- add a server side check to check plot occupation maybe? 
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -51,7 +51,7 @@ local function ChangeOccupationStatus(player: Player, plotID: number, isOccupied
 	local treeToPlant = selectTree(seed).Name
 	local plotObject = Houses.GetPlayerPlot(player, plotID)
 	spawnTree(spawnPosition, treeToPlant, seed, plotObject)
-	Manager.AdjustPlotOccupation(player, plotID, isOccupied, treeToPlant)
+	Manager.AdjustPlotOccupation(player, plotID, treeToPlant)
 end
 
 

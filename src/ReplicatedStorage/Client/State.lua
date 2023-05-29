@@ -48,11 +48,6 @@ Remotes.ResetData.OnClientEvent:Connect(function()
 	PlayerData = Template
 end)
 
-Remotes.UpdateOccupied.OnClientEvent:Connect(function(occupy: boolean, plotID: number)
-	PlayerData.Plots[plotID].Occupied = occupy
-	print(State.GetData().Plots)
-end)
-
 Remotes.UpdateTree.OnClientEvent:Connect(function(Tree, plotID: number)
 	PlayerData.Plots[plotID].Tree = Tree
 	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)

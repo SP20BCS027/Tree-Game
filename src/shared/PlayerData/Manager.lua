@@ -111,18 +111,16 @@ end
 
 -- When this function gets called the player's Plot Status gets updated and a Tree is assigned to the plots data 
 
-function Manager.AdjustPlotOccupation(player: Player, PlotID: number, isOccupied: boolean, treeToPlant: string)
+function Manager.AdjustPlotOccupation(player: Player, PlotID: number, treeToPlant: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
 	print("This function AdjustPlotOccupation Got Called" .. PlotID)
 
-	profile.Data.Plots[PlotID].Occupied = isOccupied
 	profile.Data.Plots[PlotID].Tree = table.clone(TreeConfig[treeToPlant])
 
 	profile.Data.Plots[PlotID].Tree.TimeUntilWater = os.time() + 20 
 	
-	Remotes.UpdateOccupied:FireClient(player, profile.Data.Plots[PlotID].Occupied, PlotID)
 	Remotes.UpdateTree:FireClient(player, profile.Data.Plots[PlotID].Tree, PlotID)
 end
 
@@ -182,7 +180,6 @@ function Manager.DeleteTree(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	profile.Data.Plots[plotID].Occupied = false
 	profile.Data.Plots[plotID].Tree = nil
 	Remotes.DeleteTree:FireClient(player, plotID)
 end
