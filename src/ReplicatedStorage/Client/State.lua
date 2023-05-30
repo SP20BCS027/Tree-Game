@@ -50,16 +50,14 @@ end)
 
 Remotes.UpdateTree.OnClientEvent:Connect(function(Tree, plotID: number)
 	PlayerData.Plots[plotID].Tree = Tree
-	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
-	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
 end)
 
-Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(Tree, plotID: number)
-	PlayerData.Plots[plotID].Tree = Tree
+Remotes.UpdateTreeWaterTimer.OnClientEvent:Connect(function(timeUntilWater: number, plotID: number)
+	PlayerData.Plots[plotID].Tree.TimeUntilWater = timeUntilWater
 end)
 
-Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(function(Tree, plotID: number)
-	PlayerData.Plots[plotID].Tree = Tree
+Remotes.UpdateTreeMoneyTimer.OnClientEvent:Connect(function(timeUntilMoney: number, plotID: number)
+	PlayerData.Plots[plotID].Tree.TimeUntilMoney = timeUntilMoney
 end)
 
 Remotes.UpdateWater.OnClientEvent:Connect(function(water: number)
@@ -72,18 +70,14 @@ end)
 
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: number, Tree)
 	PlayerData.Plots[plotID].Tree = Tree 
-	Remotes.Bindables.UpdateTreeLevel:Fire(plotID)
-	Remotes.Bindables.UpdateTreeCycle:Fire(plotID)
 end)
 
 Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function(OwnedWaterCans: {})
 	PlayerData.OwnedWaterCans = OwnedWaterCans
-	Remotes.Bindables.OnReset.GenerateWaterCanInventory:Fire()
 end)
 
 Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function(OwnedBackpacks: {})
 	PlayerData.OwnedBackpacks = OwnedBackpacks
-	Remotes.Bindables.OnReset.GenerateBackpackInventory:Fire()
 end)
 
 Remotes.DeleteTree.OnClientEvent:Connect(function(plotID: string)

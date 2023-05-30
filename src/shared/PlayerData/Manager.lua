@@ -115,8 +115,6 @@ function Manager.AdjustPlotOccupation(player: Player, PlotID: number, treeToPlan
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	print("This function AdjustPlotOccupation Got Called" .. PlotID)
-
 	profile.Data.Plots[PlotID].Tree = table.clone(TreeConfig[treeToPlant])
 
 	profile.Data.Plots[PlotID].Tree.TimeUntilWater = os.time() + 20 
@@ -192,7 +190,7 @@ function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	
 	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenWater
 
-	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree, plotID)
+	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
 end
 
 -- When this function gets Called The Tree's Level or Cycle is Changed 

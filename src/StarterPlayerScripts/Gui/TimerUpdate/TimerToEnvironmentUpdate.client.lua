@@ -12,7 +12,7 @@ local DontCheckForMoneyTimer = {}
 
 local function CheckWaterTimer(plot: string) 
     local currentPlot = State.GetData().Plots[plot]
-    if not (currentPlot.Tree == nil) then 
+    if currentPlot.Tree then 
         local endTime = currentPlot.Tree.TimeUntilWater
         if (endTime - os.time()) > 0 then
             print("NOT Ready for harvest" .. plot)
@@ -30,7 +30,7 @@ end
 
 local function CheckMoneyTimer(plot: string) 
     local currentPlot = State.GetData().Plots[plot]
-    if not (currentPlot.Tree == nil) then 
+    if currentPlot.Tree then 
         local endTime = currentPlot.Tree.TimeUntilMoney
         if (endTime - os.time()) > 0 then
             print("NOT Ready for harvest" .. plot)
