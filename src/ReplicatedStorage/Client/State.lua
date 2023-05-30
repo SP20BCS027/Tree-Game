@@ -13,7 +13,6 @@ local function LoadData()
 		PlayerData = Remotes.GetAllData:InvokeServer()
 		task.wait(1)
 	end
-	
 	IsDataLoaded = true
 end
 
@@ -112,8 +111,8 @@ Remotes.SellAllMoney.OnClientEvent:Connect(function()
 	PlayerData.Money = 0 
 end)
 
-Remotes.UpdateSettings.OnClientEvent:Connect(function(Settings: {})
-	PlayerData.Settings = Settings
+Remotes.UpdateSettings.OnClientEvent:Connect(function(currentStatus: boolean, setting: string)
+	PlayerData.Settings[setting] = currentStatus 
 end)
 
 return State

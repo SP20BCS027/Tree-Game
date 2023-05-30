@@ -1,7 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
--- local ServerScriptService = game:GetService("ServerScriptService")
 
--- local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 
 local State = require(ReplicatedStorage.Client.State)

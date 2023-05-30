@@ -40,8 +40,6 @@ function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	print("Seeds Adjusted")
-
 	profile.Data.Seeds[seedType].Amount += amount 
 	Remotes.UpdateOwnedSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
 end
@@ -222,7 +220,7 @@ function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 	
 	profile.Data.Plots[plotID].Tree.TimeUntilMoney = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenMoney
 
-	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree, plotID)
+	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilMoney, plotID)
 end
 
 function Manager.UpdateAchievements(player: Player, achievementType: string, amount: number)
@@ -245,7 +243,7 @@ function Manager.UpdateSettings(player: Player, setting: string)
 
 	profile.Data.Settings[setting] = not profile.Data.Settings[setting]
 
-	Remotes.UpdateSettings:FireClient(player, profile.Data.Settings)
+	Remotes.UpdateSettings:FireClient(player, profile.Data.Settings[setting], setting)
 end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
