@@ -40,8 +40,6 @@ function Manager.AdjustSeeds(player: Player, amount: number, seedType: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	print("Seeds Adjusted")
-
 	profile.Data.Seeds[seedType].Amount += amount 
 	Remotes.UpdateOwnedSeeds:FireClient(player, profile.Data.Seeds[seedType].Amount, seedType)
 end
@@ -115,8 +113,6 @@ function Manager.AdjustPlotOccupation(player: Player, PlotID: number, treeToPlan
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	print("This function AdjustPlotOccupation Got Called" .. PlotID)
-
 	profile.Data.Plots[PlotID].Tree = table.clone(TreeConfig[treeToPlant])
 
 	profile.Data.Plots[PlotID].Tree.TimeUntilWater = os.time() + 20 
@@ -192,7 +188,7 @@ function Manager.UpdateTreeWaterTimer(player: Player, plotID: number)
 	
 	profile.Data.Plots[plotID].Tree.TimeUntilWater = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenWater
 
-	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree, plotID)
+	Remotes.UpdateTreeWaterTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilWater, plotID)
 end
 
 -- When this function gets Called The Tree's Level or Cycle is Changed 
@@ -224,7 +220,7 @@ function Manager.UpdateTreeMoneyTimer(player: Player, plotID: number)
 	
 	profile.Data.Plots[plotID].Tree.TimeUntilMoney = os.time() + profile.Data.Plots[plotID].Tree.TimeBetweenMoney
 
-	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree, plotID)
+	Remotes.UpdateTreeMoneyTimer:FireClient(player, profile.Data.Plots[plotID].Tree.TimeUntilMoney, plotID)
 end
 
 function Manager.UpdateAchievements(player: Player, achievementType: string, amount: number)
@@ -247,7 +243,7 @@ function Manager.UpdateSettings(player: Player, setting: string)
 
 	profile.Data.Settings[setting] = not profile.Data.Settings[setting]
 
-	Remotes.UpdateSettings:FireClient(player, profile.Data.Settings)
+	Remotes.UpdateSettings:FireClient(player, profile.Data.Settings[setting], setting)
 end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

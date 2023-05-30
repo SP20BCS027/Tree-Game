@@ -11,9 +11,7 @@ local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
 local AchievementButton = InventoryButtonUI.Frame.Achievements
 
 AchievementButton.MouseButton1Down:Connect(function()
-
     AchievementsManager.GenerateAchievements()
-
     AchievementUI.Enabled = not AchievementUI.Enabled
 end)
 

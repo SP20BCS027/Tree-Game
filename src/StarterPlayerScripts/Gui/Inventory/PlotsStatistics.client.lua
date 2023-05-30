@@ -244,17 +244,11 @@ DeleteButton.MouseLeave:Connect(function()
     DeleteButton.Size = ORIGINAL_SIZE_OF_DELETEBUTTON
 end) 
 
-Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(prompt: string, plotID: string)
-    if prompt == "LEVEL" then 
+Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: string)
         task.delay(0, function()
             UpdateLevelLabel(plotID)
-        end)
-    end
-    if prompt == "CYCLE" then 
-        task.delay(0, function()
             UpdateCycleLabel(plotID)
         end)
-    end
 end)
 
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
@@ -267,11 +261,6 @@ Remotes.UpdateOccupied.OnClientEvent:Connect(function()
 end)
 
 Remotes.DeleteTree.OnClientEvent:Connect(function()
-    ClearPlotIcons()
-    task.delay(0, GeneratePlotsUI)
-end)
-
-Remotes.Bindables.OnReset.GenerateOwnedPlots.Event:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
 end)
