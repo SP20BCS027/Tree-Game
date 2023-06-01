@@ -10,6 +10,7 @@ local IndexButton = InventoryButtonUI.Frame.Index
 
 IndexButton.MouseButton1Down:Connect(function()
     IndexManager.ToggleSelectMenu()
+    IndexManager.UpdateTreeIndexStats()
 end)
 
 
