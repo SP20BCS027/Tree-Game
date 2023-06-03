@@ -39,7 +39,6 @@ function HouseModule.GetNoOwnerHouseClaimParts()
 end
 
 function HouseModule.ReturnPlayerWell(player: Player)
-	print(Houses)
 	for _, HouseOb in pairs(Houses) do
 		if HouseOb.owner == player then 
 			print("Player is the owner of this house " .. HouseOb.Name .. ".")	
@@ -63,23 +62,15 @@ function HouseModule.CheckForOwnerShip(player: Player)
 	return false
 end
 
-local function GetNewTree(nameOfTree: string)
-	for _, desc in pairs (Trees:GetDescendants()) do 
-		if desc.Name == nameOfTree then 
-			return desc
-		end
-	end
+local function GetNewTree(nameOfTree: string, level: number, rarity: string)
+	return Trees[rarity][nameOfTree][level][nameOfTree]
 end
 
-function HouseModule.ChangeTreeModel(plotObject: Model)
+function HouseModule.ChangeTreeModel(plotObject: Model, treeLevel: number, treeRarity: string)
 	local plantedTree = HouseModule.GetTreeObject(plotObject)
 	local treeName = plantedTree.Name 
-
-	local baseName = string.sub(treeName, 1, string.find(treeName, "_") - 1)
-	local level = string.sub(treeName, -1)
-	level += 1 
-
-	local updatedTree = GetNewTree(baseName .. "_" .. level):Clone()
+	
+	local updatedTree = GetNewTree(treeName, treeLevel, treeRarity):Clone()
 	updatedTree.Parent = plantedTree.Parent 
 	updatedTree:PivotTo(CFrame.new(plantedTree:GetPivot().p))
 	plantedTree:Destroy()

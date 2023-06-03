@@ -4,6 +4,7 @@ local player = game.Players.LocalPlayer
 
 local MainInventoryManager = require(player:WaitForChild("PlayerScripts").Gui.Inventory.MainInventoryManager)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local MainInventoryUI = player.PlayerGui:WaitForChild("MainInventory")
 local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
@@ -44,6 +45,7 @@ InventoryButton.MouseButton1Down:Connect(function()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     currentInventory = if currentInventory then currentInventory else "Backpacks"
     MainInventoryManager.GenerateInventory(currentInventory)
+    UISettings.DisableAll("MainInventory")
     MainInventoryUI.Enabled = not MainInventoryUI.Enabled
 end)
 

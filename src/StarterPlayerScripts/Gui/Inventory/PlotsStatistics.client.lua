@@ -7,15 +7,16 @@ local State = require(ReplicatedStorage.Client.State)
 local FormatTime = require(ReplicatedStorage.Libs.FormatTime)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local PlotsGUI = player.PlayerGui:WaitForChild("Plots_Stats")
 local MainFrame = PlotsGUI.MainFrame
 
 local InventoryButton = player.PlayerGui:WaitForChild("InventoryButton")
 
-local TreeButton = InventoryButton.Frame.Plots
-local HarvestAlert = TreeButton.Alerts.HarvestAlert 
-local WaterAlert = TreeButton.Alerts.WaterAlert
+local PlotsButton = InventoryButton.Frame.Plots
+local HarvestAlert = PlotsButton.Alerts.HarvestAlert 
+local WaterAlert = PlotsButton.Alerts.WaterAlert
 
 local CloseButton = MainFrame.CloseFrame.CloseButton
 local SelectedFrame = MainFrame.SelectedFrame
@@ -125,7 +126,7 @@ local function LoadStats(plot)
     StatsFrame.IconTreeName.Text = plot.Tree.Name
 
     StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
-    StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle.." / "..plot.Tree.MaxCycle)
+    StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle .. " / " .. plot.Tree.MaxCycle)
 
     ShowStats()
     if PreviousIcon then 
@@ -204,8 +205,9 @@ local function UpdateCycleLabel(plotIconID)
     StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle .. " / " .. currentPlot.Tree.MaxCycle) 
 end
 
-TreeButton.MouseButton1Down:Connect(function()
+PlotsButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
+    UISettings.DisableAll("Plots_Stats")
     PlotsGUI.Enabled = not PlotsGUI.Enabled
     ClearPlotIcons()
     GeneratePlotsUI()
@@ -227,7 +229,6 @@ CloseButton.MouseLeave:Connect(function()
     SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
-
 
 DeleteButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()

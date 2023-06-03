@@ -24,7 +24,8 @@ local function UpdateTreeWaterTimerAndTreeLevel(player: Player, plotID: number)
 			local plotObject = Houses.GetPlayerPlot(player, plotID)
 			local tree = profile.Data.Plots[plotID].Tree.Name
 			local treeLevel = profile.Data.Plots[plotID].Tree.CurrentLevel
-			Houses.ChangeTreeModel(plotObject)
+			local treeRarity = profile.Data.Plots[plotID].Tree.Rarity
+			Houses.ChangeTreeModel(plotObject, treeLevel, treeRarity)
 			Manager.AdjustTreeIndex(player, tree, treeLevel)
 		end
 		Manager.AdjustWater(player)

@@ -6,6 +6,7 @@ local Remotes = ReplicatedStorage.Remotes
 local DungeonsConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local DungeonUI = player.PlayerGui:WaitForChild("DungeonSelectMenu")
 local CloseFrame = DungeonUI.CloseFrame
@@ -35,6 +36,7 @@ local function UpdateSelectFrame(DungeonName)
 end
 
 local function GenerateUI(DungeonName)
+    UISettings.DisableAll()
     DungeonUI.Enabled = true
 
     for _, child in ScrollingFrame:GetChildren() do 

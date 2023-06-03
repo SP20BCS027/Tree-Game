@@ -21,7 +21,7 @@ local function selectTree(seed)
 end
 
 local function spawnTree(spawnPosition, tree, seed, plotObject)
-	local treeModel: Model = TreeModels:FindFirstChild(seed):FindFirstChild(tree):FindFirstChild(tree.."_1"):Clone()
+	local treeModel: Model = TreeModels:FindFirstChild(seed):FindFirstChild(tree):FindFirstChild(1):FindFirstChild(tree):Clone()
 	treeModel.Parent = plotObject
 	treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
 end

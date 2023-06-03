@@ -4,6 +4,7 @@ local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes
 
 local AchievementsManager = require(player:WaitForChild("PlayerScripts").Gui.Achievements.AchievementsManager)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local AchievementUI = player.PlayerGui:WaitForChild("AchievementTemplate")
 local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
@@ -11,6 +12,7 @@ local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
 local AchievementButton = InventoryButtonUI.Frame.Achievements
 
 AchievementButton.MouseButton1Down:Connect(function()
+    UISettings.DisableAll("AchievementTemplate")
     AchievementsManager.GenerateAchievements()
     AchievementUI.Enabled = not AchievementUI.Enabled
 end)

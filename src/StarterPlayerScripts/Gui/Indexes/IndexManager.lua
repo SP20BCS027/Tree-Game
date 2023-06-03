@@ -2,32 +2,23 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = game.Players.LocalPlayer
 
-local Remotes = ReplicatedStorage.Remotes
-
 local State = require(ReplicatedStorage.Client.State)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local IndexSelectScreenUI = player.PlayerGui:WaitForChild("IndexSelectScreen")
 local IndexTemplateUI = player.PlayerGui:WaitForChild("IndexTemplate")
 
 local MainFrame = IndexSelectScreenUI.Frame
 local CloseFrame = MainFrame.CloseFrame
-local CloseButton = CloseFrame.CloseButton
-local BackgroundFrame = MainFrame.BackgroundFrame
-local Heading = MainFrame.Heading 
-local HeadingBackground = MainFrame.HeadingBackground 
+local CloseButton = CloseFrame.CloseButton 
 local HolderFrame = MainFrame.HolderFrame
-local IndexesFrame = MainFrame.IndexesFrame
 
 local IndexTemplateMainFrame = IndexTemplateUI.Frame
 local IndexTemplateCloseFrame = IndexTemplateMainFrame.CloseFrame
 local IndexTemplateCloseButton = IndexTemplateCloseFrame.CloseButton
-local IndexTemplateBackgroundFrame = IndexTemplateMainFrame.BackgroundFrame
-local IndexTemplateHeading = IndexTemplateMainFrame.Heading
-local IndexTemplateHeadingBackground = IndexTemplateMainFrame.HeadingBackground
 local IndexTemplateHolderFrame = IndexTemplateMainFrame.HolderFrame
-local IndexTemplateIndexesFrame = IndexTemplateMainFrame.IndexesFrame
 
 local IndexTemplate = IndexTemplateHolderFrame.Template
 
@@ -75,6 +66,7 @@ function IndexManager.GenerateIndexMenu(indexType: string)
 end
 
 function IndexManager.ToggleSelectMenu()
+    UISettings.DisableAll("IndexSelectScreen")
     IndexSelectScreenUI.Enabled = not IndexSelectScreenUI.Enabled
 end
 
@@ -115,6 +107,7 @@ end
 TreeIndexFrame.Button.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     IndexManager.GenerateIndexMenu("TreeIndex")
+    UISettings.DisableAll()
     IndexSelectScreenUI.Enabled = false
     IndexTemplateUI.Enabled = true
 end)
