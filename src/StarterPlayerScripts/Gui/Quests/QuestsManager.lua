@@ -42,7 +42,6 @@ local function GenerateIcons(item)
     local increment = 1
     linkedIcons[iconClone.Name] = {}
 
-
     for task, _ in item.CurrentQuestInfo do 
         if not string.find(task, "Task") then continue end
         local taskClone = TaskTemplate:Clone()

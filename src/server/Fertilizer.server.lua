@@ -58,8 +58,9 @@ local function FertilizeTree(player: Player, plotID: string, fertilizerType: str
 		local plotObject = Houses.GetPlayerPlot(player, plotID)
 		local tree = profile.Data.Plots[plotID].Tree.Name
 		local treeLevel = profile.Data.Plots[plotID].Tree.CurrentLevel
+		local treeRarity = profile.Data.Plots[plotID].Tree.Rarity
 		Manager.AdjustTreeIndex(player, tree, treeLevel)
-		Houses.ChangeTreeModel(plotObject)
+		Houses.ChangeTreeModel(plotObject, treeLevel, treeRarity)
 	end
 end 
 

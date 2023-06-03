@@ -9,6 +9,7 @@ local character = player.CharacterAdded:Wait()
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local State= require(ReplicatedStorage.Client.State)
 
@@ -37,7 +38,6 @@ local ORIGINAL_SIZE_OF_PLANTBUTTON = PlantButton.Size
 local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
 local crouchAnimID = "rbxassetid://13248889864"
-
 
 local function MakeStatsInvisible()
 	StatsFrame.Visible = false
@@ -78,15 +78,14 @@ local function UpdateSeedIcons(plotReceived, mudPosition, animationPositionPart)
 	Seeds = State.GetData().Seeds
 
 	for _, Icon in ScrollingFrame:GetChildren() do
-
 		if Icon.Name == "UIGridLayout" then continue end
-
 		if Seeds[Icon.Name].Amount <= 0 then
 			Icon.Visible = false
 		else 
 			Icon.Visible = true
 		end	
 	end
+	UISettings.DisableAll()
 	UI.Enabled = true
 end
 

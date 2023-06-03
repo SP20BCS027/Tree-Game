@@ -36,7 +36,6 @@ local function RefillWater(animationPosition)
 	
 	SoundsManager.PlayPressSound()
 	animationPosition.WateringSound:Play()
-	
 end
 
 -- This function gets the well object from the player's house 

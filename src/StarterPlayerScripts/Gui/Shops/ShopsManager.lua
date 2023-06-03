@@ -11,6 +11,7 @@ local State = require(ReplicatedStorage.Client.State)
 local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local ShopUI = player.PlayerGui:WaitForChild("ShopTemplate")
 local MainFrame = ShopUI.MainFrame
@@ -86,7 +87,6 @@ local function CheckForOwnerShip(item)
     end
     if CurrentShop == "WaterCans" then 
         if State.GetData().OwnedWaterCans[item] then 
-
             return true
         end
     end
@@ -325,6 +325,7 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     end
     PlayerMovement:Movement(player, false)
     CurrentShop = shopID
+    UISettings.DisableAll()
     ShopUI.Enabled = true
 
     ChangeColors()

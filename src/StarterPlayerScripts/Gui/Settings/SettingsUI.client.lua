@@ -7,6 +7,7 @@ local Remotes = ReplicatedStorage.Remotes
 local State = require(ReplicatedStorage.Client.State)
 
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
 local SettingsButton = InventoryButtonUI.Frame.Settings
@@ -76,5 +77,6 @@ end)
 
 SettingsButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
+    UISettings.DisableAll("SettingsTemplate")
     SettingsUI.Enabled = not SettingsUI.Enabled
 end)

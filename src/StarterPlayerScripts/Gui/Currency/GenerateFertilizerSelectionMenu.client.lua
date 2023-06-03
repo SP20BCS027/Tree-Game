@@ -9,6 +9,7 @@ local character = player.CharacterAdded:Wait()
 local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animations.AnimationModule)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local State = require(ReplicatedStorage.Client.State)
 
@@ -81,6 +82,7 @@ local function UpdateFertilizerIcons(plotReceived: string, animationPositionPart
 			icon.Visible = true
 		end	
 	end
+	UISettings.DisableAll()
 	UI.Enabled = true
 end
 

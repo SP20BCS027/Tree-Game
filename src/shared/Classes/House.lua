@@ -69,7 +69,7 @@ function House.PlantTrees(house, playerDataPlots)
 
 		local spawnPosition = plot["Mud"].Position
 		local tree = playerDataPlots[name].Tree
-		local treeModel: Model = TreeModels:FindFirstChild(tree.Rarity):FindFirstChild(tree.Name):FindFirstChild(tree.Name.. "_" .. tree.CurrentLevel):Clone()
+		local treeModel: Model = TreeModels:FindFirstChild(tree.Rarity):FindFirstChild(tree.Name):FindFirstChild(tree.CurrentLevel):FindFirstChild(tree.Name):Clone()
 		treeModel.Parent = house.Plots[name]
 		treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
 	end
