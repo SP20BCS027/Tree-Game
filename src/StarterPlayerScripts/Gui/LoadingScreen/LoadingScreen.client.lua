@@ -10,6 +10,7 @@ local SkipButton = LoadingScreenUI.Frame.SkipButton
 LoadingScreenUI.Enabled = true
 
 local SKIPPED = false
+local TIME_UNTIL_SKIP_BUTTON_VISIBLE = 1
 
 repeat task.wait(1) 
 until game:IsLoaded()
@@ -21,7 +22,7 @@ end)
 
 task.spawn(function()
     local StartTime = os.time()
-    local EndTime = StartTime + 10
+    local EndTime = StartTime + TIME_UNTIL_SKIP_BUTTON_VISIBLE
 
     while task.wait() do 
         if os.time() > EndTime then 

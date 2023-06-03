@@ -67,6 +67,10 @@ Remotes.RefillWater.OnClientEvent:Connect(function()
 	PlayerData.Water = PlayerData.EquippedWaterCan.Capacity
 end)
 
+Remotes.UpdateTreeIndex.OnClientEvent:Connect(function(tree: string, treeLevel: number)
+	PlayerData.Index["TreeIndex"][tree].Trees[treeLevel].Unlocked = true
+end)
+
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: number, Tree)
 	PlayerData.Plots[plotID].Tree = Tree 
 end)

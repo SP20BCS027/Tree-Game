@@ -19,6 +19,7 @@ local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame
 local SelectedFrame = MainFrame.SelectedFrame
 local StatsFrame = SelectedFrame.Stats
+local IconImage = SelectedFrame.IconImage
 local PlantButton = StatsFrame.PlantButton
 local Template = InventoryFrame.Template
 
@@ -34,11 +35,23 @@ local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 local ORIGINAL_SIZE_OF_PLANTBUTTON = PlantButton.Size
 local crouchAnimID = "rbxassetid://13248889864"
 
+
+local function MakeStatsInvisible()
+	StatsFrame.Visible = false
+	IconImage.Visible = false
+end 
+
+local function MakeStatsVisible()
+	StatsFrame.Visible = true
+	IconImage.Visible = true
+end 
+
 local function LoadStats(fertilizer)
 	StatsFrame.Description.IconDescription.Text = fertilizer.Description 
 	StatsFrame.IconName.Text = AMOUNT:gsub("REPLACE", fertilizer.Name) 
 	StatsFrame.IconAmount.Text = NAME:gsub("REPLACE", fertilizer.Amount) 
 	Fertilizer = fertilizer
+	MakeStatsVisible()
 end
 
 local function CreateFertilizerIcon(fertilizer)
@@ -62,7 +75,6 @@ local function UpdateFertilizerIcons(plotReceived: string, animationPositionPart
 
 	for _, icon in ScrollingFrame:GetChildren() do
 		if icon.Name == "UIGridLayout" then continue end  
-		--icon.Amount.Text = Fertilizers[icon.Name].Amount		
 		if Fertilizers[icon.Name].Amount <= 0 then
 			icon.Visible = false
 		else 
@@ -87,6 +99,7 @@ end
 PlantButton.MouseButton1Down:Connect(function()
 	SoundsManager.PlayPressSound()
 	UI.Enabled = false
+	MakeStatsInvisible()
 	FertilizePlot() 	
 	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 	local fertilizingSound = AnimPart.WateringSound
@@ -106,6 +119,7 @@ end)
 CloseButton.MouseButton1Down:Connect(function()
 	SoundsManager.PlayCloseSound()
 	UI.Enabled = false 
+	MakeStatsInvisible()
 	PlayerMovement:Movement(player, true)
 end)
 

@@ -56,6 +56,9 @@ local function FertilizeTree(player: Player, plotID: string, fertilizerType: str
 	local Evaluation = Manager.UpdateTreeLevel(player, plotID, profile.Data.Fertilizers[fertilizerType].Cycles)
 	if Evaluation == "LEVEL" then 
 		local plotObject = Houses.GetPlayerPlot(player, plotID)
+		local tree = profile.Data.Plots[plotID].Tree.Name
+		local treeLevel = profile.Data.Plots[plotID].Tree.CurrentLevel
+		Manager.AdjustTreeIndex(player, tree, treeLevel)
 		Houses.ChangeTreeModel(plotObject)
 	end
 end 

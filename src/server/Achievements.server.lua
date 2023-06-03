@@ -10,7 +10,7 @@ local function UpdateAchievements(player: Player, achievementType: string,  amou
 	if not profile then return end
 
 	if achievementType == "MoneyEarned" then 
-		amount = profile.Data.Plots[amount].Tree.MoneyGenerated
+		amount = profile.Data.Plots[amount].Tree.MoneyGenerated * profile.Data.Plots[amount].Tree.CurrentLevel
 	end 
 
 	Manager.UpdateAchievements(player, achievementType, amount)

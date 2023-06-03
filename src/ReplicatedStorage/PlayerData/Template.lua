@@ -9,6 +9,7 @@ local FertilizerConfig = require(ReplicatedStorage.Configs.FertilizerConfig)
 local AchievementsConfig = require(ReplicatedStorage.Configs.AchievementsConfig)
 local QuestsConfig = require(ReplicatedStorage.Configs.QuestsConfig)
 local SettingsConfig = require(ReplicatedStorage.Configs.SettingsConfig)
+local TreeIndexConfig = require(ReplicatedStorage.Configs.TreeIndexConfig)
 
 local Template = {
 	Coins = 0, 
@@ -34,14 +35,16 @@ local Template = {
 		BasicBackpack = BackpackConfig.BasicBackpack,
 		DrawStringBag = BackpackConfig.DrawStringBag 
 	},
+
+	Index = {
+		TreeIndex = TreeIndexConfig, 
+	},
 	
 	Achievements = AchievementsConfig,
 	ActiveQuests = QuestsConfig,
 
 	UnlockedDungeons = DungeonConfig, 
-
 	Settings = SettingsConfig, 
-
 }
 
 export type PlayerData = typeof(Template)
