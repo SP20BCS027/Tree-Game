@@ -38,24 +38,39 @@ local ORIGINAL_SIZE_OF_INDEXCLOSEBUTTON = IndexTemplateCloseButton.Size
 
 local IndexManager = {}
 
-function IndexManager.GenerateIndexStats(headingText: string, Icons: {})
+function IndexManager.GenerateIndexStats(headingText: string,  layoutOrder: number, Icons: {})
     local IndexDisplay = IndexTemplate:Clone()
+    IndexDisplay.LayoutOrder = layoutOrder
     IndexDisplay.Parent = IndexTemplateHolderFrame
     IndexDisplay.Heading.Text = headingText
     IndexDisplay.Name = headingText
     IndexDisplay.Visible = true
     local ScrollingFrame = IndexDisplay.ScrollingFrame
 
-    for _, isUnlocked in pairs(Icons) do 
+    for level, tree in pairs(Icons) do 
         local ItemClone = ScrollingFrame.Item:Clone()
+        if tree.Unlocked == true then 
+            ItemClone.TreeImage.Image = tree.UnlockedImage
+        else
+            ItemClone.TreeImage.Image = tree.NotUnlockedImage
+        end 
+        ItemClone.LayoutOrder = level
         ItemClone.Parent = ScrollingFrame
         ItemClone.Visible = true
     end 
 end
 
+local function ClearIndexMenu()
+    for _, icon in IndexTemplateHolderFrame:GetChildren() do 
+        if icon.Name == "UIListLayout" or icon.Name == "UIPadding" or icon.Name == "Template" then continue end 
+        icon:Destroy()
+    end
+end
+
 function IndexManager.GenerateIndexMenu(indexType: string)
+    ClearIndexMenu()
     for tree, level in pairs(State.GetData().Index[indexType]) do 
-        IndexManager.GenerateIndexStats(tree, level)
+        IndexManager.GenerateIndexStats(tree, level.LayoutOrder, level.Trees)
     end
 end
 
@@ -65,22 +80,19 @@ end
 
 function IndexManager.GetTotalTrees()
     local totalTreeIndexes = 0
-    for _, level in pairs(State.GetData().Index["TreeIndex"]) do 
-        for _, value in pairs(level) do 
-            if value == false then 
-                totalTreeIndexes += 1
-            end
+    for _, levels in pairs(State.GetData().Index["TreeIndex"]) do 
+        for _ in pairs(levels.Trees) do 
+            totalTreeIndexes += 1
         end
     end
     return totalTreeIndexes
 end
-IndexManager.GetTotalTrees()
 
 function IndexManager.GetUnlockedTrees()
     local totalTreeIndexes = 0
-    for _, level in pairs(State.GetData().Index["TreeIndex"]) do 
-        for _, value in pairs(level) do 
-            if value == true then 
+    for _, levels in pairs(State.GetData().Index["TreeIndex"]) do 
+        for _, stat in pairs(levels.Trees) do 
+            if stat.Unlocked == true then 
                 totalTreeIndexes += 1
             end
         end
@@ -90,7 +102,7 @@ end
 
 function IndexManager.UpdateTreeIndexStats()
     local barCompleted = IndexManager.GetUnlockedTrees() / IndexManager.GetTotalTrees()
-    TreeIndexFrame.ProgressionText.Text = IndexManager.GetUnlockedTrees() .. " / " .. IndexManager.GetTotalTrees() .. " ( " .. (IndexManager.GetUnlockedTrees() / IndexManager.GetTotalTrees()) * 100 .. "% )"
+    TreeIndexFrame.ProgressionText.Text = IndexManager.GetUnlockedTrees() .. " / " .. IndexManager.GetTotalTrees() .. " ( " .. math.floor((IndexManager.GetUnlockedTrees() / IndexManager.GetTotalTrees() * 100) * 100) / 100  .. "% )"
     TreeIndexFrame.ProgressBar.Bar.Size = UDim2.new(barCompleted, 0, 1, 0) 
 end
 

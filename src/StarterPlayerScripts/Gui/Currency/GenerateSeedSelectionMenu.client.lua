@@ -19,6 +19,7 @@ local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame
 local SelectedFrame = MainFrame.SelectedFrame
 local StatsFrame = SelectedFrame.Stats
+local IconImage = SelectedFrame.IconImage
 local PlantButton = StatsFrame.PlantButton
 local Template = InventoryFrame.Template
 
@@ -37,11 +38,23 @@ local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
 local crouchAnimID = "rbxassetid://13248889864"
 
+
+local function MakeStatsInvisible()
+	StatsFrame.Visible = false
+	IconImage.Visible = false
+end 
+
+local function MakeStatsVisible()
+	StatsFrame.Visible = true
+	IconImage.Visible = true
+end 
+
 local function LoadStats(seedReceived)
 	StatsFrame.Description.IconDescription.Text = seedReceived.Description 
 	StatsFrame.IconAmount.Text = AMOUNT:gsub("REPLACE", seedReceived.Amount)
 	StatsFrame.IconName.Text = NAME:gsub("REPLACE", seedReceived.Name)
 	Seed = seedReceived
+	MakeStatsVisible()
 end
 
 local function CreateSeedIcon(seed)
@@ -94,6 +107,7 @@ end
 PlantButton.MouseButton1Down:Connect(function()
 	SoundsManager.PlayPressSound()
 	UI.Enabled = false
+	MakeStatsInvisible()
 	PlantSeed() 	
 	AnimationHandler.PlayAnimation(player, character, crouchAnimID)
 	local plantingSound = AnimPart.WateringSound
@@ -112,6 +126,7 @@ end)
 CloseButton.MouseButton1Down:Connect(function()
 	SoundsManager.PlayCloseSound()
 	UI.Enabled = false 
+	MakeStatsInvisible()
 	PlayerMovement:Movement(player, true)
 end)
 

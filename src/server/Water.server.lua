@@ -11,8 +11,6 @@ local function UpdateTreeWaterTimerAndTreeLevel(player: Player, plotID: number)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	print(plotID)
-
 	if profile.Data.Water <= 0 then 
 		print("The Player " .. player .. " does not have water ~~ Server")
 		return
@@ -24,7 +22,10 @@ local function UpdateTreeWaterTimerAndTreeLevel(player: Player, plotID: number)
 		local Evaluation = Manager.UpdateTreeLevel(player, plotID, WATERCYCLE)
 		if Evaluation == "LEVEL" then 
 			local plotObject = Houses.GetPlayerPlot(player, plotID)
+			local tree = profile.Data.Plots[plotID].Tree.Name
+			local treeLevel = profile.Data.Plots[plotID].Tree.CurrentLevel
 			Houses.ChangeTreeModel(plotObject)
+			Manager.AdjustTreeIndex(player, tree, treeLevel)
 		end
 		Manager.AdjustWater(player)
 	end

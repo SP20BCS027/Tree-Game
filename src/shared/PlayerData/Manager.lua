@@ -107,6 +107,15 @@ function Manager.SellAllMoney(player: Player)
 	Remotes.SellAllMoney:FireClient(player)
 end
 
+function Manager.AdjustTreeIndex(player: Player, tree: string, treeLevel: number)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+	print(profile.Data.Index["TreeIndex"][tree].Trees[treeLevel].Unlocked)
+	profile.Data.Index["TreeIndex"][tree].Trees[treeLevel].Unlocked = true
+
+	Remotes.UpdateTreeIndex:FireClient(player, tree, treeLevel)
+end
+
 -- When this function gets called the player's Plot Status gets updated and a Tree is assigned to the plots data 
 
 function Manager.AdjustPlotOccupation(player: Player, PlotID: number, treeToPlant: string)
@@ -229,7 +238,7 @@ function Manager.UpdateAchievements(player: Player, achievementType: string, amo
 
 	profile.Data.Achievements[achievementType].AmountAchieved += amount
 
-	if profile.Data.Achievements[achievementType].AmountAchieved >= profile.Data.Achievements[achievementType].AmountToAchieve then
+	while profile.Data.Achievements[achievementType].AmountAchieved >= profile.Data.Achievements[achievementType].AmountToAchieve do
 		profile.Data.Achievements[achievementType].CurrentAchievementNo += 1
 		profile.Data.Achievements[achievementType].AmountToAchieve = AchievementInfoConfig[achievementType][profile.Data.Achievements[achievementType].CurrentAchievementNo]
 	end
@@ -242,12 +251,10 @@ function Manager.UpdateSettings(player: Player, setting: string)
 	if not profile then return end
 
 	profile.Data.Settings[setting] = not profile.Data.Settings[setting]
-
 	Remotes.UpdateSettings:FireClient(player, profile.Data.Settings[setting], setting)
 end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 -- This function is used to get a specific directory of Data of the player 
 
 local function GetData(player: Player, directory: string)

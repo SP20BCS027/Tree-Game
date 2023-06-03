@@ -16,8 +16,6 @@ local function selectTree(seed)
 		end
 	end
 
-	-- Make A Better Random Selecting Algorithm
-
 	local randomIndex = math.random(table.maxn(sortedTrees))	
 	return sortedTrees[randomIndex]
 end
@@ -49,7 +47,8 @@ local function ChangeOccupationStatus(player: Player, plotID: number, seed, spaw
 	end
 
 	local treeToPlant = selectTree(seed).Name
-	local plotObject = Houses.GetPlayerPlot(player, plotID)
+	Manager.AdjustTreeIndex(player, treeToPlant, 1)
+	local plotObject = Houses.GetPlayerPlot(player, plotID)  
 	spawnTree(spawnPosition, treeToPlant, seed, plotObject)
 	Manager.AdjustPlotOccupation(player, plotID, treeToPlant)
 end

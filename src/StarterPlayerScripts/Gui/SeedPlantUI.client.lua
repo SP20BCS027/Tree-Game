@@ -29,8 +29,6 @@ local function PlantSeed(plotId: string, mudPosition: Vector3, animationPosition
 		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
 		ChangeCharacterPosition(animationPositionPart.CFrame)
 		PlayerMovement:Movement(player, false)
-		--print("This is the plantID in the plantSeed: " .. plotId)
-		print("Seed Planted")
 		SoundsManager.PlayPressSound()
 	else
 		SoundsManager.PlayDenialSound()
@@ -43,7 +41,6 @@ end
 local function WaterTree(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Tree ~= nil then
 		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
-			
 			Remotes.UpdateTreeWaterTimer:FireServer(plotId)
 
 			ChangeCharacterPosition(animationPositionPart.CFrame)
@@ -54,7 +51,6 @@ local function WaterTree(plotId, animationPositionPart)
 			wateringSound:Play()
 			print("Tree has been watered!")
 			SoundsManager.PlayPressSound()
-			--print("This is the plotID in Water: " .. plotId)
 		else
 			print("The Tree is already watered or You have no water!")
 			SoundsManager.PlayDenialSound()
@@ -101,7 +97,6 @@ local function FertilizePlot(plotId, animationPositionPart)
 	Remotes.Bindables.SelectFertilizer:Fire(plotId, animationPositionPart)
 	PlayerMovement:Movement(player, false)
 	ChangeCharacterPosition(animationPositionPart.CFrame)
-	print("Fertilized")
 end 
 
 -- This function Generates the UIs for each plot the player owns and Adornees it to that plot
