@@ -18,6 +18,8 @@ local MainInventoryUI = player.PlayerGui:WaitForChild("MainInventory")
 local MainFrame = MainInventoryUI.MainFrame
 
 local BackgroundFrame = MainFrame.BackgroundFrame
+local HeadingFrame = MainFrame.HeadingFrame
+local HeadingFrameBackground = MainFrame.HeadingFrameBackground
 
 local CloseButton = MainFrame.CloseFrame.CloseButton
 
@@ -100,6 +102,8 @@ end
 
 local function ChangeColors()
     BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].BackgroundFrame
+    HeadingFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].HeadingFrame
+    HeadingFrameBackground.BackgroundColor3 = InventoryUIColors[CurrentInventory].HeadingFrameBackground
     InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].InventoryFrame    
     EquippedFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].EquippedFrame
     DescriptionFrame.BackgroundColor3 = InventoryUIColors[CurrentInventory].DescriptionFrame
@@ -124,7 +128,6 @@ local function LoadStats(item)
 
     IconName.Text = ITEM_NAME:gsub("REPLACE", item.Name)
     IconDescription.Text = item.Description
-
     if item.Amount then 
         IconAmount.Text = ITEM_AMOUNT:gsub("REPLACE", item.Amount)
     elseif item.Capacity then 
@@ -194,8 +197,9 @@ function MainInventory.GenerateInventory(setID)
     GetDataFromClient()
     ClearInventory()
     HideStats()
-
+    
     CurrentInventory = setID
+    HeadingFrame.TextLabel.Text = CurrentInventory .. " Inventory"
 
     ChangeColors()
     for _, item in CurrentDirectory do 

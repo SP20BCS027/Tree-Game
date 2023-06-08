@@ -11,6 +11,8 @@ type ColorsConfig = {
 local Colors : {[string]: ColorsConfig} = {
 	Backpacks = {
 		BackgroundFrame = Color3.fromRGB(112, 66, 33), 
+		HeadingFrame = Color3.fromRGB(179, 105, 53), 
+		HeadingFrameBackground =  Color3.fromRGB(112, 66, 33),
 		InventoryFrame = Color3.fromRGB(179, 105, 53), 
 		EquippedFrame = Color3.fromRGB(179, 105, 53),
 		DescriptionFrame = Color3.fromRGB(112, 66, 33),
@@ -21,6 +23,8 @@ local Colors : {[string]: ColorsConfig} = {
 		}, 
 	WaterCans = {
 		BackgroundFrame = Color3.fromRGB(0, 180, 216), 
+		HeadingFrame = Color3.fromRGB(144, 224, 239), 
+		HeadingFrameBackground =  Color3.fromRGB(0, 180, 216), 
 		InventoryFrame = Color3.fromRGB(144, 224, 239), 
 		EquippedFrame = Color3.fromRGB(144, 224, 239), 
 		DescriptionFrame = Color3.fromRGB(0, 180, 216), 
@@ -31,6 +35,8 @@ local Colors : {[string]: ColorsConfig} = {
 	}, 
 	Fertilizers = {
 		BackgroundFrame = Color3.fromRGB(74, 124, 89), 
+		HeadingFrame = Color3.fromRGB(143, 192, 169), 
+		HeadingFrameBackground =  Color3.fromRGB(74, 124, 89),
 		InventoryFrame = Color3.fromRGB(143, 192, 169), 
 		EquippedFrame = Color3.fromRGB(143, 192, 169), 
 		DescriptionFrame = Color3.fromRGB(74, 124, 89), 
@@ -41,6 +47,8 @@ local Colors : {[string]: ColorsConfig} = {
 	}, 
 	Seeds = {
 		BackgroundFrame = Color3.fromRGB(212, 163, 115),
+		HeadingFrame = Color3.fromRGB(250, 237, 205), 
+		HeadingFrameBackground =  Color3.fromRGB(212, 163, 115),
 		InventoryFrame = Color3.fromRGB(250, 237, 205), 
 		EquippedFrame = Color3.fromRGB(250, 237, 205), 
 		DescriptionFrame = Color3.fromRGB(212, 163, 115), 
@@ -51,6 +59,8 @@ local Colors : {[string]: ColorsConfig} = {
 	}, 
 	Plots = {
 		BackgroundFrame = Color3.fromRGB(212, 163, 115),
+		HeadingFrame = Color3.fromRGB(250, 237, 205),  
+		HeadingFrameBackground =  Color3.fromRGB(212, 163, 115),
 		InventoryFrame = Color3.fromRGB(250, 237, 205), 
 		EquippedFrame = Color3.fromRGB(250, 237, 205), 
 		DescriptionFrame = Color3.fromRGB(212, 163, 115), 

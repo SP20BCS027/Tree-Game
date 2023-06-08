@@ -17,6 +17,8 @@ local ShopUI = player.PlayerGui:WaitForChild("ShopTemplate")
 local MainFrame = ShopUI.MainFrame
 local CloseButton = MainFrame.CloseFrame.CloseButton
 local BackgroundFrame = MainFrame.BackgroundFrame
+local HeadingFrame = MainFrame.HeadingFrame
+local HeadingFrameBackground = MainFrame.HeadingFrameBackground
 local SelectedFrame = MainFrame.SelectedFrame
 local IconImage = SelectedFrame.IconImage
 local IconStats = SelectedFrame.Stats
@@ -67,6 +69,8 @@ GetDataFromConfigs()
 
 local function ChangeColors()
     BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].BackgroundFrame
+    HeadingFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].HeadingFrame
+    HeadingFrameBackground.BackgroundColor3 = InventoryUIColors[CurrentShop].HeadingFrameBackground
     InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].InventoryFrame    
     SelectedFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].EquippedFrame
     DescriptionFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].DescriptionFrame
@@ -327,7 +331,7 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     CurrentShop = shopID
     UISettings.DisableAll()
     ShopUI.Enabled = true
-
+    HeadingFrame.TextLabel.Text = CurrentShop .. " Shop"
     ChangeColors()
 
     if CurrentShop == "Plots" then 
@@ -359,7 +363,6 @@ CloseButton.MouseLeave:Connect(function()
     SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
-
 
 -- When the Buy Button is pressed calls the desired Buy Function
 
