@@ -13,7 +13,7 @@ export type TreeConfigTemp = {
 local TreeConfig: {[string]: TreeConfigTemp} = {
 	CashTree = {
 		Name = "CashTree",
-		Rarity = "Basic", 
+		Rarity = "Common", 
 		CurrentLevel = 1, 
 		MaxLevel = 10, 
 		CurrentCycle = 0, 
@@ -27,7 +27,7 @@ local TreeConfig: {[string]: TreeConfigTemp} = {
 	}, 
 	CoinTree = {
 		Name = "CoinTree",
-		Rarity = "Basic", 
+		Rarity = "Common", 
 		CurrentLevel = 1, 
 		MaxLevel = 10, 
 		CurrentCycle = 0, 
@@ -41,7 +41,7 @@ local TreeConfig: {[string]: TreeConfigTemp} = {
 	}, 
 	SilverTree = {
 		Name = "SilverTree",
-		Rarity = "Basic", 
+		Rarity = "Common", 
 		CurrentLevel = 1, 
 		MaxLevel = 10,  
 		CurrentCycle = 0,

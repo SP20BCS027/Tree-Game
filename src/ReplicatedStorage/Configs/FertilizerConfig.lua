@@ -8,8 +8,9 @@ type FertilizerConfigTemp = {
 }
 
 local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
-	Basic = {
-		Name = "Basic", 
+	Common = {
+		UID = "Common",
+		Name = "Common", 
 		Amount = 1, 
 		Description = "This will grant your tree 2 cycles", 
 		Price = 10, 
@@ -18,6 +19,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		LayoutOrder = 1,
 	}, 
 	Uncommon = {
+		UID = "Uncommon",
 		Name = "Uncommon", 
 		Amount = 0, 
 		Description = "This will grant your tree 3 cycles", 
@@ -27,6 +29,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		LayoutOrder = 2, 
 	}, 
 	Rare = {
+		UID = "Rare", 
 		Name = "Rare",
 		Amount = 0,  
 		Description = "This will grant your tree 4 cycles", 
@@ -36,6 +39,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		LayoutOrder = 3,
 	}, 
 	Legendary = {
+		UID = "Legendary",
 		Name = "Legendary",
 		Amount = 0,  
 		Description = "This will grant your tree 6 cycles", 
@@ -45,6 +49,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		LayoutOrder = 4,
 	}, 
 	Mythical = {
+		UID = "Mythical", 
 		Name = "Mythical", 
 		Amount = 0, 
 		Description = "This will grant your tree 10 cycles", 

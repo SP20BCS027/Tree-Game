@@ -7,6 +7,9 @@ local PlotsConfig = require(ReplicatedStorage.Configs.PlotsConfig)
 
 local Remotes = ReplicatedStorage.Remotes
 
+-- Updates the player's owned plots.
+-- Checks if the player has enough coins to purchase the plot.
+-- Calls the appropriate manager functions to purchase the plot and adjust the player's coins.
 local function UpdateOwnedPlots(player: Player, plot: directory)	
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -39,7 +42,7 @@ local function UpdateOwnedPlots(player: Player, plot: directory)
 	Manager.AdjustCoins(player, -PlotsConfig[plot.Id].Price)
 	local playerPlot = Houses.GetPlayerPlot(player, plot.Id)
 	if not playerPlot then return end 
-	for _, part in pairs (playerPlot:GetChildren()) do 
+	for _, part in pairs(playerPlot:GetChildren()) do 
 		if part:IsA("Part") then 
 			if part.Name == "AnimationPosition" then continue end 
 			part.Transparency = 0
@@ -48,6 +51,8 @@ local function UpdateOwnedPlots(player: Player, plot: directory)
 	end 
 end
 
+-- Deletes the tree in the specified plot for the player.
+-- Calls the appropriate manager function to delete the tree.
 local function DeleteTree(player: Player, plotID: string)
 	Manager.DeleteTree(player, plotID)
 
@@ -56,8 +61,8 @@ local function DeleteTree(player: Player, plotID: string)
 
 	local plotTree = Houses.GetTreeObject(playerPlot)
 	plotTree:Destroy()
-
 end
+
 
 Remotes.DeleteTree.OnServerEvent:Connect(DeleteTree)
 Remotes.UpdateOwnedPlots.OnServerEvent:Connect(UpdateOwnedPlots)

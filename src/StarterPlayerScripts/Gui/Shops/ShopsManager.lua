@@ -55,9 +55,8 @@ local ORIGINAL_SIZE_OF_NUMBERBUYBUTTON = NumberBuyButton.Size
 
 local Shops = {}
 
--- This function loads the Configs into the Shops Table
-
-local function GetDataFromConfigs()
+-- This function loads the data from Configs into the Shops table
+local function LoadDataFromConfigs()
     Shops["Backpacks"] = require(Configs.BackpacksConfig)
     Shops["Fertilizers"] = require(Configs.FertilizerConfig)
     Shops["Plots"] = require(Configs.PlotsConfig)
@@ -65,8 +64,9 @@ local function GetDataFromConfigs()
     Shops["WaterCans"] = require(Configs.WaterCanConfig)
 end
 
-GetDataFromConfigs()
+LoadDataFromConfigs()
 
+-- This function changes the colors of the UI elements based on the current shop
 local function ChangeColors()
     BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].BackgroundFrame
     HeadingFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].HeadingFrame
@@ -80,10 +80,9 @@ local function ChangeColors()
     IconImage.BackgroundColor3 = InventoryUIColors[CurrentShop].IconImage
 end
 
--- Thsi function Checks for owner of the Watering Can or the Bacpack and returns a boolean Value
-
+-- This function checks for ownership of the Watering Can or the Backpack and returns a boolean value
 local function CheckForOwnerShip(item)
-    item = if item then item else SelectedItem.Name
+    item = item or SelectedItem.Name
     if CurrentShop == "Backpacks" then 
         if State.GetData().OwnedBackpacks[item] then 
             return true
@@ -97,16 +96,16 @@ local function CheckForOwnerShip(item)
     return false 
 end
 
+-- This function checks for ownership of a plot and returns a boolean value
 local function CheckForPlotOwnerShip(Plot)
-    Plot = if Plot then Plot else SelectedItem.Id
+    Plot = Plot or SelectedItem.Id
     if State.GetData().Plots[Plot] then 
         return true
     end
     return false
 end
 
--- Thsi function Buys the Backpack if it is not already owned 
-
+-- This function buys the Backpack if it is not already owned
 local function BuyBackpack()
     if CheckForOwnerShip() then 
         SoundsManager.PlayDenialSound()
@@ -117,8 +116,8 @@ local function BuyBackpack()
 
     if State.GetData().Coins >= SelectedItem.Price then 
         SoundsManager.PlayPressSound()
-        Remotes.UpdateOwnedBackpacks:FireServer(SelectedItem.Name)
-        Remotes.GivePlayerBackpack:FireServer(SelectedItem.Name)
+        Remotes.UpdateOwnedBackpacks:FireServer(SelectedItem.UID)
+        Remotes.GivePlayerBackpack:FireServer(SelectedItem.UID)
         print("Bought")
         BuyButton.Text = "Owned"
         return
@@ -127,8 +126,8 @@ local function BuyBackpack()
     print("Not Enough Money")
 end
 
--- This function Buys the Watering Can if it is not already owned and player has enough Coins
 
+-- This function buys the Watering Can if it is not already owned and the player has enough Coins
 local function BuyWaterCan()
     if CheckForOwnerShip() then 
         SoundsManager.PlayDenialSound()
@@ -137,7 +136,7 @@ local function BuyWaterCan()
     end 
 
     if State.GetData().Coins >= SelectedItem.Price then 
-        Remotes.UpdateOwnedWaterCans:FireServer(SelectedItem.Name)
+        Remotes.UpdateOwnedWaterCans:FireServer(SelectedItem.UID)
         BuyButton.Text = "Owned"
         SoundsManager.PlayPressSound()
         print("Item Has been Bought")
@@ -147,12 +146,11 @@ local function BuyWaterCan()
     print("Not Enough Money")
 end
 
--- This function Buys the Selected Seed if the player has enough coins 
-
+-- This function buys the selected Seed if the player has enough Coins
 local function BuySeed()
     if State.GetData().Coins >= SelectedItem.Price then
         SoundsManager.PlayPressSound()
-		Remotes.UpdateOwnedSeeds:FireServer(AmountOfItems, SelectedItem.Name)
+		Remotes.UpdateOwnedSeeds:FireServer(AmountOfItems, SelectedItem.UID)
 		print("Bought")
 	else
         SoundsManager.PlayDenialSound()
@@ -160,12 +158,11 @@ local function BuySeed()
 	end
 end
 
--- This function Buys the Selected Fertilizer if the player has enough coins
-
+-- This function buys the selected Fertilizer if the player has enough Coins
 local function BuyFertilizer()
     if State.GetData().Coins >= SelectedItem.Price then
         SoundsManager.PlayPressSound()
-		Remotes.UpdateOwnedFertilizers:FireServer(AmountOfItems, SelectedItem.Name)
+		Remotes.UpdateOwnedFertilizers:FireServer(AmountOfItems, SelectedItem.UID)
 		print("Bought")
 	else
         SoundsManager.PlayDenialSound()
@@ -173,6 +170,7 @@ local function BuyFertilizer()
 	end
 end
 
+-- This function buys the selected Plot if it is not already owned, unlocked, and the player has enough Coins
 local function BuyPlot()
     if CheckForPlotOwnerShip() then 
         SoundsManager.PlayDenialSound()
@@ -197,12 +195,12 @@ local function BuyPlot()
     print("Not Enough Money")
 end
 
+-- This function sets the text of the AmountLabel to the current AmountOfItems value
 local function SetAmountLabelText()
     AmountLabel.Text = AmountOfItems
-end 
+end
 
--- This funcion shows all the stats of the Information Frame 
-
+-- This function shows all the stats in the Information Frame
 local function ShowStats()
     IconName.Visible = true
     IconPrice.Visible = true
@@ -216,15 +214,13 @@ local function ShowStats()
     end
     if CurrentShop == "Plots" then 
         IconAmount.Visible = false
-
     end
     IconImage.Visible = true 
     AmountLabel.Text = 1
     AmountOfItems = 1 
 end
 
--- This function Hides all the stats of the Information Frame 
-
+-- This function hides all the stats in the Information Frame
 local function HideStats()
     IconName.Visible = false
     IconPrice.Visible = false
@@ -235,8 +231,7 @@ local function HideStats()
     IconImage.Visible = false
 end
 
--- This funciton Loads the stats of the selected item into the Information Frame.
-
+-- This function loads the stats of the selected item into the Information Frame
 local function LoadStats(item)
     IconName.Text = NAME_TEXT:gsub("REPLACE", item.Name)
     IconPrice.Text = PRICE_TEXT:gsub("REPLACE", item.Price)
@@ -262,8 +257,7 @@ local function LoadStats(item)
     ShowStats()
 end
 
--- This Resets the Background Transparency of all the Icons in the current Menu
-
+-- This function resets the background transparency of all the icons in the current menu
 local function ResetTransparency()
     for _, item in ScrollingFrame:GetChildren() do 
         if item.Name == "UIGridLayout" then continue end
@@ -271,8 +265,7 @@ local function ResetTransparency()
     end
 end
 
--- This function Creates the Icon and Hooks up their pressed event 
-
+-- This function creates the icon and hooks up its pressed event
 local function CreateIcon(item)
     local icon = Template:Clone()
     icon.Parent = ScrollingFrame
@@ -311,8 +304,7 @@ local function CreateIcon(item)
     end)
 end
 
--- This function deletes all the Icons from the Shops Inventory
-
+-- This function deletes all the icons from the shop's inventory
 local function ClearInventory()
     for _, icon in ScrollingFrame:GetChildren() do 
         if icon.Name == "UIGridLayout" then continue end 
@@ -320,8 +312,7 @@ local function ClearInventory()
     end
 end
 
--- This function gets called to and creates all the Icons of the current Shop
-
+-- This function is called to generate and display the icons of the current shop
 function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     ClearInventory()
     if hideShop then 
@@ -346,8 +337,7 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?)
     end
 end
 
--- This closes the menu when the X button is pressed 
-
+-- This function closes the menu when the X button is pressed
 CloseButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     PlayerMovement:Movement(player, true)
@@ -364,8 +354,7 @@ CloseButton.MouseLeave:Connect(function()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
--- When the Buy Button is pressed calls the desired Buy Function
-
+-- When the Buy button is pressed, it calls the corresponding buy function based on the current shop
 BuyButton.MouseButton1Down:Connect(function()
     if CurrentShop == "Backpacks" then 
         BuyBackpack()
@@ -391,7 +380,7 @@ BuyButton.MouseLeave:Connect(function()
     BuyButton.Size = ORIGINAL_SIZE_OF_BUYBUTTON
 end)
 
-
+-- When the NumberBuyButton is pressed, it calls the corresponding buy function based on the current shop
 NumberBuyButton.MouseButton1Down:Connect(function()
     if CurrentShop == "Seeds" then 
         BuySeed()
@@ -407,6 +396,7 @@ NumberBuyButton.MouseEnter:Connect(function()
     SoundsManager.PlayEnterSound()
     NumberBuyButton.Size = ScalingUI.IncreaseBy5Percent(ORIGINAL_SIZE_OF_NUMBERBUYBUTTON)
 end)
+
 NumberBuyButton.MouseLeave:Connect(function()
     SoundsManager.PlayLeaveSound()
     NumberBuyButton.Size = ORIGINAL_SIZE_OF_NUMBERBUYBUTTON
@@ -415,6 +405,7 @@ end)
 MinusButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
 
+    -- Decrease the amount of items by 1, with a minimum value of 1
     if AmountOfItems < 2 then
         AmountOfItems = 1 
     else 
@@ -426,6 +417,7 @@ end)
 PlusButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
 
+    -- Increase the amount of items by 1, with a maximum value of 10
     if AmountOfItems > 9 then 
         AmountOfItems = 10 
     else 

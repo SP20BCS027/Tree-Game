@@ -6,10 +6,12 @@ local IndexManager = require(player:WaitForChild("PlayerScripts").Gui.Indexes.In
 local InventoryButtonUI = player.PlayerGui:WaitForChild("InventoryButton")
 local IndexButton = InventoryButtonUI.Frame.Index
 
+-- Update the tree index stats in the Index Manager
 IndexButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     IndexManager.ToggleSelectMenu()
     IndexManager.UpdateTreeIndexStats()
 end)
+
 
 

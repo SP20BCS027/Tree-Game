@@ -20,35 +20,41 @@ local SeedButton = ButtonsFrame.SeedButtonFrame.TextButton
 --local ToolButton = ButtonsFrame.ToolButtonFrame.TextButton
 local WaterCanButton = ButtonsFrame.WaterCanButtonFrame.TextButton
 
+-- When the Backpack button is pressed, generate the "Backpacks" inventory
 BackpackButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     MainInventoryManager.GenerateInventory("Backpacks")
 end)
 
+-- When the Fertilizer button is pressed, generate the "Fertilizers" inventory
 FertilizerButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     MainInventoryManager.GenerateInventory("Fertilizers")
 end)
 
+-- When the Seed button is pressed, generate the "Seeds" inventory
 SeedButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     MainInventoryManager.GenerateInventory("Seeds")
 end)
 
+-- When the Watering Can button is pressed, generate the "WaterCans" inventory
 WaterCanButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     MainInventoryManager.GenerateInventory("WaterCans")
 end)
 
+-- When the Inventory button is pressed, toggle the visibility of the MainInventoryUI
 InventoryButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
-    currentInventory = if currentInventory then currentInventory else "Backpacks"
+    currentInventory = currentInventory or "Backpacks"
     MainInventoryManager.GenerateInventory(currentInventory)
     UISettings.DisableAll("MainInventory")
     MainInventoryUI.Enabled = not MainInventoryUI.Enabled
 end)
 
+-- When the owned backpacks are updated, regenerate the current inventory
 ReplicatedStorage.Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function() 
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     if currentInventory then 
@@ -58,6 +64,7 @@ ReplicatedStorage.Remotes.UpdateOwnedBackpacks.OnClientEvent:Connect(function()
     end 
 end)
 
+-- When the owned water cans are updated, regenerate the current inventory
 ReplicatedStorage.Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     if currentInventory then 
@@ -67,6 +74,7 @@ ReplicatedStorage.Remotes.UpdateOwnedWaterCans.OnClientEvent:Connect(function()
     end
 end)
 
+-- When the data is reset, regenerate the current inventory
 ReplicatedStorage.Remotes.ResetData.OnClientEvent:Connect(function()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
     if currentInventory then 

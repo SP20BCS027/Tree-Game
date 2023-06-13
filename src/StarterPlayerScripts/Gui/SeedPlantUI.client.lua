@@ -15,15 +15,12 @@ local Template = PlotStatsUI.Template
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 local crouchAnimID = "rbxassetid://13248889864"
 
--- This function Moves the Character's Position 
-
+-- Function to change the character's position
 local function ChangeCharacterPosition(position)
 	character:WaitForChild("HumanoidRootPart").CFrame = position + VERTICAL_OFFSET
 end
 
--- This function when called loads up the menu where the Seed to be Planted is Selected 
--- It also makes the player unable to move 
-
+-- Function to plant a seed in a plot, disabling player movement during the animation
 local function PlantSeed(plotId: string, mudPosition: Vector3, animationPositionPart: Part)
 	if State.GetData().Plots[plotId].Tree == nil  then 
 		Remotes.Bindables.SelectSeed:Fire(plotId, mudPosition, animationPositionPart)
@@ -36,8 +33,7 @@ local function PlantSeed(plotId: string, mudPosition: Vector3, animationPosition
 	end
 end
 
--- This function when called Waters the tree in the selected Plot and renders the player motionless until the animation is complete 
-
+-- Function to water a tree in the selected plot and render the player motionless until the animation is complete
 local function WaterTree(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Tree ~= nil then
 		if State.GetData().Plots[plotId].Tree.TimeUntilWater < os.time() and State.GetData().Water > 0 then
@@ -61,11 +57,10 @@ local function WaterTree(plotId, animationPositionPart)
 	end
 end
 
--- This function when called collects the money from the tree in the Current Plot and renders the player motionless until the animation is complete 
-
+-- Function to collect money from the tree in the current plot and render the player motionless until the animation is complete
 local function CollectMoney(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Tree == nil then
-		print("The is no Tree in this Plot")
+		print("There is no Tree in this Plot")
 		return
 	end
 	if State.GetData().EquippedBackpack.Capacity <= State.GetData().Money then 
@@ -73,7 +68,6 @@ local function CollectMoney(plotId, animationPositionPart)
 		return
 	end
 	if State.GetData().Plots[plotId].Tree.TimeUntilMoney < os.time() then
-
 		Remotes.UpdateAchievements:FireServer("MoneyEarned", plotId)
 		Remotes.UpdateTreeMoneyTimer:FireServer(plotId)
 
@@ -90,8 +84,7 @@ local function CollectMoney(plotId, animationPositionPart)
 	end
 end
 
--- This function when called Opens the fertilization selection Menu and Fertilizes the plot. 
-
+-- Function to open the fertilization selection menu and fertilize the plot
 local function FertilizePlot(plotId, animationPositionPart)
 	if State.GetData().Plots[plotId].Tree == nil then return end 
 	Remotes.Bindables.SelectFertilizer:Fire(plotId, animationPositionPart)
@@ -99,8 +92,7 @@ local function FertilizePlot(plotId, animationPositionPart)
 	ChangeCharacterPosition(animationPositionPart.CFrame)
 end 
 
--- This function Generates the UIs for each plot the player owns and Adornees it to that plot
-
+-- Function to generate UIs for each plot the player owns and adornee them to the respective plots
 local function GenerateUIs()
 	for name, _ in (State.GetData().Plots) do
 		local Plot = Remotes.AskUIInformation:InvokeServer(name)
@@ -130,8 +122,7 @@ local function GenerateUIs()
 	end
 end
 
--- This function just deletes all the UIs from the plots
-
+-- Function to clear all UIs from the plots
 local function ClearUIs()
 	PlotStatsUI.PlotInteractive:ClearAllChildren()
 end
