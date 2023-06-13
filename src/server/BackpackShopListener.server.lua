@@ -10,10 +10,12 @@ local DELAY = 5
 local SHOP_ID = "Backpacks"
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
 
+-- Generates the UI for opening the backpack shop for the specified player.
+-- The function fires a remote event to open the backpack shop UI on the client-side.
 local function GenerateUI(player: Player)
     if Debounce[player] then return end 
 
-	Remotes.OpenBackpackShop:FireClient(player, SHOP_ID)
+    Remotes.OpenBackpackShop:FireClient(player, SHOP_ID)
 
     local character = player.Character 
     character.HumanoidRootPart.CFrame = TriggerPart.PositionPart.CFrame + VERTICAL_OFFSET
@@ -25,6 +27,7 @@ local function GenerateUI(player: Player)
     end)
 end
 
+-- When a player touches the trigger part, it generates the UI for the player by calling the GenerateUI function.
 local function ListenToWaterShopTouch()
     TriggerPart.Touched:Connect(function(hit)
         local player = Players:GetPlayerFromCharacter(hit.Parent)

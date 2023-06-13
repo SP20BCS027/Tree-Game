@@ -6,14 +6,16 @@ type SeedsConfigTemp = {
 }
 
 local SeedsConfig: {[string] : SeedsConfigTemp} = {
-	Basic = {
-		Name = "Basic", 
+	Common = {
+		UID = "Common", 
+		Name = "Common", 
 		Amount = 10, 
 		Description = "This will plant a Basic Tree", 
 		Price = 100,
 		LayoutOrder = 1, 
 	}, 
 	Uncommon = {
+		UID = "Uncommon", 
 		Name = "Uncommon", 
 		Amount = 10, 
 		Description = "This will plant an Uncommon Tree", 
@@ -21,6 +23,7 @@ local SeedsConfig: {[string] : SeedsConfigTemp} = {
 		LayoutOrder = 2, 
 	}, 
 	Rare = {
+		UID = "Rare", 
 		Name = "Rare", 
 		Amount = 10, 
 		Description = "This will plant a Rare Tree",
@@ -28,6 +31,7 @@ local SeedsConfig: {[string] : SeedsConfigTemp} = {
 		LayoutOrder = 3, 
 	}, 
 	Legendary = {
+		UID = "Legendary", 
 		Name = "Legendary", 
 		Amount = 10, 
 		Description = "This will plant a Legendary Tree", 
@@ -35,6 +39,7 @@ local SeedsConfig: {[string] : SeedsConfigTemp} = {
 		LayoutOrder = 4,
 	}, 
 	Mythical = {
+		UID = "Mythical", 
 		Name = "Mythical", 
 		Amount = 10, 
 		Description = "This will plant a Mythical Tree", 

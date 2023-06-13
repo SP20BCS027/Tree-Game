@@ -33,7 +33,7 @@ local Template = {
 	EquippedBackpack = BackpackConfig.DrawStringBag,
 	OwnedBackpacks = {
 		BasicBackpack = BackpackConfig.BasicBackpack,
-		DrawStringBag = BackpackConfig.DrawStringBag 
+		DrawStringBag = BackpackConfig.DrawStringBag,
 	},
 
 	Index = {

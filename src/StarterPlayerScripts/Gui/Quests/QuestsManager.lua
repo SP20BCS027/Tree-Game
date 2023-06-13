@@ -13,7 +13,7 @@ local MainFrame = QuestsUI.MainFrame
 --local BackgroundFrame = MainFrame.BackgroundFrame
 
 local CloseFrame = MainFrame.CloseFrame
-local CloseButton = CloseFrame.CloseButton
+local CloseButton = CloseFrame:WaitForChild("CloseButton")
 
 local InventoryFrame = MainFrame.InventoryFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame 
@@ -24,12 +24,14 @@ local linkedIcons = {}
 
 local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
+-- Toggles the visibility of icons associated with the given icon name
 local function LoadUnloadItems(iconName)
     for _, icon in pairs(linkedIcons[iconName]) do
         icon.Visible = not icon.Visible
     end
 end
 
+-- Generates icons for the given item and its associated tasks
 local function GenerateIcons(item)
     if not item.CurrentQuestInfo then return end
 
@@ -52,6 +54,7 @@ local function GenerateIcons(item)
         increment += 1 
     end
 
+    -- Click event for the quest title to load/unload associated tasks
     iconClone.QuestTitle.MouseButton1Down:Connect(function()
         LoadUnloadItems(iconClone.Name)
     end)
@@ -60,6 +63,7 @@ local function GenerateIcons(item)
 end
 
 local function ClearQuests()
+    -- Clears all quests/icons from the Quests UI
     for _, icon in pairs(ScrollingFrame:GetChildren()) do 
         if icon.Name == "UIListLayout" then continue end 
         icon:Destroy()
@@ -67,6 +71,7 @@ local function ClearQuests()
 end
 
 function Achievements.GenerateQuests()
+    -- Generates quests/icons in the Quests UI based on active quests in the player's data
     ClearQuests()
 
     for _, item in pairs(State.GetData().ActiveQuests) do 
@@ -74,6 +79,7 @@ function Achievements.GenerateQuests()
     end
 end
 
+-- Click event for the close button to close the Quests UI
 CloseButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayCloseSound()
     QuestsUI.Enabled = false

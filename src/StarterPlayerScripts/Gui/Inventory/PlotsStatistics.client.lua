@@ -37,13 +37,15 @@ local LoadedIcon
 local PreviousIcon
 
 local function ToggleHarvestAlertNotification()
+    -- Count the number of plots ready for harvest
     local numberOfHarvestReadyPlots = 0
-    for _, plot in pairs (State.GetData().Plots) do 
+    for _, plot in pairs(State.GetData().Plots) do 
         if plot.Tree == nil then continue end 
         if plot.Tree.TimeUntilMoney - os.time() <= 0 then 
             numberOfHarvestReadyPlots += 1 
         end
     end
+    -- Toggle the visibility of the harvest alert notification
     HarvestAlert.Visible = false
     if numberOfHarvestReadyPlots > 0 then 
         HarvestAlert.Visible = true 
@@ -51,6 +53,7 @@ local function ToggleHarvestAlertNotification()
 end
 
 local function ToggleWaterAlertNotification()
+    -- Count the number of plots ready for watering
     local numberOfWaterReadyPlots = 0
     for _, plot in State.GetData().Plots do 
         if plot.Tree == nil then continue end 
@@ -58,6 +61,7 @@ local function ToggleWaterAlertNotification()
             numberOfWaterReadyPlots += 1 
         end
     end
+    -- Toggle the visibility of the water alert notification
     WaterAlert.Visible = false
     if numberOfWaterReadyPlots > 0 then 
         WaterAlert.Visible = true 
@@ -65,6 +69,7 @@ local function ToggleWaterAlertNotification()
 end
 
 local function UpdateMoneyTimer(plotIcon)
+    -- Update the money timer for the specified plot
     local currentPlot = State.GetData().Plots[plotIcon.Name]
     if currentPlot.Tree then 
         local endTime = currentPlot.Tree.TimeUntilMoney
@@ -78,6 +83,7 @@ local function UpdateMoneyTimer(plotIcon)
 end
 
 local function UpdateWaterTimer(plotIcon)
+    -- Update the water timer for the specified plot
     local currentPlot = State.GetData().Plots[plotIcon.Name]
     if currentPlot.Tree then 
         local endTime = currentPlot.Tree.TimeUntilWater
@@ -91,6 +97,7 @@ local function UpdateWaterTimer(plotIcon)
 end
 
 local function UpdateTimers(plot)
+    -- Update the money and water timers for the given plot
     task.spawn(function()
         repeat
             local updateMoney = UpdateMoneyTimer(LoadedIcon)
@@ -107,20 +114,24 @@ local function UpdateTimers(plot)
 end 
 
 local function HideStats()
+    -- Hide the stats section in the selected frame
     SelectedFrame.Stats.Visible = false
     SelectedFrame.Plot_ID.Visible = false
     PreviousIcon = nil 
 end 
 
 local function ShowStats()
+    -- Show the stats section in the selected frame
     SelectedFrame.Stats.Visible = true
     SelectedFrame.Plot_ID.Visible = true
 end
 
 local function DeleteTree(plot)
+    -- Delete the tree associated with the given plot
     Remotes.DeleteTree:FireServer(plot)
 end
 
+-- Loads the stats for a plot and updates the UI accordingly
 local function LoadStats(plot)
     SelectedFrame.Plot_ID.Text = plot.Id
     StatsFrame.IconTreeName.Text = plot.Tree.Name
@@ -128,15 +139,19 @@ local function LoadStats(plot)
     StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", plot.Tree.CurrentLevel)
     StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", plot.Tree.CurrentCycle .. " / " .. plot.Tree.MaxCycle)
 
+    -- Show the stats section
     ShowStats()
+
     if PreviousIcon then 
         if LoadedIcon.Name == PreviousIcon.Name then return end 
         UpdateTimers(plot)
         return
     end 
+
     UpdateTimers(plot)
 end
 
+-- Creates a plot icon and sets up its functionality
 local function CreateIcon(plot)
     local plotIcon = Template:Clone()
     plotIcon.Parent = ScrollingFrame
@@ -144,12 +159,16 @@ local function CreateIcon(plot)
     plotIcon.Name = plot.Id
     plotIcon.LayoutOrder = plot.LayoutOrder
     plotIcon:WaitForChild("ItemName").Text = plot.Id 
+
+    -- Display alerts based on the time until money and water
     if plot.Tree.TimeUntilMoney - os.time() <= 0 then 
         plotIcon.AlertFrame.WaterAlert.Visible = true
     end 
     if plot.Tree.TimeUntilWater - os.time() <= 0 then 
         plotIcon.AlertFrame.HarvestAlert.Visible = true
     end 
+
+    -- Handle mouse interactions with the plot icon
     plotIcon.MouseButton1Down:Connect(function()
         SoundsManager.PlayPressSound()
         LoadedIcon = plotIcon
@@ -157,6 +176,7 @@ local function CreateIcon(plot)
         PreviousIcon = LoadedIcon
     end)
 
+    -- Handle delete button interactions
     local ORIGINAL_SIZE_OF_PLOTDELETEBUTTON = plotIcon.DeleteButton.Size
 
     plotIcon.DeleteButton.MouseButton1Down:Connect(function()
@@ -168,36 +188,41 @@ local function CreateIcon(plot)
         SoundsManager.PlayEnterSound()
         plotIcon.DeleteButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_PLOTDELETEBUTTON)
     end)
+
     plotIcon.DeleteButton.MouseLeave:Connect(function()
         SoundsManager.PlayLeaveSound()
         plotIcon.DeleteButton.Size = ORIGINAL_SIZE_OF_PLOTDELETEBUTTON
     end)
 end
 
+-- Generates the plot icons in the UI based on the data in State
 local function GeneratePlotsUI()
-    for _, plot in (State.GetData().Plots) do 
+    for _, plot in pairs(State.GetData().Plots) do 
         if plot.Tree == nil then continue end
         CreateIcon(plot)
     end
 end
 
+-- Clears the plot icons from the UI
 local function ClearPlotIcons()
-    for _, icon in pairs (ScrollingFrame:GetChildren()) do 
+    for _, icon in pairs(ScrollingFrame:GetChildren()) do 
         if icon.Name == "UIGridLayout" then continue end 
         icon:Destroy()
     end
     HideStats()
 end
 
+-- Generate the plot icons UI
 GeneratePlotsUI()
 
+-- Update the level label for a specific plot icon
 local function UpdateLevelLabel(plotIconID)
     local plotIcon = ScrollingFrame[plotIconID]
     local currentPlot = State.GetData().Plots[plotIcon.Name]
 
     StatsFrame.IconLevel.Text = LEVEL:gsub("AMOUNT", currentPlot.Tree.CurrentLevel)
 end
-
+-- Update the cycle label for a specific plot icon
 local function UpdateCycleLabel(plotIconID)
     local plotIcon = ScrollingFrame[plotIconID]
     local currentPlot = State.GetData().Plots[plotIcon.Name]
@@ -205,6 +230,7 @@ local function UpdateCycleLabel(plotIconID)
     StatsFrame.IconCycle.Text = CYCLE:gsub("AMOUNT", currentPlot.Tree.CurrentCycle .. " / " .. currentPlot.Tree.MaxCycle) 
 end
 
+-- Handles the button click event for the "Plots" button
 PlotsButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     UISettings.DisableAll("Plots_Stats")
@@ -213,6 +239,7 @@ PlotsButton.MouseButton1Down:Connect(function()
     GeneratePlotsUI()
 end)
 
+-- Handles the button click event for the "Close" button
 CloseButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayCloseSound()
     PlotsGUI.Enabled = false
@@ -220,52 +247,63 @@ CloseButton.MouseButton1Down:Connect(function()
     GeneratePlotsUI()
 end)
 
+-- Handles the mouse enter event for the "Close" button
 CloseButton.MouseEnter:Connect(function()
     SoundsManager.PlayEnterSound()
     CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
 end)
 
+-- Handles the mouse leave event for the "Close" button
 CloseButton.MouseLeave:Connect(function()
     SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
 end)
 
+-- Handles the button click event for the "Delete" button
 DeleteButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     DeleteTree(LoadedIcon.Name)
 end)
 
+-- Handles the mouse enter event for the "Delete" button
 DeleteButton.MouseEnter:Connect(function()
     SoundsManager.PlayEnterSound()
     DeleteButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_DELETEBUTTON)
 end)
 
+-- Handles the mouse leave event for the "Delete" button
 DeleteButton.MouseLeave:Connect(function()
     SoundsManager.PlayLeaveSound()
     DeleteButton.Size = ORIGINAL_SIZE_OF_DELETEBUTTON
 end) 
 
+-- Handles the client event for updating the tree level and cycle
 Remotes.UpdateTreeLevel.OnClientEvent:Connect(function(plotID: string)
-        task.delay(0, function()
-            UpdateLevelLabel(plotID)
-            UpdateCycleLabel(plotID)
-        end)
+    task.delay(0, function()
+        UpdateLevelLabel(plotID)
+        UpdateCycleLabel(plotID)
+    end)
 end)
 
+-- Handles the client event for updating owned plots
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
-    --clearPlotIcons()
-    --task.delay(0, generatePlotsUI)
+    -- clearPlotIcons()
+    -- task.delay(0, generatePlotsUI)
 end)
-Remotes.UpdateOccupied.OnClientEvent:Connect(function()
+
+-- Handles the client event for updating the tree
+Remotes.UpdateTree.OnClientEvent:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
 end)
 
+-- Handles the client event for deleting a tree
 Remotes.DeleteTree.OnClientEvent:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)
 end)
 
+-- Handles the client event for updating the alerts
 Remotes.Bindables.UpdateAlert.Event:Connect(function()
     ToggleWaterAlertNotification()
     ToggleHarvestAlertNotification()
@@ -273,6 +311,7 @@ Remotes.Bindables.UpdateAlert.Event:Connect(function()
     GeneratePlotsUI()
 end)
 
+-- Handles the client event for resetting data
 Remotes.ResetData.OnClientEvent:Connect(function()
     ClearPlotIcons()
     task.delay(0, GeneratePlotsUI)

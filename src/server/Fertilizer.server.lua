@@ -9,6 +9,8 @@ local Remotes = ReplicatedStorage.Remotes
 
 local FERTLIZEAMOUNT = 1 
 
+-- Updates the amount of fertilizers for the specified player.
+-- Calls the appropriate manager functions to adjust the player's coins and fertilizers.
 local function UpdateFertilizers(player: Player, amount: number, fertilizerType: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
@@ -27,11 +29,13 @@ local function UpdateFertilizers(player: Player, amount: number, fertilizerType:
 	Manager.AdjustFertilizer(player, amount, fertilizerType)
 end
 
+-- Fertilizes the tree in the specified plot for the specified player.
+-- Calls the appropriate manager functions to adjust the fertilizers, tree level, and tree index.
+-- Calls the Houses module to update the tree model if the tree level increases.
 local function FertilizeTree(player: Player, plotID: string, fertilizerType: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	-- Server Side Sanity Checks
 	if not profile.Data.Plots[plotID] then 
 		print("This Plot " .. plotID .. " does not exist for player " .. player.Name .. " ~~ Server")
 		return
@@ -43,7 +47,7 @@ local function FertilizeTree(player: Player, plotID: string, fertilizerType: str
 	end
 
 	if not profile.Data.Fertilizers[fertilizerType] then 
-		print("This fertlizer " .. fertilizerType .. " is Invalid")
+		print("This fertilizer " .. fertilizerType .. " is invalid")
 		return
 	end
 
@@ -62,7 +66,8 @@ local function FertilizeTree(player: Player, plotID: string, fertilizerType: str
 		Manager.AdjustTreeIndex(player, tree, treeLevel)
 		Houses.ChangeTreeModel(plotObject, treeLevel, treeRarity)
 	end
-end 
+end
+
 
 Remotes.FertilizeTree.OnServerEvent:Connect(FertilizeTree)
 Remotes.UpdateOwnedFertilizers.OnServerEvent:Connect(UpdateFertilizers)

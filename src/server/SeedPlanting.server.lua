@@ -8,6 +8,9 @@ local Houses = require(ServerScriptService.Houses)
 local Remotes = ReplicatedStorage.Remotes
 local TreeModels = ReplicatedStorage.Trees
 
+-- Selects a tree based on the given seed.
+-- Iterates through the TreeConfig and adds trees with matching rarity to the sortedTrees table.
+-- Randomly selects an index from sortedTrees and returns the corresponding tree.
 local function selectTree(seed)
 	local sortedTrees = {}
 	for _, tree in TreeConfig do
@@ -20,12 +23,15 @@ local function selectTree(seed)
 	return sortedTrees[randomIndex]
 end
 
+-- Spawns a tree model at the specified spawnPosition for the given tree and seed.
 local function spawnTree(spawnPosition, tree, seed, plotObject)
 	local treeModel: Model = TreeModels:FindFirstChild(seed):FindFirstChild(tree):FindFirstChild(1):FindFirstChild(tree):Clone()
 	treeModel.Parent = plotObject
 	treeModel:PivotTo(CFrame.new(spawnPosition + Vector3.new(0, 5, 0)))
 end
 
+-- Changes the occupation status of a plot by planting a tree.
+-- Adjusts the plot occupation status.
 local function ChangeOccupationStatus(player: Player, plotID: number, seed, spawnPosition)
 	-- add a server side check to check plot occupation maybe? 
 	local profile = Manager.Profiles[player]

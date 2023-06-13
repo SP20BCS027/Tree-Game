@@ -17,7 +17,6 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Name = "First Plot",
 		Id = "Plot_1",
 		Tree = nil, 
-		Position = 0, 
 		Price = 100,
 		LayoutOrder = 1, 
 	},
@@ -48,7 +47,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Name = "Fifth Plot",
 		Id = "Plot_5",
 		Tree = nil, 
-    Price = 50000,
+    	Price = 50000,
 		LayoutOrder = 5, 
 
 	}, 

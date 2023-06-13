@@ -11,22 +11,25 @@ local AchievementInfoConfig = require(ReplicatedStorage.Configs.AchievementInfoC
 
 local AchievementConfig :{[string] : AchievementsConfigTemplate} = {
 	SeedsPlanted = {
+		UID = "SeedsPlanted", 
 		Name = "Seeds Planted", 
 		CurrentAchievementNo = 1,
 		AmountAchieved = 0,
-		AmountToAchieve = AchievementInfoConfig["SeedsPlanted"][1],
+		AmountToAchieve = AchievementInfoConfig["SeedsPlanted"][1].Amount,
 	}, 
 	MoneyEarned = {
+		UID = "MoneyEarned",
 		Name = "Money Collected", 
 		CurrentAchievementNo = 1,
 		AmountAchieved = 0,
-		AmountToAchieve = AchievementInfoConfig["MoneyEarned"][1],
+		AmountToAchieve = AchievementInfoConfig["MoneyEarned"][1].Amount,
 	}, 
 	CoinsEarned = {
+		UID = "CoinsEarned",
 		Name = "Coins Earned", 
 		CurrentAchievementNo = 1, 
 		AmountAchieved = 0, 
-		AmountToAchieve = AchievementInfoConfig["CoinsEarned"][1], 
+		AmountToAchieve = AchievementInfoConfig["CoinsEarned"][1].Amount, 
 	}	
 }
 
