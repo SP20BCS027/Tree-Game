@@ -11,7 +11,7 @@ local House = {}
 
 House.__index = House
 
--- House class constructor
+-- House Creator
 function House.new(houseFolder, allHouses)
 	local houseObject = {}
 	setmetatable(houseObject, House)
@@ -21,8 +21,11 @@ function House.new(houseFolder, allHouses)
 	houseObject.well = houseFolder.Well
 	houseObject.owner = nil
 	houseObject.signLabel = houseFolder.Claim_Part.BillboardGui.TextLabel
+	houseObject.displayLabel = houseFolder.OwnerPart.SurfaceGui.TextLabel
 	houseObject.allHouses = allHouses
+	houseObject.ownerPart = houseFolder.OwnerPart
 	houseObject.Plots = {}
+	
 
 	-- Store plot references in the house object
 	for _, plot in pairs(houseFolder.Plots:GetChildren()) do 
@@ -47,7 +50,7 @@ function House.new(houseFolder, allHouses)
 	game.Players.PlayerRemoving:Connect(function(player: Player)
 		if houseObject.owner == player then
 			houseObject.owner = nil
-			House.ClearPlotOnPlayerLeaving(houseObject)
+			House.ClearPlot(houseObject)
 		end
 	end)
 
@@ -57,6 +60,7 @@ end
 -- Update the sign label text to show the owner's name or "No Owner!"
 function House:Update()
 	self.signLabel.Text = self.owner and self.owner.Name or "No Owner!"
+	self.displayLabel.Text = self.owner and self.owner.Name or "No Owner!"
 end
 
 -- Check if the given player owns any house among all houses
@@ -69,9 +73,19 @@ function House:CheckOwner(player: Player)
 	return false
 end
 
+-- Check if the given player owns a house and returns the house 
+-- function House.GetPlayerHouse(player: Player)
+-- 	print("Get Player House function got called")
+-- 	for _, house in pairs(self.allHouses) do 
+-- 		if house.owner == player then 
+-- 			return house
+-- 		end
+-- 	end
+-- end
+
 -- Plant trees in the house based on player data plots
 function House.PlantTrees(house, playerDataPlots)
-	for name, plot in pairs(house.Plots)do 
+	for name, plot in pairs(house.Plots) do 
 		if not playerDataPlots[name] then continue end
 		if not playerDataPlots[name].Tree then continue end
 
@@ -99,7 +113,7 @@ function House.GeneratePlots(house, playerDataPlots)
 end 
 
 -- Clear plots when the owner leaves the game
-function House.ClearPlotOnPlayerLeaving(house)
+function House.ClearPlot(house)
 	for _, plot in house.Plots do 
 		for _, part in plot:GetChildren() do 
 			if part:IsA("Part") then 
@@ -112,6 +126,23 @@ function House.ClearPlotOnPlayerLeaving(house)
 			end
 		end
 	end 
+end
+
+function House.ClearPlotOnDataReset(house)
+	if house == nil then 
+		print("The player's house doesn not exist")
+		return 
+	end
+
+	local player = house.owner
+
+	local profile = Manager.Profiles[player]
+	if not profile then return end 
+
+	House.ClearPlot(house)
+	task.delay(0, function()
+		House.GeneratePlots(house, profile.Data.Plots)	
+	end)
 end
 
 return House

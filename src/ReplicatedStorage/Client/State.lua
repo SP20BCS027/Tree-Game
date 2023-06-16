@@ -52,7 +52,8 @@ end)
 
 -- Reset the player data to the template data
 Remotes.ResetData.OnClientEvent:Connect(function()
-	PlayerData = Template
+	local templateClone = table.clone(Template)
+	PlayerData = templateClone
 end)
 
 -- Update the tree in a specific plot of the player data

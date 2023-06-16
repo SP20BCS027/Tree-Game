@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local TriggerPart = WorkSpace.WateringCanShop
+local TriggerPart = WorkSpace:WaitForChild("Shops").WateringCanShop.TouchPart
 local Debounce = {}
 local DELAY = 5
 local SHOP_ID = "WaterCans"
@@ -16,7 +16,7 @@ local function GenerateUI(player: Player)
 	Remotes.OpenWaterCanShop:FireClient(player, SHOP_ID)
     
     local character = player.Character 
-    character.HumanoidRootPart.CFrame = TriggerPart.PositionPart.CFrame + VERTICAL_OFFSET
+    character.HumanoidRootPart.CFrame = TriggerPart.Parent.PositionPart.CFrame + VERTICAL_OFFSET
 
     Debounce[player] = true
     task.delay(DELAY, function()

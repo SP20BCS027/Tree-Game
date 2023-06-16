@@ -128,6 +128,12 @@ local function ClearUIs()
 end
 
 Remotes.EstablishPlotsUI.OnClientEvent:Connect(GenerateUIs)
+Remotes.ResetData.OnClientEvent:Connect(function()
+	ClearUIs()
+	task.delay(0, function()
+		GenerateUIs()
+	end)
+end)
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()
 	ClearUIs()
 	task.delay(0, function()
