@@ -55,7 +55,6 @@ function Manager.AdjustWater(player: Player, amount: number?)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	-- If `amount` is provided, use that value; otherwise, use a default value of 1
 	amount = amount or 1
 
 	profile.Data.Water -= amount
@@ -218,15 +217,16 @@ local function GiveAchievementRewards(player: Player, achievementType: string, a
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	for item, value in AchievementInfoConfig[achievementType][achievementNo].Reward do 
-		if item == "Coins" then 
-			print("Player has been rewarded coins!")
-			Manager.AdjustCoins(player, value)
-		end
-		if item == "Gems" then 
-			print("Player has been rewarded Gems!")
-			Manager.AdjustGems(player, value)
-		end
+	if AchievementInfoConfig[achievementType][achievementNo]["Reward"]["Coins"] then 
+		local value = AchievementInfoConfig[achievementType][achievementNo]["Reward"]["Coins"]
+		print("Player has been rewarded coins!")
+		Manager.AdjustCoins(player, value)
+	end
+
+	if AchievementInfoConfig[achievementType][achievementNo]["Reward"]["Gems"] then 
+		local value = AchievementInfoConfig[achievementType][achievementNo]["Reward"]["Gems"]
+		print("Player has been rewarded Gems!")
+		Manager.AdjustGems(player, value)
 	end
 end
 
@@ -291,8 +291,11 @@ Remotes.GetAllData.OnServerInvoke = GetAllData
 function Manager.ResetAllData(player: Player)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
-	
-	Manager.Profiles[player].Data = Template
+
+	print("Reset Manager function got called")
+	local templateClone = table.clone(Template)
+	Manager.Profiles[player].Data = templateClone
+	print(templateClone)
 	player.leaderstats.Coins.Value = profile.Data.Coins
 	player.leaderstats.Gems.Value = profile.Data.Gems 
 	Remotes.ResetData:FireClient(player)

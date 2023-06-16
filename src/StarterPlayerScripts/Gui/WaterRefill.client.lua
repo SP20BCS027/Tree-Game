@@ -9,7 +9,6 @@ local AnimationHandler = require(player:WaitForChild("PlayerScripts").Gui.Animat
 local State = require(ReplicatedStorage.Client.State)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 
-
 local UI = player.PlayerGui:WaitForChild("WaterRefill")
 local RefillIcon = UI.IconHolder
 

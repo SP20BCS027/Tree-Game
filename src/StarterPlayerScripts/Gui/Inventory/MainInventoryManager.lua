@@ -215,7 +215,6 @@ EquipButton.MouseButton1Down:Connect(function()
     end 
 
     SoundsManager.PlayPressSound()
-
     EquippedItem = SelectedItem
     
     if CurrentInventory == "Backpacks" then 

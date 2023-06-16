@@ -12,6 +12,7 @@ local function CreateHouses()
         local houseObj = House.new(houseFolder, Houses)
         table.insert(Houses, houseObj)
     end
+	print(Houses)
 end
 
 -- Invoke the house creation function
@@ -40,6 +41,14 @@ function HouseModule.GetNoOwnerHouseClaimParts()
 		end
 	end
 	return NoOwnerHouses
+end
+
+function HouseModule.GetPlayerHouse(player: Player)
+	for _, house in pairs(Houses) do 
+		if house.owner == player then 
+			return house
+		end 
+	end
 end
 
 -- Return the well associated with the player's owned house
@@ -108,6 +117,5 @@ task.spawn(function()
         end
     end
 end)
-
 
 return HouseModule

@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local TriggerPart = WorkSpace.FertilizerShop 
+local TriggerPart = WorkSpace:WaitForChild("Shops").FertilizerShop.TouchPart
 local Debounce = {}
 local DELAY = 5
 local VERTICAL_OFFSET = Vector3.new(0, 3, 0)
@@ -16,7 +16,7 @@ local function GenerateUI(player: Player)
 	Remotes.OpenFertilizerShop:FireClient(player, SHOP_ID)
 
     local character = player.Character 
-    character.HumanoidRootPart.CFrame = TriggerPart.PositionPart.CFrame + VERTICAL_OFFSET
+    character.HumanoidRootPart.CFrame = TriggerPart.Parent.PositionPart.CFrame + VERTICAL_OFFSET
     Debounce[player] = true
     task.delay(DELAY, function()
         Debounce[player] = nil 

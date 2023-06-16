@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 
 local Remotes = ReplicatedStorage.Remotes
 
-local TriggerPart = WorkSpace.BackpackShop
+local TriggerPart = WorkSpace:WaitForChild("Shops").BackpackShop.TouchPart
 local Debounce = {}
 local DELAY = 5
 local SHOP_ID = "Backpacks"
@@ -18,7 +18,7 @@ local function GenerateUI(player: Player)
     Remotes.OpenBackpackShop:FireClient(player, SHOP_ID)
 
     local character = player.Character 
-    character.HumanoidRootPart.CFrame = TriggerPart.PositionPart.CFrame + VERTICAL_OFFSET
+    character.HumanoidRootPart.CFrame = TriggerPart.Parent.PositionPart.CFrame + VERTICAL_OFFSET
 
     Debounce[player] = true
 
