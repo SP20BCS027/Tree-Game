@@ -17,6 +17,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		Type = "Basic", 
 		Cycles = 2,
 		LayoutOrder = 1,
+		imageID = "rbxassetid://13806779858" 
 	}, 
 	Uncommon = {
 		UID = "Uncommon",
@@ -27,6 +28,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		Type = "Uncommon", 
 		Cycles = 3, 
 		LayoutOrder = 2, 
+		imageID = "rbxassetid://13806741893" 
 	}, 
 	Rare = {
 		UID = "Rare", 
@@ -37,6 +39,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		Type = "Rare", 
 		Cycles = 4, 
 		LayoutOrder = 3,
+		imageID = "rbxassetid://13806765322" 
 	}, 
 	Legendary = {
 		UID = "Legendary",
@@ -47,6 +50,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		Type = "Legendary", 
 		Cycles = 6, 
 		LayoutOrder = 4,
+		imageID = "rbxassetid://13806768473" 
 	}, 
 	Mythical = {
 		UID = "Mythical", 
@@ -57,6 +61,7 @@ local FertilizerConfig :{[string] : FertilizerConfigTemp} = {
 		Type = "Mythical", 
 		Cycles = 10,
 		LayoutOrder = 5,
+		imageID = "rbxassetid://13806770908" 
 	}
 }
 

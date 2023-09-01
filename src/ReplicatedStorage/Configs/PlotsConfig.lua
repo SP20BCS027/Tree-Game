@@ -19,6 +19,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Tree = nil, 
 		Price = 100,
 		LayoutOrder = 1, 
+		imageID = "rbxassetid://13806908261"
 	},
 	Plot_2 = {
 		Name = "Second Plot",
@@ -26,6 +27,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Tree = nil, 
 		Price = 500,
 		LayoutOrder = 2, 
+		imageID = "rbxassetid://13806908261"
 	}, 
 	Plot_3 = {
 		Name = "Third Plot",
@@ -33,7 +35,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Tree = nil, 
 		Price = 2000,
 		LayoutOrder = 3, 
-
+		imageID = "rbxassetid://13806908261"
 	}, 
 	Plot_4 = {
 		Name = "Fourth Plot",
@@ -41,7 +43,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Tree = nil, 
 		Price = 25000,
 		LayoutOrder = 4, 
-
+		imageID = "rbxassetid://13806908261"
 	}, 
 	Plot_5 = {
 		Name = "Fifth Plot",
@@ -49,7 +51,7 @@ local Plots: {[number] : PlotsConfigTemp} = {
 		Tree = nil, 
     	Price = 50000,
 		LayoutOrder = 5, 
-
+		imageID = "rbxassetid://13806908261"
 	}, 
 }
 

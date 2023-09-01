@@ -13,6 +13,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 0, 
 		Description = "This is the smallest backpack",
 		LayoutOrder = 1,
+		imageID = "rbxassetid://13806571993"
 	}, 
 	DrawStringBag = {
 		UID = "DrawStringBag", 
@@ -21,6 +22,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 10, 
 		Description = "This is the Draw String Bag", 
 		LayoutOrder = 2, 
+		imageID = "rbxassetid://13806575571"
 	}, 
 	BasicBackpack = {
 		UID = "BasicBackpack",
@@ -29,6 +31,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 25, 
 		Description = "This is the Basic of the Basic Backpacks",
 		LayoutOrder = 3, 
+		imageID = "rbxassetid://13806578113"
 	}, 
 	TravelerBackpack = {
 		UID = "TravelerBackpack", 
@@ -37,6 +40,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 50, 
 		Description = "This is the Essential backpack for traveling", 
 		LayoutOrder = 4, 
+		imageID = "rbxassetid://13806584768"
 	}, 
 	HikerBackpack = {
 		UID = "HikerBackpack", 
@@ -45,6 +49,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 70, 
 		Description = "This is the backpack all Hiker's carry.", 
 		LayoutOrder = 5,
+		imageID = "rbxassetid://13806602429"
 	}, 
 	AdventurerBackpack = {
 		UID = "AdventurerBackpack", 
@@ -53,6 +58,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 90, 
 		Description = "This is the backpack of a true adventurer", 
 		LayoutOrder = 6,
+		imageID = "rbxassetid://13806627165"
 	}, 
 	ExplorerBackpack = {
 		UID = "ExplorerBackpack", 
@@ -61,6 +67,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 100, 
 		Description = "This backpack can only be worn by a true explorer", 
 		LayoutOrder = 7,
+		imageID = "rbxassetid://13806602429"
 	}, 
 	MasterBackpack = {
 		UID = "MasterBackpack", 
@@ -69,6 +76,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 100, 
 		Description = "Legend has it that this backpack belonged to master shifu.", 
 		LayoutOrder = 8, 
+		imageID = "rbxassetid://13806642288"
 	}, 
 	LegendBackpack = {
 		UID = "LegendBackpack", 
@@ -77,6 +85,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 100, 
 		Description = "This is the Legend Backpack? What does that even mean?",
 		LayoutOrder = 9,
+		imageID = "rbxassetid://13806659349"
 	}, 
 	DivineBackpack = {
 		UID = "DivineBackpack", 
@@ -85,6 +94,7 @@ local Backpacks: {[string]: BackpackConfigTemp} = {
 		Price = 100, 
 		Description = "DivineBackpack (O)_(O)...",
 		LayoutOrder = 10,
+		imageID = "rbxassetid://13806680348"
 	}
 }
 

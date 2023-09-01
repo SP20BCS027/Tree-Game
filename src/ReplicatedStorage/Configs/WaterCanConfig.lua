@@ -13,6 +13,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 0, 
 		Description = "This is the smallest of the smallest watering cans out there. It can barely hold a drop", 
 		LayoutOrder = 1, 
+		imageID = "rbxassetid://13806800107" 
 	}, 
 	BasicWateringCan = {
 		UID = "BasicWateringCan", 
@@ -21,6 +22,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 100, 
 		Description = "This is the basic essential watering can that every gardern must have", 
 		LayoutOrder = 2, 
+		imageID = "rbxassetid://13806804274" 
 	}, 
 	WideMouthWateringCan = {
 		UID = "WideMouthWateringCan", 
@@ -29,6 +31,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 500, 
 		Description = "As the name suggests this watering can has an unusually wide mouth", 
 		LayoutOrder = 3, 
+		imageID = "rbxassetid://13806807988" 
 	}, 
 	TeapotWateringCan = {
 		UID = "TeapotWateringCan", 
@@ -37,6 +40,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 1000, 
 		Description = "This watering can is literally a teapot", 
 		LayoutOrder = 4, 
+		imageID = "rbxassetid://13806811009" 
 	}, 
 	DeluxeWateringCan = {
 		UID = "DeluxeWateringCan", 
@@ -45,6 +49,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 2000, 
 		Description = "This is a super premium watering can made out of luxury materials", 
 		LayoutOrder = 5, 
+		imageID = "rbxassetid://13806814139" 
 	}, 
 	HoseAttachmentWateringCan = {
 		UID = "HoseAttachmentWateringCan", 
@@ -53,6 +58,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 5000, 
 		Description = "This watering can has a hose attached to its mouth", 
 		LayoutOrder = 6, 
+		imageID = "rbxassetid://13806816929"
 	}, 
 	LongSpoutWateringCan = {
 		UID = "LongSpoutWateringCan", 
@@ -61,6 +67,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 10000, 
 		Description = "This watering can has a longer than usual spout", 
 		LayoutOrder = 7, 
+		imageID = "rbxassetid://13806828452"
 	}, 
 	VintageWateringCan = {
 		UID = "VintageWateringCan", 
@@ -69,6 +76,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 15000, 
 		Description = "This watering can is said to be more than 5000 years old", 
 		LayoutOrder = 8,
+		imageID = "rbxassetid://13806833092"
 	}, 
 	SelfWateringCan = {
 		UID = "SelfWateringCan", 
@@ -77,6 +85,7 @@ local WaterCanConfig: {[string]: WaterCanConfigTemp} = {
 		Price = 50000, 
 		Description = "This watering can has a very futuristic look but definitly doesn't water the trees itself.", 
 		LayoutOrder = 9,
+		imageID = "rbxassetid://13806838223"
 	}
 }
 

@@ -65,6 +65,10 @@ local function CreateSeedIcon(seed)
     seedIcon.ItemName.Text = seed.Name
     seedIcon.Name = seed.Name
 
+    if seed.imageID then 
+        seedIcon.ImageLabel.Image = seed.imageID
+    end
+
     if seed.Amount <= 0 then
         seedIcon.Visible = false
     end

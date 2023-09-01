@@ -6,6 +6,7 @@ local Trees = ReplicatedStorage.Trees
 local House = require(game.ServerScriptService.Classes.House)
 local Houses = {}
 local HouseModule = {}
+
 -- Create houses by iterating over house folders in the workspace
 local function CreateHouses()
     for _, houseFolder in pairs(workspace.Houses:GetChildren()) do 

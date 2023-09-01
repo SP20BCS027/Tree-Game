@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local WorkSpace = game:GetService("Workspace")
 
 local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes 
@@ -7,6 +8,9 @@ local DungeonsConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
+
+local PhysicalDungeons = WorkSpace:WaitForChild("PhysicalDungeons")
+local TutorialDungeon = PhysicalDungeons:WaitForChild("TutorialDungeon")
 
 local DungeonUI = player.PlayerGui:WaitForChild("DungeonSelectMenu")
 local CloseFrame = DungeonUI.CloseFrame
@@ -34,7 +38,7 @@ local function UpdateSelectFrame(DungeonName)
     BattleButton.MouseButton1Down:Connect(function()
         SoundsManager.PlayPressSound()
         local playerModel = player.Character
-        playerModel.HumanoidRootPart.CFrame = CFrame.new(-80.5, 20.5, 82.7)
+        playerModel.HumanoidRootPart.CFrame = TutorialDungeon.SpawnPoint.CFrame + Vector3.new(0, 3, 0)
         DungeonUI.Enabled = false
     end)
 end

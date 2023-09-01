@@ -49,8 +49,8 @@ end
 -- Load the stats of the selected fertilizer and display them in the UI.
 local function LoadStats(fertilizer)
     StatsFrame.Description.IconDescription.Text = fertilizer.Description
-    StatsFrame.IconName.Text = AMOUNT:gsub("REPLACE", fertilizer.Name)
-    StatsFrame.IconAmount.Text = NAME:gsub("REPLACE", fertilizer.Amount)
+    StatsFrame.IconName.Text = NAME:gsub("REPLACE", fertilizer.Name)
+    StatsFrame.IconAmount.Text = AMOUNT:gsub("REPLACE", fertilizer.Amount)
     Fertilizer = fertilizer
     MakeStatsVisible()
 end
@@ -62,6 +62,11 @@ local function CreateFertilizerIcon(fertilizer)
     fertilizerIcon.Parent = ScrollingFrame
     fertilizerIcon.ItemName.Text = fertilizer.Name
     fertilizerIcon.Name = fertilizer.Name
+
+    if fertilizer.imageID then 
+        fertilizerIcon.ImageLabel.Image = fertilizer.imageID
+    end
+
 
     if fertilizer.Amount <= 0 then
         fertilizerIcon.Visible = false
