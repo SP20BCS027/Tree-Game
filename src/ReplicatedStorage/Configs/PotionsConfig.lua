@@ -1,0 +1,122 @@
+export type Armor = {
+	UIID : string, 
+	Name: string,
+	Description: string, 
+	Defense: number, 
+	Type: string, 
+	Rarity: string, 
+	Equipped: boolean,
+}
+
+local Potions = {
+	Attack = {
+		DoubleAttack = {
+			UIID = "DA__001", 
+			Name = "Double Attack Potion", 
+			Description = "This doubles your weapons attack for 5 mins", 
+			Type = "Attack", 
+			Multiplier = 2, 
+			Time = 300, 
+			Rarity = "Rare", 
+		}, 
+		TripleAttack = {
+			UIID = "TA__001", 
+			Name = "Triple Attack Potion", 
+			Description = "This triples your weapons attack for 30 seconds", 
+			Type = "Attack", 
+			Multiplier = 3, 
+			Time = 30, 
+			Rarity = "Uncommon", 
+		}, 
+		FiftyPercentBuff = {
+			UIID = "5PB__001", 
+			Name = "50% Buff Potion", 
+			Description = "This potion increases your weapons damage by 50% for 2 mins", 
+			Type = "Attack", 
+			Multiplier = 1.5, 
+			Time = 120, 
+			Rarity = "Common", 
+		}, 
+	}, 
+	Health = {
+		FullHealPotion = {
+			UIID = "FHP__001", 
+			Name = "Full Heal Potion", 
+			Description = "This Completely Refills your Health", 
+			Type = "Health", 
+			Multiplier = 1, 
+			Time = 0, 
+			Rarity = "Rare", 
+		}, 
+		DoubleHealthPotion = {
+			UIID = "DHP__001", 
+			Name = "Double Health Potion", 
+			Description = "This potion doubles your health for 30 seconds", 
+			Type = "Health", 
+			Multiplier = 2, 
+			Time = 30, 
+			Rarity = "Rare", 
+		}, 
+		TripleHealthPotion = {
+			UIID = "THP__001", 
+			Name = "Triple Health Potion", 
+			Description = "This potion doubles your health for 25 seconds", 
+			Type = "Health", 
+			Multiplier = 3, 
+			Time = 25, 
+			Rarity = "Legendary", 
+		}, 
+		DoubleHealthRegeneration = {
+			UIID = "DHR__001", 
+			Name = "Double Health Regeneration", 
+			Description = "This potion doubles your health regeneration for 25 seconds", 
+			Type = "Health", 
+			Multiplier = 2, 
+			Time = 25, 
+			Rarity = "Rare", 
+		}, 
+	}, 
+	Defense = {
+		DoubleDefense = {
+			UIID = "DD__001", 
+			Name = "Double Defenses Potion", 
+			Description = "This potion doubles your defense for 25 seconds", 
+			Type = "Defense", 
+			Multiplier = 2, 
+			Time = 25, 
+			Rarity = "Rare", 
+		}, 
+		TripleDefense = {
+			UIID = "TDP__001", 
+			Name = "Triple Defense Potion", 
+			Description = "This potion triples your health for 50 seconds", 
+			Type = "Health", 
+			Multiplier = 3, 
+			Time = 50, 
+			Rarity = "Legendary", 
+		}, 
+
+	}, 
+	Pets = {
+		DoublePetsAttack = {
+			UIID = "DPA__001", 
+			Name = "Double Pets Attack", 
+			Description = "This potion doubles all Equipped Pet's Attack for 10 seconds", 
+			Type = "Pets", 
+			Multiplier = 2, 
+			Time = 10, 
+			Rarity = "Legendary", 
+		}, 
+		DoublePetsCritRate = {
+			UIID = "DPCR__001", 
+			Name = "Double Pets Critical Rate Potion", 
+			Description = "This potion doubles all Eqiupped Pet's Critical Damage Rate for 25 seconds", 
+			Type = "Pets", 
+			Multiplier = 2, 
+			Time = 25, 
+			Rarity = "Legendary", 
+		}, 
+	},  
+}
+
+return Potions

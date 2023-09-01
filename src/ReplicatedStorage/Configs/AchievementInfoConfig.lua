@@ -10,43 +10,43 @@ local NumberOfAchievement = {
 		[1] = {
 			Amount = 3, 
 			Reward = {
-				Coins = 100, 
-				Gems = 5,
+				Coins = 0, 
+				Gems = 0,
 			},
 		}, 
 		[2] = {
 			Amount = 10, 
 			Reward = {
-				Coins = 500, 
-				Gems = 10,
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[3] = {
 			Amount = 20, 
 			Reward = {
-				Coins = 1000, 
-				Gems = 20,
+				Coins = 0, 
+				Gems = 0,
 			}
 		},
 		[4] = {
 			Amount = 50,
 			Reward = {
-				Coins = 2000, 
-				Gems = 30, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		},
 		[5] = {
 			Amount = 75, 
 			Reward = {
-				Coins = 3000, 
-				Gems = 50,
+				Coins = 0, 
+				Gems = 0,
 			}
 		},
 		[6] = {
 			Amount = 100, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		},
 	}, 
@@ -54,71 +54,71 @@ local NumberOfAchievement = {
 		[1] = {
 			Amount = 100, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0, 
 			}
 		},
 		[2] = {
 			Amount = 250, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0, 
 			}
 		}, 
 		[3] = {
 			Amount = 500, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0, 
 			}
 		}, 
 		[4] = {
 			Amount = 1000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[5] = {
 			Amount = 2500, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0, 
 			}
 		}, 
 		[6] = {
 			Amount = 5000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[7] = {
 			Amount = 10000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[8] = {
 			Amount = 25000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		},
 		[9] = {
 			Amount = 50000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0, 
 			}
 		}, 
 		[10] = {
 			Amount = 100000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		},
 	}, 
@@ -126,71 +126,71 @@ local NumberOfAchievement = {
 		[1] = {
 			Amount = 100, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[2] = {
 			Amount = 250, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[3] = {
 			Amount = 500, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[4] = {
 			Amount = 1000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[5] = {
 			Amount = 2500, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[6] = {
 			Amount = 5000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0, 
 			}
 		}, 
 		[7] = {
 			Amount = 10000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[8] = {
 			Amount = 25000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[9] = {
 			Amount = 50000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0,
 			}
 		}, 
 		[10] = {
 			Amount = 100000, 
 			Reward = {
-				Coins = 5000, 
-				Gems = 100, 
+				Coins = 0, 
+				Gems = 0, 
 			}
 		},
 	}

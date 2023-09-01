@@ -283,7 +283,6 @@ local function GetAllData(player: Player)
 end
 
 -- Server to client requests
-
 Remotes.GetData.OnServerInvoke = GetData	
 Remotes.GetAllData.OnServerInvoke = GetAllData
 

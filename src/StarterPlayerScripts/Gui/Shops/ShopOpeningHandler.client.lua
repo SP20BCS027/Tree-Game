@@ -11,11 +11,7 @@ local function ShopOpener(shopID, hideShop: boolean?)
     ShopsManager.GenerateShop(shopID, hideShop)
 end
 
-Remotes.OpenBackpackShop.OnClientEvent:Connect(ShopOpener)
-Remotes.OpenFertilizerShop.OnClientEvent:Connect(ShopOpener)
-Remotes.OpenSeedsShop.OnClientEvent:Connect(ShopOpener)
-Remotes.OpenWaterCanShop.OnClientEvent:Connect(ShopOpener)
-Remotes.OpenPlotsShop.OnClientEvent:Connect(ShopOpener)
+Remotes.OpenShop.OnClientEvent:Connect(ShopOpener)
 
 -- Connect client event for updating owned plots
 Remotes.UpdateOwnedPlots.OnClientEvent:Connect(function()

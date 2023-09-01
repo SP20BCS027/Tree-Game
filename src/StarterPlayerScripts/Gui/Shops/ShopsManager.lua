@@ -29,7 +29,7 @@ local BuyButton = IconStats.BuyButton
 local BuyFrame = IconStats.BuyFrame 
 local NumberBuyButton = BuyFrame.BuyButton
 local AdditionFrame = BuyFrame.AdditionFrame
-local AmountLabel = AdditionFrame.AmountLabel 
+local AmountLabel = AdditionFrame.AmountLabel
 local MinusButton = AdditionFrame.MinusButtonFrame.MinusButton
 local PlusButton = AdditionFrame.PlusButtonFrame.PlusButton 
 
@@ -62,6 +62,7 @@ local function LoadDataFromConfigs()
     Shops["Plots"] = require(Configs.PlotsConfig)
     Shops["Seeds"] = require(Configs.SeedsConfig)
     Shops["WaterCans"] = require(Configs.WaterCanConfig)
+    Shops["Eggs"] = require(Configs.EggsConfig)
 end
 
 LoadDataFromConfigs()
@@ -238,6 +239,12 @@ local function LoadStats(item)
     if item.Description then 
         IconDescription.Text = item.Description
     end
+
+    if item.imageID then 
+        IconImage.Image = item.imageID
+    end 
+
+
     BuyButton.Text = "Buy"
     if CurrentShop == "Backpacks" or CurrentShop == "WaterCans" then 
         IconAmount.Text = CAPACITY_TEXT:gsub("REPLACE", item.Capacity)
@@ -272,6 +279,10 @@ local function CreateIcon(item)
     icon.Name = item.Name
     icon.ItemName.Text = item.Name
     icon.Visible = true
+
+    if item.imageID then 
+        icon.ImageLabel.Image = item.imageID
+    end
 
     if item.LayoutOrder then 
         icon.LayoutOrder = item.LayoutOrder

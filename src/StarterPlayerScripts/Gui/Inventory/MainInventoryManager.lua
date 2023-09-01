@@ -21,9 +21,13 @@ local BackgroundFrame = MainFrame.BackgroundFrame
 local HeadingFrame = MainFrame.HeadingFrame
 local HeadingFrameBackground = MainFrame.HeadingFrameBackground
 
+local FarmButtons = MainFrame.FarmButtons
+local BattleButtons = MainFrame.BattleButtons
+
 local CloseButton = MainFrame.CloseFrame.CloseButton
 
 local InventoryFrame = MainFrame.InventoryFrame
+local EmptyFrame = InventoryFrame.EmptyFrame
 local ScrollingFrame = InventoryFrame.ScrollingFrame
 local Template = InventoryFrame.Template
 
@@ -42,6 +46,8 @@ local ITEM_CAPACITY = "Capacity: REPLACE"
 local ORIGINAL_SIZE_OF_EQUIPBUTTON = EquipButton.Size
 local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 
+local TOTALITEMS
+
 local SelectedItem
 local CurrentInventory
 local EquippedItem
@@ -54,6 +60,16 @@ local function GetDataFromClient()
     Configs["WaterCans"] = State.GetData().OwnedWaterCans
     Configs["EquippedBackpack"] = State.GetData().EquippedBackpack
     Configs["EquippedWaterCan"] = State.GetData().EquippedWaterCan
+
+    Configs["Weapons"] = State.GetData().OwnedWeapons
+    Configs["Armors"] = State.GetData().OwnedArmors
+    Configs["Pets"] = State.GetData().OwnedPets
+    Configs["Potions"] = State.GetData().OwnedPotions
+    Configs["Eggs"] = State.GetData().Eggs
+    Configs["EquippedPotions"] = State.GetData().EquippedPotions
+    Configs["EquippedWeapons"] = State.GetData().EquippedWeapons
+    Configs["EquippedPets"] = State.GetData().EquippedPets
+    Configs["EquippedArmors"] = State.GetData().EquippedArmor
 end
 
 -- This function sets the current directory variable
@@ -128,11 +144,17 @@ local function LoadStats(item)
 end
 
 local function CreateIcon(item)
+    TOTALITEMS += 1
+
     -- Clone the template and set its parent to the ScrollingFrame
     local icon = Template:Clone()
     icon.Parent = ScrollingFrame
     icon.Name = item.Name
     icon.ItemName.Text = item.Name
+
+    if item.imageID then
+        icon.ImageLabel.Image = item.imageID
+    end
 
     -- Set the layout order if provided
     if item.LayoutOrder then 
@@ -192,12 +214,27 @@ function MainInventory.GenerateInventory(setID)
     HideStats()
     
     CurrentInventory = setID
-    HeadingFrame.TextLabel.Text = CurrentInventory .. " Inventory"
-
+    TOTALITEMS = 0
     ChangeColors()
-    for _, item in CurrentDirectory do 
-        CreateIcon(item)
-    end 
+
+    if CurrentInventory == "Potions" or CurrentInventory == "Weapons" or CurrentInventory == "Armors" or CurrentInventory == "Pets" or CurrentInventory == "Eggs" then 
+        for _, subDir in CurrentDirectory do 
+            for _, item in subDir do 
+                CreateIcon(item)
+            end
+        end 
+    else
+        for _, item in CurrentDirectory do 
+            CreateIcon(item)
+        end 
+    end
+
+    if TOTALITEMS == 0 then 
+        EmptyFrame.Visible = true
+    else
+        EmptyFrame.Visible = false
+    end
+
 end
 
 -- This function returns the current inventory as a string.
@@ -261,6 +298,16 @@ end)
 CloseButton.MouseLeave:Connect(function()
     SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
+end)
+
+HeadingFrame.Peace.TextButton.MouseButton1Down:Connect(function()
+    FarmButtons.Visible = true
+    BattleButtons.Visible = false
+end)
+
+HeadingFrame.Battle.TextButton.MouseButton1Down:Connect(function()
+    FarmButtons.Visible = false 
+    BattleButtons.Visible = true
 end)
 
 return MainInventory
