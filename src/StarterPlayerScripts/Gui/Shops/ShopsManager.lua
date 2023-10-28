@@ -54,7 +54,7 @@ local ORIGINAL_SIZE_OF_BUYBUTTON = BuyButton.Size
 local ORIGINAL_SIZE_OF_NUMBERBUYBUTTON = NumberBuyButton.Size
 
 local Shops = {}
-
+ 
 -- This function loads the data from Configs into the Shops table
 local function LoadDataFromConfigs()
     Shops["Backpacks"] = require(Configs.BackpacksConfig)
@@ -63,6 +63,7 @@ local function LoadDataFromConfigs()
     Shops["Seeds"] = require(Configs.SeedsConfig)
     Shops["WaterCans"] = require(Configs.WaterCanConfig)
     Shops["Eggs"] = require(Configs.EggsConfig)
+    Shops["Weapons"] = require(Configs.WeaponsConfig)
 end
 
 LoadDataFromConfigs()
@@ -83,7 +84,7 @@ end
 
 -- This function checks for ownership of the Watering Can or the Backpack and returns a boolean value
 local function CheckForOwnerShip(item)
-    item = item or SelectedItem.Name
+    item = item or SelectedItem.UID
     if CurrentShop == "Backpacks" then 
         if State.GetData().OwnedBackpacks[item] then 
             return true
@@ -94,6 +95,13 @@ local function CheckForOwnerShip(item)
             return true
         end
     end
+
+    if CurrentShop == "Weapons" then 
+        if State.GetData().OwnedWeapons[item] then 
+            return true
+        end
+    end
+
     return false 
 end
 
@@ -196,6 +204,23 @@ local function BuyPlot()
     print("Not Enough Money")
 end
 
+local function BuyWeapon()
+    if CheckForOwnerShip() then 
+        SoundsManager.PlayDenialSound()
+        print("Item Already Owned")
+    end
+
+    if State.GetData().Coins >= SelectedItem.Price then 
+        Remotes.UpdateOwnedWeapons:FireServer(SelectedItem.UID)
+        BuyButton.Text = "Owned"
+        SoundsManager.PlayPressSound()
+        print("Item Has been Bought")
+        return
+    end
+    SoundsManager.PlayDenialSound()
+    print("Not Enough Money")
+end
+
 -- This function sets the text of the AmountLabel to the current AmountOfItems value
 local function SetAmountLabelText()
     AmountLabel.Text = AmountOfItems
@@ -274,6 +299,7 @@ end
 
 -- This function creates the icon and hooks up its pressed event
 local function CreateIcon(item)
+    print(item)
     local icon = Template:Clone()
     icon.Parent = ScrollingFrame
     icon.Name = item.Name
@@ -375,6 +401,12 @@ BuyButton.MouseButton1Down:Connect(function()
         BuyWaterCan() 
         return
     end
+   
+    if CurrentShop == "Weapons" then 
+        BuyWeapon()
+        return     
+    end
+
     if CurrentShop == "Plots" then 
         BuyPlot()
         return 

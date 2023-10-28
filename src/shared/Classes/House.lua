@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 local Manager = require(ServerScriptService.PlayerData.Manager)
 
 local Remotes = ReplicatedStorage.Remotes
-local TreeModels = ReplicatedStorage.Trees
+local TreeModels = ReplicatedStorage.Assets.Trees
 
 local House = {}
 

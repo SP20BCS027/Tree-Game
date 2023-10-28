@@ -86,8 +86,16 @@ end)
 InventoryButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
+    local currentInventoryType = MainInventoryManager.GetCurrentInventoryType()
     currentInventory = currentInventory or "Backpacks"
     MainInventoryManager.GenerateInventory(currentInventory)
+
+    if currentInventoryType == "Battle" then 
+        MainInventoryManager.HideFarm()
+    else
+        MainInventoryManager.HideBattle()
+    end
+    
     UISettings.DisableAll("MainInventory")
     MainInventoryUI.Enabled = not MainInventoryUI.Enabled
 end)

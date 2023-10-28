@@ -9,6 +9,7 @@ local BackpackEquipping = {}
 -- Give the player a backpack with the specified ID.
 -- The function clones the backpack model from the replicated storage, assigns it a name and parents it to the character.
 local function GivePlayerBackpack(player: Player, BackpackID: string)
+    print("Backpack Given to Player")
     local character = player.Character or player.CharacterAdded:Wait()
 
     if character then 
@@ -17,7 +18,7 @@ local function GivePlayerBackpack(player: Player, BackpackID: string)
         end
     end
 
-    local backpack = ReplicatedStorage.Backpacks[BackpackID]:Clone()
+    local backpack = ReplicatedStorage.Assets.Backpacks[BackpackID]:Clone()
     backpack.Name = "Backpack"
     backpack.Parent = character 
 

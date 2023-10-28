@@ -6,7 +6,7 @@ local TreeConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local Houses = require(ServerScriptService.Houses)
 
 local Remotes = ReplicatedStorage.Remotes
-local TreeModels = ReplicatedStorage.Trees
+local TreeModels = ReplicatedStorage.Assets.Trees
 
 -- Selects a tree based on the given seed.
 -- Iterates through the TreeConfig and adds trees with matching rarity to the sortedTrees table.

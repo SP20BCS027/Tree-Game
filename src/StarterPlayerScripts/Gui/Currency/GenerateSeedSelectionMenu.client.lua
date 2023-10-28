@@ -64,6 +64,7 @@ local function CreateSeedIcon(seed)
     seedIcon.Parent = ScrollingFrame
     seedIcon.ItemName.Text = seed.Name
     seedIcon.Name = seed.Name
+    seedIcon.LayoutOrder = seed.LayoutOrder
 
     if seed.imageID then 
         seedIcon.ImageLabel.Image = seed.imageID

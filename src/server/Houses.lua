@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Remotes = ReplicatedStorage.Remotes
-local Trees = ReplicatedStorage.Trees
+local Trees = ReplicatedStorage.Assets.Trees
 
 local House = require(game.ServerScriptService.Classes.House)
 local Houses = {}

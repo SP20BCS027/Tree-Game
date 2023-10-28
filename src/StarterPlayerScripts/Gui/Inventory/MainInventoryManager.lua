@@ -50,6 +50,7 @@ local TOTALITEMS
 
 local SelectedItem
 local CurrentInventory
+local CurrentInventoryType = "Farm"
 local EquippedItem
 
 -- This function loads the most updated data in the Configs table
@@ -88,10 +89,13 @@ local function HideStats()
 end
 
 -- This function makes the Equip Button visible if the inventory is either Backpack or Watering Can
-local function HideEquipButton()
+local function ShowEquipButton()
     if CurrentInventory == "Backpacks" or CurrentInventory == "WaterCans" then 
         EquipButton.Visible = true
         EquipButton.Text = "Equip"
+    elseif CurrentInventory == "Weapons" or CurrentInventory == "Armors" then
+        EquipButton.Visible = true
+        EquipButton.Text = "Use"
     end
 end
 
@@ -101,7 +105,7 @@ local function ShowStats(item)
     IconName.Visible = true
     DescriptionFrame.Visible = true
 
-    HideEquipButton()
+    ShowEquipButton()
 
     if item.Name == EquippedItem then 
         EquipButton.Text = "Equipped"
@@ -180,7 +184,7 @@ local function CreateIcon(item)
     icon.MouseButton1Down:Connect(function()
         SoundsManager.PlayPressSound()
         ResetTransparency()
-        SelectedItem = item.UID 
+        SelectedItem = item.UID
         icon.BackgroundTransparency = 0.5
         LoadStats(item)
     end)
@@ -237,9 +241,23 @@ function MainInventory.GenerateInventory(setID)
 
 end
 
+function MainInventory.HideFarm()
+    FarmButtons.Visible = false 
+    BattleButtons.Visible = true
+end
+
+function MainInventory.HideBattle()
+    FarmButtons.Visible = true
+    BattleButtons.Visible = false
+end
+
 -- This function returns the current inventory as a string.
 function MainInventory.GetCurrentInventory(): string
     return CurrentInventory
+end
+
+function MainInventory.GetCurrentInventoryType(): string 
+    return CurrentInventoryType
 end
 
 -- When the Equip button is pressed, the selected item gets equipped if it is not already equipped.
@@ -261,6 +279,14 @@ EquipButton.MouseButton1Down:Connect(function()
     if CurrentInventory == "WaterCans" then 
         ReplicatedStorage.Remotes.ChangeEquippedWateringCan:FireServer(SelectedItem)
     end
+
+    if CurrentInventory == "Weapons" then 
+        print(SelectedItem)
+        print(EquippedItem)
+        ReplicatedStorage.Remotes.ChangeEquippedWeapon:FireServer(SelectedItem)
+        ReplicatedStorage.Remotes.GivePlayerWeaponTool:FireServer(SelectedItem)
+    end
+
     EquipButton.Text = "Equipped"
 end)
 
@@ -301,13 +327,15 @@ CloseButton.MouseLeave:Connect(function()
 end)
 
 HeadingFrame.Peace.TextButton.MouseButton1Down:Connect(function()
-    FarmButtons.Visible = true
-    BattleButtons.Visible = false
+    MainInventory.GenerateInventory("Backpacks")
+    MainInventory.HideBattle()
+    CurrentInventoryType = "Peace"
 end)
 
 HeadingFrame.Battle.TextButton.MouseButton1Down:Connect(function()
-    FarmButtons.Visible = false 
-    BattleButtons.Visible = true
+    MainInventory.GenerateInventory("Pets")
+    MainInventory.HideFarm()
+    CurrentInventoryType = "Battle"
 end)
 
 return MainInventory

@@ -6,6 +6,7 @@ local Template = require(ReplicatedStorage.PlayerData.Template)
 local TreeConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
+local WeaponsConfig = require(ReplicatedStorage.Configs.WeaponsConfig)
 local AchievementInfoConfig = require(ReplicatedStorage.Configs.AchievementInfoConfig)
 
 local Manager = {}
@@ -161,6 +162,23 @@ function Manager.EquipBackpack(player: Player, backpackID: string)
 
 	profile.Data.EquippedBackpack = BackpacksConfig[backpackID]
 	Remotes.ChangeEquippedBackpack:FireClient(player, profile.Data.EquippedBackpack)
+end
+
+function Manager.PurchaseWeapon(player: Player, weaponID: string)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+	
+	profile.Data.OwnedWeapons[weaponID] = BackpacksConfig[weaponID]
+	Remotes.UpdateOwnedWeapons:FireClient(player, profile.Data.OwnedWeapons)	
+end
+
+function Manager.EquipWeapon(player: Player, weaponID: string)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.EquippedWeapon = WeaponsConfig[weaponID]
+	Remotes.ChangeEquippedWeapon:FireClient(player, profile.Data.EquippedWeapon)
+
 end
 
 -- When this function is called, the tree of the plot gets removed

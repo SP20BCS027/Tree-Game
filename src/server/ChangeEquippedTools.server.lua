@@ -22,5 +22,16 @@ local function ChangeEquippedBackpack(player: Player, backpack: string)
     end
 end
 
+local function ChangeEquippedWeapon(player: Player, weapon: string)
+    print("Weapon Changed in Data")
+    local profile = Manager.Profiles[player]
+    if not profile then return end 
+
+    if profile.Data.OwnedWeapons[weapon] then 
+        Manager.EquipWeapon(player, weapon)
+    end
+end
+
+Remotes.ChangeEquippedWeapon.OnServerEvent:Connect(ChangeEquippedWeapon)
 Remotes.ChangeEquippedBackpack.OnServerEvent:Connect(ChangeEquippedBackpack)
 Remotes.ChangeEquippedWateringCan.OnServerEvent:Connect(ChangeEquippedWateringCan)

@@ -1,5 +1,5 @@
 export type Weapons = {
-	UIID : string, 
+	UID : string, 
 	Name: string,
 	Description: string, 
 	Attack: number, 
@@ -14,13 +14,14 @@ export type Weapons = {
 local Weapons = {
 	NeutralWeapons = {
 		StarterSword = {
-			UIID = "SS__001", 
+			UID = "SS__001", 
 			Name = "Starter Sword", 
 			Description = "The Starter Sword",  
 			Attack = 2, 
+			Price = 100,
 			Type = "Neutral", 
 			WeaponType = "Sword", 
-			Rarity = "Basic",
+			Rarity = "Common",
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
@@ -28,13 +29,14 @@ local Weapons = {
 	},
 	FireWeapons = {
 		FireSword = {
-			UIID = "FS__001", 
+			UID = "FS__001", 
 			Name = "Fire Sword", 
 			Description = "A Fire Sword",  
 			Attack = 2, 
+			Price = 100,
 			Type = "Fire", 
 			WeaponType = "Sword", 
-			Rarity = "Basic",
+			Rarity = "Common",
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
@@ -42,13 +44,14 @@ local Weapons = {
 	}, 
 	WaterWeapons = {
 		WaterSword = {
-			UIID = "WS__001", 
+			UID = "WS__001", 
 			Name = "Water Sword", 
 			Description = "A Water Sword", 
 			Attack = 2, 
+			Price = 100,
 			Type = "Water", 
 			WeaponType = "Sword", 
-			Rarity = "Basic",
+			Rarity = "Common",
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
@@ -56,13 +59,14 @@ local Weapons = {
 	}, 
 	AirWeapons = {
 		AirSword = {
-			UIID = "AS__001", 
+			UID = "AS__001", 
 			Name = "Air Sword", 
 			Description = "An Air Sword", 
 			Attack = 2, 
+			Price = 100,
 			Type = "Air", 
 			WeaponType = "Sword", 
-			Rarity = "Basic",
+			Rarity = "Common",
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
@@ -70,13 +74,14 @@ local Weapons = {
 	}, 
 	GeoWeapons = {
 		GeoSword = {
-			UIID = "GS__001", 
+			UID = "GS__001", 
 			Name = "Geo Sword", 
 			Description = "A Geo Sword", 
 			Attack = 2, 
+			Price = 100,
 			Type = "Geo", 
 			WeaponType = "Sword", 
-			Rarity = "Basic",
+			Rarity = "Common",
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
