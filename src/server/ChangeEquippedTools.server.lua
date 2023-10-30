@@ -22,13 +22,13 @@ local function ChangeEquippedBackpack(player: Player, backpack: string)
     end
 end
 
-local function ChangeEquippedWeapon(player: Player, weapon: string)
+local function ChangeEquippedWeapon(player: Player, element, weapon: string)
     print("Weapon Changed in Data")
     local profile = Manager.Profiles[player]
     if not profile then return end 
-
-    if profile.Data.OwnedWeapons[weapon] then 
-        Manager.EquipWeapon(player, weapon)
+    print(element)
+    if profile.Data.OwnedWeapons[element][weapon] then 
+        Manager.EquipWeapon(player, element, weapon)
     end
 end
 

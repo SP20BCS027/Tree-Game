@@ -47,15 +47,15 @@ local Template = {
 	},
 
 	OwnedWeapons = {
-		NeutralWeapons = {
-			WeaponsConfig.NeutralWeapons.StarterSword,
+		Neutral = {
+			StarterSword = WeaponsConfig.Neutral.StarterSword,
 		},
-		FireWeapons = {}, 
-		WaterWeapons = {},
-		AirWeapons = {},  
-		GeoWeapons = {}, 
+		Fire = {}, 
+		Water = {},
+		Air = {},  
+		Geo = {}, 
 	},
-	EquippedWeapon = WeaponsConfig.NeutralWeapons.StarterSword,
+	EquippedWeapon = WeaponsConfig.Neutral.StarterSword,
 
 	OwnedArmors = {
 		NeutralArmors = {

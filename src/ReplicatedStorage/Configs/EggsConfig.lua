@@ -10,7 +10,7 @@ export type PetsConfigTemp = {
 local Eggs = {
 	NeutralEggs = {
 		NeutralEgg = {
-			UIID = "NE__001", 
+			UIID = "NeutralEgg", 
 			Name = "Neutral Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Fire", 
@@ -20,7 +20,7 @@ local Eggs = {
 	}, 
 	FireEggs = {
 		FireEgg = {
-			UIID = "FE__001", 
+			UIID = "FireEgg", 
 			Name = "Fire Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Fire", 
@@ -30,7 +30,7 @@ local Eggs = {
 	}, 
 	WaterEggs = {
 		WaterEgg = {
-			UIID = "WE__001", 
+			UIID = "WaterEgg", 
 			Name = "Water Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Water", 
@@ -40,7 +40,7 @@ local Eggs = {
 	}, 
 	AirEggs = {
 		AirEgg = {
-			UIID = "AE__001", 
+			UIID = "AirEgg", 
 			Name = "Air Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Air", 
@@ -50,7 +50,7 @@ local Eggs = {
 	}, 
 	GeoPets = {
 		GeoEgg = {
-			UIID = "GE__001", 
+			UIID = "GeoEgg", 
 			Name = "Geo Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Geo", 

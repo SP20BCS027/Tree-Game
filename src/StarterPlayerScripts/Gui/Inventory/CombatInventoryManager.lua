@@ -14,8 +14,8 @@ local Configs = {}
 
 local CurrentDirectory
 
-local MainInventoryUI = player.PlayerGui:WaitForChild("MainInventory")
-local MainFrame = MainInventoryUI.MainFrame
+local CombatInventoryUI = player.PlayerGui:WaitForChild("CombatInventory")
+local MainFrame = CombatInventoryUI.MainFrame
 
 local BackgroundFrame = MainFrame.BackgroundFrame
 local HeadingFrame = MainFrame.HeadingFrame
@@ -36,6 +36,10 @@ local IconDescription = EquippedFrame.Stats.Description.IconDescription
 local DescriptionFrame = EquippedFrame.Stats.Description
 local EquipButton = EquippedFrame.Stats.EquipButton
 
+local PotionTypeHolder = MainFrame.PotionTypeHolder
+local WeaponTypeHolder = MainFrame.WeaponTypeHolder 
+local ElementTypeButtons = MainFrame.ElementTypeButtons
+
 local ITEM_NAME = "Name: REPLACE"
 local ITEM_AMOUNT = "Amount: REPLACE"
 local ITEM_CAPACITY = "Capacity: REPLACE"
@@ -48,16 +52,22 @@ local TOTALITEMS
 local SelectedItem
 local SelectedItemType
 local CurrentInventory
+local CurrentWeaponType
+local CurrentPotionType
+local CurrentElement 
 local EquippedItem
 
 -- This function loads the most updated data in the Configs table
 local function GetDataFromClient()
-    Configs["Backpacks"] = State.GetData().OwnedBackpacks
-    Configs["Fertilizers"] = State.GetData().Fertilizers 
-    Configs["Seeds"] = State.GetData().Seeds
-    Configs["WaterCans"] = State.GetData().OwnedWaterCans
-    Configs["EquippedBackpack"] = State.GetData().EquippedBackpack
-    Configs["EquippedWaterCan"] = State.GetData().EquippedWaterCan
+    Configs["Weapons"] = State.GetData().OwnedWeapons
+    Configs["Armors"] = State.GetData().OwnedArmors
+    Configs["Pets"] = State.GetData().OwnedPets
+    Configs["Potions"] = State.GetData().OwnedPotions
+    Configs["Eggs"] = State.GetData().Eggs
+    Configs["EquippedPotions"] = State.GetData().EquippedPotions
+    Configs["EquippedWeapons"] = State.GetData().EquippedWeapons
+    Configs["EquippedPets"] = State.GetData().EquippedPets
+    Configs["EquippedArmors"] = State.GetData().EquippedArmor
 end
 
 -- This function sets the current directory variable
@@ -77,10 +87,8 @@ end
 
 -- This function makes the Equip Button visible if the inventory is either Backpack or Watering Can
 local function ShowEquipButton()
-    if CurrentInventory == "Backpacks" or CurrentInventory == "WaterCans" then 
-        EquipButton.Visible = true
-        EquipButton.Text = "Equip"
-    elseif CurrentInventory == "Weapons" or CurrentInventory == "Armors" then
+
+    if CurrentInventory == "Weapons" or CurrentInventory == "Armors" then
         EquipButton.Visible = true
         EquipButton.Text = "Use"
     end
@@ -152,12 +160,6 @@ local function CreateIcon(item)
         icon.LayoutOrder = item.LayoutOrder
     end
 
-    -- Check if the icon represents the equipped backpack or watering can
-    if icon.Name == Configs["EquippedBackpack"].Name or icon.Name == Configs["EquippedWaterCan"].Name  then 
-        icon.EquippedIcon.Visible = true 
-        EquippedItem = item.Name
-    end 
-
     -- Set icon visibility based on item amount
     if item.Amount then 
         if item.Amount > 0 then 
@@ -188,39 +190,69 @@ local function ClearInventory()
     end
 end
 
--- When the Watering Can or Backpack is changed, this function updates the UI
-function MainInventory.ChangeEquipped()
-    GetDataFromClient()
-    for _, item in ScrollingFrame:GetChildren() do 
-        if item.Name == "UIGridLayout" then continue end 
-        item.EquippedIcon.Visible = false
-        if item.Name == Configs["EquippedBackpack"].Name or item.Name == Configs["EquippedWaterCan"].Name then 
-            item.EquippedIcon.Visible = true
+local function CreateWeaponIcons(elementType, weaponType)
+
+    weaponType = weaponType or "Sword"
+    elementType = elementType or "Neutral"
+
+    local CurrentWeapons = {}
+    for _, item in CurrentDirectory[CurrentInventory][elementType] do
+        if item.WeaponType == weaponType then 
+            CurrentWeapons[item.UID] = item
         end
+    end
+    for _, item in CurrentWeapons do 
+        CreateIcon(item)
     end
 end
 
+local function CreatePotionIcons(potionType)
+    potionType = potionType or "Attack"
+
+    local CurrentPotions = {}
+    for _, item in CurrentDirectory[CurrentInventory][potionType] do
+        if item.PotionType == potionType then 
+            CurrentPotions[item.UID] = item
+        end
+    end
+    for _, item in CurrentPotions do 
+        CreateIcon(item)
+    end
+
+end
+
 -- This function is responsible for generating the inventory with the desired ID
-function MainInventory.GenerateInventory(setID)
+function MainInventory.GenerateInventory(setID, weaponType, elementType, potionType)
     SetCurrentConfig(setID)
     GetDataFromClient()
     ClearInventory()
     HideStats()
-    
-    CurrentInventory = setID
-    TOTALITEMS = 0
     ChangeColors()
 
-    if CurrentInventory == "Potions" or CurrentInventory == "Weapons" or CurrentInventory == "Armors" or CurrentInventory == "Pets" or CurrentInventory == "Eggs" then 
-        for _, subDir in CurrentDirectory do 
-            for _, item in subDir do 
-                CreateIcon(item)
-            end
-        end 
-    else
-        for _, item in CurrentDirectory do 
-            CreateIcon(item)
-        end 
+    CurrentElement = elementType or "Neutral"
+    CurrentWeaponType = weaponType or "Sword"
+    CurrentPotionType = potionType or "Attack"
+    CurrentInventory = setID
+    TOTALITEMS = 0
+
+    -- for _, subDir in CurrentDirectory do 
+    --     for _, item in subDir do 
+    --         CreateIcon(item)
+    --     end
+    -- end 
+
+    if CurrentInventory == "Weapons" then 
+        WeaponTypeHolder.Visible = true 
+        PotionTypeHolder.Visible = false 
+        ElementTypeButtons.Visible = true
+        CreateWeaponIcons(elementType, weaponType)
+    end
+
+    if CurrentInventory == "Potions" then 
+        WeaponTypeHolder.Visible = false
+        PotionTypeHolder.Visible = true
+        ElementTypeButtons.Visible = false
+        CreatePotionIcons(potionType)
     end
 
     if TOTALITEMS == 0 then 
@@ -236,6 +268,50 @@ function MainInventory.GetCurrentInventory(): string
     return CurrentInventory
 end
 
+WeaponTypeHolder.Sword.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, "Sword", CurrentElement, CurrentPotionType)
+end)
+
+WeaponTypeHolder.Ranged.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, "Ranged", CurrentElement, CurrentPotionType)
+end)
+
+WeaponTypeHolder.Staff.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, "Staff", CurrentElement, CurrentPotionType)
+end)
+
+PotionTypeHolder.Attack.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Attack")
+end)
+
+PotionTypeHolder.Defense.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Defense")
+end)
+
+PotionTypeHolder.Health.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Health")
+end)
+
+PotionTypeHolder.Pets.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Pets")
+end)
+
+ElementTypeButtons.Air.ImageButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Air", CurrentPotionType)
+end)
+ElementTypeButtons.Water.ImageButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Water", CurrentPotionType)
+end)
+ElementTypeButtons.Fire.ImageButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Fire", CurrentPotionType)
+end)
+ElementTypeButtons.Geo.ImageButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Geo", CurrentPotionType)
+end)
+ElementTypeButtons.Neutral.ImageButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Neutral", CurrentPotionType)
+end)
+
 -- When the Equip button is pressed, the selected item gets equipped if it is not already equipped.
 EquipButton.MouseButton1Down:Connect(function()
     if not SelectedItem then return end
@@ -247,14 +323,6 @@ EquipButton.MouseButton1Down:Connect(function()
 
     SoundsManager.PlayPressSound()
     EquippedItem = SelectedItem
-    
-    if CurrentInventory == "Backpacks" then 
-        ReplicatedStorage.Remotes.ChangeEquippedBackpack:FireServer(SelectedItem)
-        ReplicatedStorage.Remotes.GivePlayerBackpack:FireServer(SelectedItem)
-    end
-    if CurrentInventory == "WaterCans" then 
-        ReplicatedStorage.Remotes.ChangeEquippedWateringCan:FireServer(SelectedItem)
-    end
 
     if CurrentInventory == "Weapons" then 
         ReplicatedStorage.Remotes.ChangeEquippedWeapon:FireServer(SelectedItemType, SelectedItem)
@@ -274,20 +342,9 @@ EquipButton.MouseLeave:Connect(function()
     EquipButton.Size = ORIGINAL_SIZE_OF_EQUIPBUTTON
 end)
 
--- This updates the inventory after a delay.
-ReplicatedStorage.Remotes.ChangeEquippedWateringCan.OnClientEvent:Connect(function()
-    task.delay(0, MainInventory.ChangeEquipped)
-end)
-
--- This updates the inventory after a delay.
-ReplicatedStorage.Remotes.ChangeEquippedBackpack.OnClientEvent:Connect(function()
-    task.delay(0, MainInventory.ChangeEquipped)
-end)
-
--- When pressed, this function closes the inventory menu.
 CloseButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayCloseSound()
-    MainInventoryUI.Enabled = false 
+    CombatInventoryUI.Enabled = false 
 end)
 
 CloseButton.MouseEnter:Connect(function()

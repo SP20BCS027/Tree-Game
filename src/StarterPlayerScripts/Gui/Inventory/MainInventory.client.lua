@@ -13,20 +13,12 @@ local InventoryButton = InventoryButtonUI.Frame.Inventory
 
 local MainFrame = MainInventoryUI.MainFrame
 local FarmButtons = MainFrame.FarmButtons
-local BattleButtons = MainFrame.BattleButtons
 
 -- Farm Buttons
 local BackpackButton = FarmButtons.BackpackButtonFrame.TextButton
 local FertilizerButton = FarmButtons.FertilizerButtonFrame.TextButton
 local SeedButton = FarmButtons.SeedButtonFrame.TextButton
 local WaterCanButton = FarmButtons.WaterCanButtonFrame.TextButton
-
--- Battle Buttons
-local EggsButton = BattleButtons.EggsButtonFrame.TextButton
-local WeaponsButton = BattleButtons.WeaponsButtonFrame.TextButton
-local ArmorsButton = BattleButtons.ArmorButtonFrame.TextButton
-local PotionsButton = BattleButtons.PotionsButtonFrame.TextButton
-local PetsButton = BattleButtons.PetsButtonFrame.TextButton
 
 -- When the Backpack button is pressed, generate the "Backpacks" inventory
 BackpackButton.MouseButton1Down:Connect(function()
@@ -52,50 +44,13 @@ WaterCanButton.MouseButton1Down:Connect(function()
     MainInventoryManager.GenerateInventory("WaterCans")
 end)
 
--- When the Eggs button is pressed, generate the "Eggs" inventory
-EggsButton.MouseButton1Down:Connect(function()
-    SoundsManager.PlayPressSound()
-    MainInventoryManager.GenerateInventory("Eggs")
-end)
-
--- When the Weapons button is pressed, generate the "Weapons" Inventory
-WeaponsButton.MouseButton1Down:Connect(function()
-    SoundsManager.PlayPressSound()
-    MainInventoryManager.GenerateInventory("Weapons")
-end)
-
--- When the Weapons button is pressed, generate the "Armors" Inventory
-ArmorsButton.MouseButton1Down:Connect(function()
-    SoundsManager.PlayPressSound()
-    MainInventoryManager.GenerateInventory("Armors")
-end)
-
--- When the Weapons button is pressed, generate the "Potions" Inventory
-PotionsButton.MouseButton1Down:Connect(function()
-    SoundsManager.PlayPressSound()
-    MainInventoryManager.GenerateInventory("Potions")
-end)
-
--- When the Weapons button is pressed, generate the "Pets" Inventory
-PetsButton.MouseButton1Down:Connect(function()
-    SoundsManager.PlayPressSound()
-    MainInventoryManager.GenerateInventory("Pets")
-end)
-
 -- When the Inventory button is pressed, toggle the visibility of the MainInventoryUI
 InventoryButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
     local currentInventory = MainInventoryManager.GetCurrentInventory()
-    local currentInventoryType = MainInventoryManager.GetCurrentInventoryType()
     currentInventory = currentInventory or "Backpacks"
     MainInventoryManager.GenerateInventory(currentInventory)
 
-    if currentInventoryType == "Battle" then 
-        MainInventoryManager.HideFarm()
-    else
-        MainInventoryManager.HideBattle()
-    end
-    
     UISettings.DisableAll("MainInventory")
     MainInventoryUI.Enabled = not MainInventoryUI.Enabled
 end)

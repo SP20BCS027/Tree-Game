@@ -5,11 +5,20 @@ local Players = game:GetService("Players")
 local Remotes = ReplicatedStorage.Remotes
 
 local Shops = WorkSpace:WaitForChild("Shops"):GetChildren()
+local BattleShops = WorkSpace:WaitForChild("BattleShops"):GetChildren()
+
 local TriggerParts = {}
+local BattleTriggerParts = {}
 
 for _, shop in Shops do
     if shop.TouchPart then 
         TriggerParts[shop.Name] = shop.TouchPart
+    end
+end
+
+for _, shop in BattleShops do 
+    if shop.TouchPart then 
+        BattleTriggerParts[shop.Name] = shop.TouchPart
     end
 end
 
@@ -32,7 +41,21 @@ local function GenerateUI(player: Player, TriggerPart)
     end)
 end
 
-local function ListenToWaterShopTouch()
+local function GenerateBattleUI(player: Player, TriggerPart)
+    if Debounce[player] then return end
+    SHOP_ID = TriggerPart.Parent.Name
+
+    Remotes.OpenBattleShop:FireClient(player, SHOP_ID, "Sword", "Neutral", true)
+
+    local character = player.Character 
+    character.HumanoidRootPart.CFrame = TriggerPart.Parent.PositionPart.CFrame + VERTICAL_OFFSET
+    Debounce[player] = true
+    task.delay(DELAY, function()
+        Debounce[player] = nil 
+    end)
+end
+
+local function ListenToShopTouch()
     for _, TriggerPart in TriggerParts do 
         TriggerPart.Touched:Connect(function(hit)
             local player = Players:GetPlayerFromCharacter(hit.Parent)
@@ -44,4 +67,18 @@ local function ListenToWaterShopTouch()
     end
 end
 
-ListenToWaterShopTouch()
+local function ListenToBattleShopTouch()
+    for _, TriggerPart in BattleTriggerParts do 
+        TriggerPart.Touched:Connect(function(hit)
+            local player = Players:GetPlayerFromCharacter(hit.Parent)
+    
+            if player then 
+                GenerateBattleUI(player, TriggerPart)
+            end
+        end)
+    end
+end
+
+ListenToBattleShopTouch()
+ListenToShopTouch()
+

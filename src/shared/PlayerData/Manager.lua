@@ -164,19 +164,19 @@ function Manager.EquipBackpack(player: Player, backpackID: string)
 	Remotes.ChangeEquippedBackpack:FireClient(player, profile.Data.EquippedBackpack)
 end
 
-function Manager.PurchaseWeapon(player: Player, weaponID: string)
+function Manager.PurchaseWeapon(player: Player, element, weaponID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	
-	profile.Data.OwnedWeapons[weaponID] = BackpacksConfig[weaponID]
+	profile.Data.OwnedWeapons[element][weaponID] = WeaponsConfig[element][weaponID]
 	Remotes.UpdateOwnedWeapons:FireClient(player, profile.Data.OwnedWeapons)	
 end
 
-function Manager.EquipWeapon(player: Player, weaponID: string)
+function Manager.EquipWeapon(player: Player, element, weaponID: string)
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 
-	profile.Data.EquippedWeapon = WeaponsConfig[weaponID]
+	profile.Data.EquippedWeapon = WeaponsConfig[element][weaponID]
 	Remotes.ChangeEquippedWeapon:FireClient(player, profile.Data.EquippedWeapon)
 
 end

@@ -1,0 +1,364 @@
+local ShopsManager = {}
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = game.Players.LocalPlayer
+
+local Remotes = ReplicatedStorage.Remotes
+local Configs = ReplicatedStorage.Configs
+
+local PlayerMovement = require(ReplicatedStorage.Libs.PlayerCharacterMovement)
+local State = require(ReplicatedStorage.Client.State)
+local InventoryUIColors = require(ReplicatedStorage.Configs.InventoryUIColors)
+local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
+local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
+local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
+
+local ShopUI = player.PlayerGui:WaitForChild("BattleShopTemplate")
+local MainFrame = ShopUI.MainFrame
+local CloseButton = MainFrame.CloseFrame.CloseButton
+local BackgroundFrame = MainFrame.BackgroundFrame
+local HeadingFrame = MainFrame.HeadingFrame
+local HeadingFrameBackground = MainFrame.HeadingFrameBackground
+local SelectedFrame = MainFrame.SelectedFrame
+local IconImage = SelectedFrame.IconImage
+local IconStats = SelectedFrame.Stats
+local IconName = IconStats.IconName
+local IconPrice = IconStats.IconPrice
+local IconAmount = IconStats.IconAmount
+local BuyButton = IconStats.BuyButton
+local BuyFrame = IconStats.BuyFrame 
+local NumberBuyButton = BuyFrame.BuyButton
+local AdditionFrame = BuyFrame.AdditionFrame
+local AmountLabel = AdditionFrame.AmountLabel
+local MinusButton = AdditionFrame.MinusButtonFrame.MinusButton
+local PlusButton = AdditionFrame.PlusButtonFrame.PlusButton 
+
+local DescriptionFrame = IconStats.Description
+local IconDescription = IconStats.Description.IconDescription
+
+local InventoryFrame = MainFrame.InventoryFrame
+local ScrollingFrame = InventoryFrame.ScrollingFrame
+local Template = InventoryFrame.Template
+
+local WeaponTypeButtonsFrame = MainFrame.WeaponTypeButtons
+local RangedButton = WeaponTypeButtonsFrame.Ranged.ImageButton
+local SwordButton = WeaponTypeButtonsFrame.Sword.ImageButton
+local StaffButton = WeaponTypeButtonsFrame.Staff.ImageButton
+
+local ElementTypeButtonsFrame = MainFrame.ElementTypeButtons
+local AirButton = ElementTypeButtonsFrame.Air.ImageButton
+local FireButton = ElementTypeButtonsFrame.Fire.ImageButton
+local GeoButton = ElementTypeButtonsFrame.Geo.ImageButton
+local WaterButton = ElementTypeButtonsFrame.Water.ImageButton 
+local NeutralButton = ElementTypeButtonsFrame.Neutral.ImageButton
+
+local NAME_TEXT = "Name: REPLACE"
+local PRICE_TEXT = "Price: REPLACE"
+local CAPACITY_TEXT = "Capacity: REPLACE"
+
+local SelectedItem
+local CurrentShop
+local CurrentElement
+local CurrentWeaponType
+local AmountOfItems = 1 
+
+local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
+local ORIGINAL_SIZE_OF_BUYBUTTON = BuyButton.Size
+local ORIGINAL_SIZE_OF_NUMBERBUYBUTTON = NumberBuyButton.Size
+
+local Shops = {}
+ 
+-- This function loads the data from Configs into the Shops table
+local function LoadDataFromConfigs()
+    Shops["Weapons"] = require(Configs.WeaponsConfig)
+end
+
+LoadDataFromConfigs()
+
+-- This function changes the colors of the UI elements based on the current shop
+local function ChangeColors()
+    BackgroundFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].BackgroundFrame
+    HeadingFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].HeadingFrame
+    HeadingFrameBackground.BackgroundColor3 = InventoryUIColors[CurrentShop].HeadingFrameBackground
+    InventoryFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].InventoryFrame    
+    SelectedFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].EquippedFrame
+    DescriptionFrame.BackgroundColor3 = InventoryUIColors[CurrentShop].DescriptionFrame
+    IconPrice.BackgroundColor3 = InventoryUIColors[CurrentShop].IconPrice
+    IconAmount.BackgroundColor3 = InventoryUIColors[CurrentShop].IconAmount
+    IconName.BackgroundColor3 = InventoryUIColors[CurrentShop].IconName
+    IconImage.BackgroundColor3 = InventoryUIColors[CurrentShop].IconImage
+end
+
+-- This function checks for ownership of the Watering Can or the Backpack and returns a boolean value
+local function CheckForOwnerShip(item)
+    item = item or SelectedItem.UID
+    print(CurrentElement)
+    print(item)
+    if CurrentShop == "Weapons" then 
+        if State.GetData().OwnedWeapons[CurrentElement][item] then 
+            return true
+        end
+    end
+
+    return false 
+end
+
+local function BuyWeapon()
+    if CheckForOwnerShip() then 
+        SoundsManager.PlayDenialSound()
+        print("Item Already Owned")
+        return
+    end
+
+    if State.GetData().Coins >= SelectedItem.Price then 
+        Remotes.UpdateOwnedWeapons:FireServer(CurrentElement, SelectedItem.UID)
+        BuyButton.Text = "Owned"
+        SoundsManager.PlayPressSound()
+        print("Item Has been Bought")
+        return
+    end
+    SoundsManager.PlayDenialSound()
+    print("Not Enough Money")
+end
+
+-- This function sets the text of the AmountLabel to the current AmountOfItems value
+local function SetAmountLabelText()
+    AmountLabel.Text = AmountOfItems
+end
+
+-- This function shows all the stats in the Information Frame
+local function ShowStats()
+    IconName.Visible = true
+    IconPrice.Visible = true
+    IconAmount.Visible = true 
+    DescriptionFrame.Visible = true
+    BuyButton.Visible = true
+    IconImage.Visible = true 
+    AmountLabel.Text = 1
+    AmountOfItems = 1 
+end
+
+-- This function hides all the stats in the Information Frame
+local function HideStats()
+    IconName.Visible = false
+    IconPrice.Visible = false
+    IconAmount.Visible = false
+    DescriptionFrame.Visible = false 
+    BuyButton.Visible = false
+    BuyFrame.Visible = false 
+    IconImage.Visible = false
+end
+
+-- This function loads the stats of the selected item into the Information Frame
+local function LoadStats(item)
+    IconName.Text = NAME_TEXT:gsub("REPLACE", item.Name)
+    IconPrice.Text = PRICE_TEXT:gsub("REPLACE", item.Price)
+    if item.Description then 
+        IconDescription.Text = item.Description
+    end
+
+    if item.imageID then 
+        IconImage.Image = item.imageID
+    end 
+
+    BuyButton.Text = "Buy"
+    if CurrentShop == "Weapons" then 
+        IconAmount.Text = CAPACITY_TEXT:gsub("REPLACE", item.Attack)
+        if CheckForOwnerShip() then 
+            BuyButton.Text = "Owned"
+        end
+    end
+
+    ShowStats()
+end
+
+-- This function resets the background transparency of all the icons in the current menu
+local function ResetTransparency()
+    for _, item in ScrollingFrame:GetChildren() do 
+        if item.Name == "UIGridLayout" then continue end
+        item.BackgroundTransparency = 0
+    end
+end
+
+-- This function creates the icon and hooks up its pressed event
+local function CreateIcon(item)
+    local icon = Template:Clone()
+    icon.Parent = ScrollingFrame
+    icon.Name = item.Name
+    icon.ItemName.Text = item.Name
+    icon.Visible = true
+
+    if item.imageID then 
+        icon.ImageLabel.Image = item.imageID
+    end
+
+    if item.LayoutOrder then 
+        icon.LayoutOrder = item.LayoutOrder
+    end
+
+
+    if CurrentShop == "Weapons" then 
+        if CheckForOwnerShip(icon.Name) then 
+            icon.EquippedIcon.Visible = true
+        end
+    end
+
+    icon.MouseButton1Down:Connect(function()
+        SoundsManager.PlayPressSound()
+        ResetTransparency()
+        SelectedItem = item
+        icon.BackgroundTransparency = 0.5
+
+        LoadStats(item)
+    end)
+end
+
+-- This function deletes all the icons from the shop's inventory
+local function ClearInventory()
+    for _, icon in ScrollingFrame:GetChildren() do 
+        if icon.Name == "UIGridLayout" then continue end 
+        icon:Destroy()
+    end
+end
+
+local function GenerateIcons(WeaponType, ElementType)
+    WeaponType = WeaponType or "Sword"
+    ElementType = ElementType or "Neutral"
+
+    local CurrentWeapons = {}
+    for _, item in Shops[CurrentShop][ElementType] do
+        if item.WeaponType == WeaponType then 
+            CurrentWeapons[item.UID] = item
+        end
+    end
+    for _, item in CurrentWeapons do 
+        CreateIcon(item)
+    end
+end
+
+-- This function is called to generate and display the icons of the current shop
+function ShopsManager.GenerateShop(shopID, weaponType, elementType, hideShop: boolean?)
+    hideShop = hideShop or true
+    ClearInventory()
+    if hideShop then 
+        HideStats()
+    end
+    PlayerMovement:Movement(player, false)
+    CurrentShop = shopID
+    CurrentWeaponType = weaponType or "Sword"
+    CurrentElement = elementType or "Neutral"
+    UISettings.DisableAll()
+    ShopUI.Enabled = true
+    HeadingFrame.TextLabel.Text = CurrentShop .. " Shop"
+    ChangeColors()
+
+    GenerateIcons(CurrentWeaponType, CurrentElement)
+end
+
+SwordButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, "Sword", CurrentElement, true)
+end)
+
+RangedButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, "Ranged", CurrentElement, true)
+end)
+
+StaffButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, "Staff", CurrentElement, true)
+end)
+
+AirButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Air", true)
+end)
+
+WaterButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Water", true)
+end)
+
+GeoButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Geo", true)
+end)
+
+FireButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Fire", true)
+end)
+
+NeutralButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Neutral", true)
+end)
+
+-- This function closes the menu when the X button is pressed
+CloseButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
+    PlayerMovement:Movement(player, true)
+    ShopUI.Enabled = false
+end)
+
+CloseButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
+    CloseButton.Size = ScalingUI.IncreaseBy10Percent(ORIGINAL_SIZE_OF_CLOSEBUTTON)
+end)
+
+CloseButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
+    CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
+end)
+
+-- When the Buy button is pressed, it calls the corresponding buy function based on the current shop
+BuyButton.MouseButton1Down:Connect(function()
+    if CurrentShop == "Weapons" then 
+        BuyWeapon()
+        return     
+    end
+end)
+
+BuyButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
+    BuyButton.Size = ScalingUI.IncreaseBy2Point5Percent(ORIGINAL_SIZE_OF_BUYBUTTON)
+end)
+
+BuyButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
+    BuyButton.Size = ORIGINAL_SIZE_OF_BUYBUTTON
+end)
+
+-- When the NumberBuyButton is pressed, it calls the corresponding buy function based on the current shop
+NumberBuyButton.MouseButton1Down:Connect(function()
+
+end)
+
+NumberBuyButton.MouseEnter:Connect(function()
+    SoundsManager.PlayEnterSound()
+    NumberBuyButton.Size = ScalingUI.IncreaseBy5Percent(ORIGINAL_SIZE_OF_NUMBERBUYBUTTON)
+end)
+
+NumberBuyButton.MouseLeave:Connect(function()
+    SoundsManager.PlayLeaveSound()
+    NumberBuyButton.Size = ORIGINAL_SIZE_OF_NUMBERBUYBUTTON
+end)
+
+MinusButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
+
+    -- Decrease the amount of items by 1, with a minimum value of 1
+    if AmountOfItems < 2 then
+        AmountOfItems = 1 
+    else 
+        AmountOfItems -= 1 
+    end
+    SetAmountLabelText()
+end)
+
+PlusButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
+
+    -- Increase the amount of items by 1, with a maximum value of 10
+    if AmountOfItems > 9 then 
+        AmountOfItems = 10 
+    else 
+        AmountOfItems += 1
+    end
+    SetAmountLabelText()
+end)
+
+return ShopsManager
