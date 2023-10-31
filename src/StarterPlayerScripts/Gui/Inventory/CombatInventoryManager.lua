@@ -54,6 +54,7 @@ local SelectedItemType
 local CurrentInventory
 local CurrentWeaponType
 local CurrentPotionType
+local CurrentEggType
 local CurrentElement 
 local EquippedItem
 
@@ -88,9 +89,17 @@ end
 -- This function makes the Equip Button visible if the inventory is either Backpack or Watering Can
 local function ShowEquipButton()
 
-    if CurrentInventory == "Weapons" or CurrentInventory == "Armors" then
+    if CurrentInventory == "Weapons" or CurrentInventory == "Armors" or CurrentInventory == "Pets" then
+        EquipButton.Visible = true
+        EquipButton.Text = "Equip"
+    end
+    if CurrentInventory == "Potions" then 
         EquipButton.Visible = true
         EquipButton.Text = "Use"
+    end
+    if CurrentInventory == "Eggs" then 
+        EquipButton.Visible = true 
+        EquipButton.Text = "Hatch"
     end
 end
 
@@ -194,9 +203,8 @@ local function CreateWeaponIcons(elementType, weaponType)
 
     weaponType = weaponType or "Sword"
     elementType = elementType or "Neutral"
-
     local CurrentWeapons = {}
-    for _, item in CurrentDirectory[CurrentInventory][elementType] do
+    for _, item in CurrentDirectory[elementType] do
         if item.WeaponType == weaponType then 
             CurrentWeapons[item.UID] = item
         end
@@ -210,7 +218,7 @@ local function CreatePotionIcons(potionType)
     potionType = potionType or "Attack"
 
     local CurrentPotions = {}
-    for _, item in CurrentDirectory[CurrentInventory][potionType] do
+    for _, item in CurrentDirectory[potionType] do
         if item.PotionType == potionType then 
             CurrentPotions[item.UID] = item
         end
@@ -218,7 +226,19 @@ local function CreatePotionIcons(potionType)
     for _, item in CurrentPotions do 
         CreateIcon(item)
     end
+end
 
+local function CreateEggIcons(eggType)
+    eggType = eggType or "Neutral"
+    print(CurrentDirectory)
+    print(eggType)
+    local CurrentEggs = {}
+    for _, item in CurrentDirectory[eggType] do 
+        CurrentEggs[item.UID] = item
+    end
+    for _, item in CurrentEggs do 
+        CreateIcon(item)
+    end
 end
 
 -- This function is responsible for generating the inventory with the desired ID
@@ -227,12 +247,13 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
     GetDataFromClient()
     ClearInventory()
     HideStats()
-    ChangeColors()
 
     CurrentElement = elementType or "Neutral"
     CurrentWeaponType = weaponType or "Sword"
     CurrentPotionType = potionType or "Attack"
+    CurrentEggType = elementType or "Neutral"
     CurrentInventory = setID
+    ChangeColors()
     TOTALITEMS = 0
 
     -- for _, subDir in CurrentDirectory do 
@@ -255,12 +276,18 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
         CreatePotionIcons(potionType)
     end
 
+    if CurrentInventory == "Eggs" then 
+        WeaponTypeHolder.Visible = false
+        PotionTypeHolder.Visible = false 
+        ElementTypeButtons.Visible = true
+        CreateEggIcons(CurrentEggType)
+    end
+
     if TOTALITEMS == 0 then 
         EmptyFrame.Visible = true
     else
         EmptyFrame.Visible = false
     end
-
 end
 
 -- This function returns the current inventory as a string.

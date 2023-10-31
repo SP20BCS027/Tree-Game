@@ -1,5 +1,5 @@
 export type DungeonConfigTemp = {
-	UIID : string, 
+	UID : string, 
 	Name: string,
 	Description: string, 
 	MaxFloor: number,
@@ -9,7 +9,7 @@ export type DungeonConfigTemp = {
 
 local DungeonConfig: {[string]: DungeonConfigTemp} = {
 	TutorialDungeon = {
-		UIID = "Tutorial", 
+		UID = "Tutorial", 
 		Name = "Tutorial Dungeon", 
 		Description = "This is the tutorial Dungeon and we will teach you all about combat in these floors. Enjoy!", 
 		MaxFloor = 5,
@@ -17,28 +17,28 @@ local DungeonConfig: {[string]: DungeonConfigTemp} = {
 		IsUnlocked = true, 
 	}, 
 	FireDungeon = {
-		UIID = "Fire", 
+		UID = "Fire", 
 		Name = "Fire Dungeon", 
 		MaxFloor = 10,
 		UnlockedFloor = 0, 
 		IsUnlocked = false, 
 	}, 
 	WaterDungeon = {
-		UIID = "Water", 
+		UID = "Water", 
 		Name = "Water Dungeon", 
 		MaxFloor = 10,
 		UnlockedFloor = 0,
 		IsUnlocked = false,   
 	}, 
 	ElectricDungeon = {
-		UIID = "Electric", 
+		UID = "Electric", 
 		Name = "Electric Dungeon", 
 		MaxFloor = 10,
 		UnlockedFloor = 0,  
 		IsUnlocked = false, 
 	},  
 	NaturalDunegon = {
-		UIID = "Natural", 
+		UID = "Natural", 
 		Name = "Natural Dungeon", 
 		MaxFloor = 10,
 		UnlockedFloor = 0,  

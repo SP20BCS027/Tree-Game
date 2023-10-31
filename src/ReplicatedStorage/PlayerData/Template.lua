@@ -14,7 +14,7 @@ local TreeIndexConfig = require(ReplicatedStorage.Configs.TreeIndexConfig)
 local WeaponsConfig = require(ReplicatedStorage.Configs.WeaponsConfig)
 local ArmorsConfig = require(ReplicatedStorage.Configs.ArmorConfig)
 local PotionsConfig = require(ReplicatedStorage.Configs.PotionsConfig)
--- local EggsConfig = require(ReplicatedStorage.Configs.EggsConfig)
+local EggsConfig = require(ReplicatedStorage.Configs.EggsConfig)
 -- local PetsConfig = require(ReplicatedStorage.Configs.PetsConfig)
 
 local Template = {
@@ -114,11 +114,15 @@ local Template = {
 	EquippedPets = {
 	},
 	Eggs = {
-		NeutralEggs = {},
-		FireEggs = {}, 
-		WaterEggs = {}, 
-		AirEggs = {}, 
-		GeoEggs = {},
+		Neutral = {
+			NeutralEgg = EggsConfig.Neutral.NeutralEgg
+		},
+		Fire = {
+			FireEgg = EggsConfig.Fire.FireEgg
+		}, 
+		Water = {}, 
+		Air = {}, 
+		Geo = {},
 	},
 	
 	Achievements = AchievementsConfig,

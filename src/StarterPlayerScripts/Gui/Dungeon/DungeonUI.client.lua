@@ -21,6 +21,9 @@ local ScrollingFrame = InformationFrame.ScrollingFrame
 
 local Template = InformationFrame.Template
 
+local HeadingFrame = DungeonUI.HeadingFrame
+local HeadingFrameText = HeadingFrame.TextLabel
+
 local SelectFrame = DungeonUI.SelectFrame
 local BattleButton = SelectFrame.BattleButton
 local Heading = SelectFrame.Heading
@@ -51,6 +54,7 @@ end
 local function GenerateUI(DungeonName)
     UISettings.DisableAll()
     DungeonUI.Enabled = true
+    HeadingFrameText.Text = DungeonsConfig[DungeonName].Name
 
     for _, child in ipairs(ScrollingFrame:GetChildren()) do
         if child.Name == "UIGridLayout" or child.Name == "UIPadding" then
@@ -101,4 +105,5 @@ end)
 -- Calls the GenerateUI function to generate the UI for the received DungeonName.
 Remotes.GenerateDungeons.OnClientEvent:Connect(function(DungeonName)
     GenerateUI(DungeonName)
+
 end)

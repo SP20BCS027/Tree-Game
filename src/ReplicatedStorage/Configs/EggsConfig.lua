@@ -1,5 +1,5 @@
 export type PetsConfigTemp = {
-	UIID : string, 
+	UID : string, 
 	Name: string,
 	Description: string, 
 	Type: string, 
@@ -8,54 +8,59 @@ export type PetsConfigTemp = {
 }
 
 local Eggs = {
-	NeutralEggs = {
+	Neutral = {
 		NeutralEgg = {
-			UIID = "NeutralEgg", 
+			UID = "NeutralEgg", 
 			Name = "Neutral Egg", 
 			Description = "A Bunny that Fires", 
-			Type = "Fire", 
+			Type = "Neutral", 
 			Rarity = "Basic",
 			Price = 100, 
+			ImageID = "rbxassetid://15217376249",
 		}
 	}, 
-	FireEggs = {
+	Fire = {
 		FireEgg = {
-			UIID = "FireEgg", 
+			UID = "FireEgg", 
 			Name = "Fire Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Fire", 
 			Rarity = "Basic",
 			Price = 100, 
+			ImageID = "rbxassetid://15217391614",
 		}
 	}, 
-	WaterEggs = {
+	Water = {
 		WaterEgg = {
-			UIID = "WaterEgg", 
+			UID = "WaterEgg", 
 			Name = "Water Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Water", 
 			Rarity = "Basic",
 			Price = 100, 
+			ImageID = "rbxassetid://15217400528",
 		}
 	}, 
-	AirEggs = {
+	Air = {
 		AirEgg = {
-			UIID = "AirEgg", 
+			UID = "AirEgg", 
 			Name = "Air Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Air", 
 			Rarity = "Basic",
 			Price = 100, 
+			ImageID = "rbxassetid://15217408485",
 		}  
 	}, 
-	GeoPets = {
+	Geo = {
 		GeoEgg = {
-			UIID = "GeoEgg", 
+			UID = "GeoEgg", 
 			Name = "Geo Egg", 
 			Description = "A Bunny that Fires", 
 			Type = "Geo", 
 			Rarity = "Basic",
 			Price = 100, 
+			ImageID = "rbxassetid://15217429275",
 		}
 	},  
 }
