@@ -10,7 +10,7 @@ local Remotes = ReplicatedStorage.Remotes
 -- Updates the player's owned plots.
 -- Checks if the player has enough coins to purchase the plot.
 -- Calls the appropriate manager functions to purchase the plot and adjust the player's coins.
-local function UpdateOwnedPlots(player: Player, plot: directory)	
+local function UpdateOwnedPlots(player: Player, plot: {})	
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 

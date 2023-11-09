@@ -10,7 +10,13 @@ local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.Sca
 local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
 
 local PhysicalDungeons = WorkSpace:WaitForChild("PhysicalDungeons")
-local TutorialDungeon = PhysicalDungeons:WaitForChild("TutorialDungeon")
+local Dungeons = {
+    TutorialDungeon = PhysicalDungeons:WaitForChild("TutorialDungeon"),
+    FireDungeon = PhysicalDungeons:WaitForChild("FireDungeon"),
+    WaterDungeon = PhysicalDungeons:WaitForChild("WaterDungeon"),
+    AirDungeon = PhysicalDungeons:WaitForChild("AirDungeon"),
+    GeoDungeon = PhysicalDungeons:WaitForChild("GeoDungeon"),
+}
 
 local DungeonUI = player.PlayerGui:WaitForChild("DungeonSelectMenu")
 local CloseFrame = DungeonUI.CloseFrame
@@ -29,21 +35,22 @@ local BattleButton = SelectFrame.BattleButton
 local Heading = SelectFrame.Heading
 local Description = SelectFrame.Description 
 
+local SelectedFloor
+local CurrentDungeon
+
 local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
+local FLOOR_TEXT = "Floor REPLACE"
 
 -- Updates the select frame in the dungeon UI based on the selected dungeon.
 -- Sets the heading and description text according to the dungeon configuration.
 -- Connects the battle button's MouseButton1Down event to teleport the player and disable the dungeon UI.
 local function UpdateSelectFrame(DungeonName)
-    Heading.Text = DungeonsConfig[DungeonName].Name
-    Description.Text = DungeonsConfig[DungeonName].Description
-
-    BattleButton.MouseButton1Down:Connect(function()
-        SoundsManager.PlayPressSound()
-        local playerModel = player.Character
-        playerModel.HumanoidRootPart.CFrame = TutorialDungeon.SpawnPoint.CFrame + Vector3.new(0, 3, 0)
-        DungeonUI.Enabled = false
-    end)
+    Heading.Text = FLOOR_TEXT:gsub("REPLACE", SelectedFloor.LayoutOrder)
+    if SelectedFloor.LayoutOrder <= DungeonsConfig[DungeonName].UnlockedFloor then 
+        Description.Text = DungeonsConfig[DungeonName].Description
+    else
+        Description.Text = "This Floor is not Unlocked Yet!"
+    end
 end
 
 -- Generates the UI for the selected dungeon.
@@ -55,6 +62,8 @@ local function GenerateUI(DungeonName)
     UISettings.DisableAll()
     DungeonUI.Enabled = true
     HeadingFrameText.Text = DungeonsConfig[DungeonName].Name
+
+    CurrentDungeon = DungeonName
 
     for _, child in ipairs(ScrollingFrame:GetChildren()) do
         if child.Name == "UIGridLayout" or child.Name == "UIPadding" then
@@ -69,6 +78,7 @@ local function GenerateUI(DungeonName)
 
         FloorIcon.Button.Visible = true
         FloorIcon.Button.Text = i
+        FloorIcon.LayoutOrder = i
         FloorIcon.Parent = ScrollingFrame
 
         if i > DungeonsConfig[DungeonName].UnlockedFloor then
@@ -77,8 +87,16 @@ local function GenerateUI(DungeonName)
         end
 
         FloorIcon.Button.MouseButton1Down:Connect(function()
+            SelectedFloor = FloorIcon
             SoundsManager.PlayPressSound()
             UpdateSelectFrame(DungeonName)
+            print("Unlocked Button Pressed")
+        end)
+        FloorIcon.Unlocked.MouseButton1Down:Connect(function()
+            SelectedFloor = FloorIcon
+            SoundsManager.PlayPressSound()
+            UpdateSelectFrame(DungeonName)
+            print("Locked Button Pressed")
         end)
     end
 end
@@ -99,6 +117,18 @@ end)
 CloseButton.MouseLeave:Connect(function()
     SoundsManager.PlayLeaveSound()
     CloseButton.Size = ORIGINAL_SIZE_OF_CLOSEBUTTON
+end)
+
+BattleButton.MouseButton1Down:Connect(function()
+    if SelectedFloor.LayoutOrder <= DungeonsConfig[CurrentDungeon].UnlockedFloor then 
+        SoundsManager.PlayPressSound()
+        local playerModel = player.Character
+        playerModel.HumanoidRootPart.CFrame = Dungeons[CurrentDungeon].SpawnPoint.CFrame + Vector3.new(0, 3, 0)
+        DungeonUI.Enabled = false
+    else
+        SoundsManager.PlayLeaveSound()
+        print("This Dungeon is not Unlocked Yet!")
+    end
 end)
 
 -- Connects the OnClientEvent of the GenerateDungeons remote event.

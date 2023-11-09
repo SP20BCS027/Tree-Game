@@ -6,7 +6,7 @@ type PlotsConfigTemp = {
 	Name: string, 
 	Id: string, 
 	Occupied: boolean, 
-	Tree: Trees.TreeConfig?, 
+	Tree: Trees.TreeConfigTemp, 
 	Position: CFrame, 
 	Price: number, 
 	LayoutOrder: number,

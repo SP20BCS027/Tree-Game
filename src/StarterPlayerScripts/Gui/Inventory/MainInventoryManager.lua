@@ -46,7 +46,6 @@ local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
 local TOTALITEMS
 
 local SelectedItem
-local SelectedItemType
 local CurrentInventory
 local EquippedItem
 
@@ -172,9 +171,6 @@ local function CreateIcon(item)
         SoundsManager.PlayPressSound()
         ResetTransparency()
         SelectedItem = item.UID
-        if CurrentInventory == "Weapons" then 
-            SelectedItemType = item.Type
-        end
         icon.BackgroundTransparency = 0.5
         LoadStats(item)
     end)
@@ -254,11 +250,6 @@ EquipButton.MouseButton1Down:Connect(function()
     end
     if CurrentInventory == "WaterCans" then 
         ReplicatedStorage.Remotes.ChangeEquippedWateringCan:FireServer(SelectedItem)
-    end
-
-    if CurrentInventory == "Weapons" then 
-        ReplicatedStorage.Remotes.ChangeEquippedWeapon:FireServer(SelectedItemType, SelectedItem)
-        ReplicatedStorage.Remotes.GivePlayerWeaponTool:FireServer(SelectedItemType, SelectedItem)
     end
 
     EquipButton.Text = "Equipped"

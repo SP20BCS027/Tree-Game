@@ -58,6 +58,11 @@ local HealthButton = PotionsTypeButtonsFrame.Health.TextButton
 local DefenseButton = PotionsTypeButtonsFrame.Defense.TextButton
 local PetsButton = PotionsTypeButtonsFrame.Pets.TextButton
 
+local ArmorsTypeButtonsFrame = MainFrame.ArmorTypeButtons
+local ArmsButton = ArmorsTypeButtonsFrame.Arms.ImageButton
+local ChestButton = ArmorsTypeButtonsFrame.Chest.ImageButton
+local HeadButton = ArmorsTypeButtonsFrame.Head.ImageButton
+local LegsButton = ArmorsTypeButtonsFrame.Legs.ImageButton
 
 local NAME_TEXT = "Name: REPLACE"
 local PRICE_TEXT = "Price: REPLACE"
@@ -68,6 +73,7 @@ local CurrentShop
 local CurrentElement
 local CurrentWeaponType
 local CurrentPotionType
+local CurrentArmorType
 local AmountOfItems = 1 
 
 local ORIGINAL_SIZE_OF_CLOSEBUTTON = CloseButton.Size
@@ -82,6 +88,7 @@ local function LoadDataFromConfigs()
     Shops["Potions"] = require(Configs.PotionsConfig)
     Shops["Eggs"] = require(Configs.EggsConfig)
     Shops["Pets"] = require(Configs.PetsConfig)
+    Shops["Armors"] = require(Configs.ArmorConfig)
 end
 
 LoadDataFromConfigs()
@@ -273,6 +280,23 @@ local function GenerateEggIcons(eggType)
     end
 end
 
+local function GenerateArmorIcons(elementType, armorType)
+    elementType = elementType or "Neutral"
+    armorType = armorType or "Head"
+
+    local CurrentArmors = {}
+    for _, item in Shops[CurrentShop][elementType] do
+        for _, innerItem in item do 
+            if innerItem.ArmorType == armorType then 
+                CurrentArmors[innerItem] = innerItem
+            end
+        end
+    end
+    for _, item in CurrentArmors do 
+        CreateIcon(item)
+    end
+end
+
 function ShopsManager.GetCurrentWeaponType(): string 
     return CurrentWeaponType or "Sword"
 end
@@ -285,8 +309,12 @@ function ShopsManager.GetCurrentElementType(): string
     return CurrentElement or "Neutral"
 end
 
+function ShopsManager.GetCurrentArmorType(): string 
+    return CurrentArmorType or "Head"
+end 
+
 -- This function is called to generate and display the icons of the current shop
-function ShopsManager.GenerateShop(shopID, weaponType, elementType, potionType, hideShop: boolean?)
+function ShopsManager.GenerateShop(shopID, hideShop: boolean?, weaponType, elementType, potionType, armorType)
     hideShop = hideShop or true
     ClearInventory()
     if hideShop then 
@@ -297,6 +325,7 @@ function ShopsManager.GenerateShop(shopID, weaponType, elementType, potionType, 
     CurrentWeaponType = weaponType or "Sword"
     CurrentElement = elementType or "Neutral"
     CurrentPotionType = potionType or "Attack"
+    CurrentArmorType = armorType or "Head"
     UISettings.DisableAll()
     ShopUI.Enabled = true
     HeadingFrame.TextLabel.Text = CurrentShop .. " Shop"
@@ -306,70 +335,80 @@ function ShopsManager.GenerateShop(shopID, weaponType, elementType, potionType, 
         WeaponTypeButtonsFrame.Visible = true 
         ElementTypeButtonsFrame.Visible = true
         PotionsTypeButtonsFrame.Visible = false
-        GenerateWeaponIcons(CurrentWeaponType, CurrentElement)
+        ArmorsTypeButtonsFrame.Visible = false
+        GenerateWeaponIcons(weaponType, elementType)
     end
     if CurrentShop == "Potions" then 
         WeaponTypeButtonsFrame.Visible = false
         ElementTypeButtonsFrame.Visible = false
         PotionsTypeButtonsFrame.Visible = true
-        GeneratePotionIcons(CurrentPotionType)
+        ArmorsTypeButtonsFrame.Visible = false
+        GeneratePotionIcons(potionType)
     end
     if CurrentShop == "Eggs" then 
         WeaponTypeButtonsFrame.Visible = false
         ElementTypeButtonsFrame.Visible = true
         PotionsTypeButtonsFrame.Visible = false
-        GenerateEggIcons(CurrentElement)
+        ArmorsTypeButtonsFrame.Visible = false
+        GenerateEggIcons(elementType)
+    end
+    if CurrentShop == "Armors" then
+        WeaponTypeButtonsFrame.Visible = false
+        ElementTypeButtonsFrame.Visible = true
+        PotionsTypeButtonsFrame.Visible = false
+        ArmorsTypeButtonsFrame.Visible = true
+        GenerateArmorIcons(elementType, armorType)
     end
 end
 
 SwordButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, "Sword", CurrentElement, CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, "Sword", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
-
 RangedButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, "Ranged", CurrentElement, CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, "Ranged", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
-
 StaffButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, "Staff", CurrentElement, CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, "Staff", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
-
 AirButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Air", CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, "Air", CurrentPotionType, CurrentArmorType)
 end)
-
 WaterButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Water", CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, "Water", CurrentPotionType, CurrentArmorType)
 end)
-
 GeoButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Geo", CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, "Geo", CurrentPotionType, CurrentArmorType)
 end)
-
 FireButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Fire", CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, "Fire", CurrentPotionType, CurrentArmorType)
 end)
-
 NeutralButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, "Neutral", CurrentPotionType, true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, "Neutral", CurrentPotionType, CurrentArmorType)
 end)
-
 AttackButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, CurrentElement, "Attack", true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, "Attack", CurrentArmorType)
 end)
-
 DefenseButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, CurrentElement, "Defense", true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, "Defense", CurrentArmorType)
 end)
-
 HealthButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, CurrentElement, "Health", true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, "Health", CurrentArmorType)
 end)
-
 PetsButton.MouseButton1Down:Connect(function()
-    ShopsManager.GenerateShop(CurrentShop, CurrentWeaponType, CurrentElement, "Pets", true)
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, "Pets", CurrentArmorType)
 end)
-
+ArmsButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, CurrentPotionType, "Arms")   
+end)
+HeadButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, CurrentPotionType, "Head")   
+end)
+LegsButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, CurrentPotionType, "Legs")   
+end)
+ChestButton.MouseButton1Down:Connect(function()
+    ShopsManager.GenerateShop(CurrentShop, true, CurrentWeaponType, CurrentElement, CurrentPotionType, "Chest")   
+end)
 -- This function closes the menu when the X button is pressed
 CloseButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()

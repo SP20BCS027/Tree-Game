@@ -36,7 +36,7 @@ end)
 -- When the Weapons button is pressed, generate the "Armors" Inventory
 ArmorsButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
-    --CombatInventoryManager.GenerateInventory("Armors")
+    CombatInventoryManager.GenerateInventory("Armors")
 end)
 
 -- When the Weapons button is pressed, generate the "Potions" Inventory

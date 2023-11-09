@@ -58,30 +58,30 @@ local Template = {
 	EquippedWeapon = WeaponsConfig.Neutral.StarterSword,
 
 	OwnedArmors = {
-		NeutralArmors = {
+		Neutral = {
 			Chest = {
-				StarterChestPlate = ArmorsConfig.NeutralArmors.Chest.StarterChestPlate,
+				StarterChestPlate = ArmorsConfig.Neutral.Chest.StarterChestPlate,
 			},
 			Arms = {
-				StarterArmGuard = ArmorsConfig.NeutralArmors.Arms.StarterArmGuard, 
+				StarterArmGuard = ArmorsConfig.Neutral.Arms.StarterArmGuard, 
 			},
 			Legs = {
-				StarterLegsGuard = ArmorsConfig.NeutralArmors.Legs.StarterLegsGuard,
+				StarterLegsGuard = ArmorsConfig.Neutral.Legs.StarterLegsGuard,
 			},
 			Head = {
-				StarterHelmet = ArmorsConfig.NeutralArmors.Head.StarterHelmet, 
+				StarterHelmet = ArmorsConfig.Neutral.Head.StarterHelmet, 
 			},
 		},
-		FireArmors = {}, 
-		WaterArmors = {},
-		AirWArmors = {},  
-		GeoArmors = {}, 
+		Fire = {}, 
+		Water = {},
+		Air = {},  
+		Geo = {}, 
 	}, 
 	EquippedArmors = {
-		Chest = ArmorsConfig.NeutralArmors.Chest.StarterChestPlate, 
-		Arms = ArmorsConfig.NeutralArmors.Arms.StarterArmGuard, 
-		Legs = ArmorsConfig.NeutralArmors.Legs.StarterLegsGuard, 
-		Head = ArmorsConfig.NeutralArmors.Head.StarterHelmet, 
+		Chest = ArmorsConfig.Neutral.Chest.StarterChestPlate, 
+		Arms = ArmorsConfig.Neutral.Arms.StarterArmGuard, 
+		Legs = ArmorsConfig.Neutral.Legs.StarterLegsGuard, 
+		Head = ArmorsConfig.Neutral.Head.StarterHelmet, 
 	}, 
 
 	OwnedPotions = {

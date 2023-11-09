@@ -120,7 +120,7 @@ function Manager.AdjustPlotOccupation(player: Player, PlotID: number, treeToPlan
 end
 
 -- When this function is called, the plot is added to the owned plots of the player
-function Manager.PurchasePlot(player: Player, plot: directory)
+function Manager.PurchasePlot(player: Player, plot: {})
 	local profile = Manager.Profiles[player]
 	if not profile then return end
 	

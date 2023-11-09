@@ -39,6 +39,7 @@ local EquipButton = EquippedFrame.Stats.EquipButton
 local PotionTypeHolder = MainFrame.PotionTypeHolder
 local WeaponTypeHolder = MainFrame.WeaponTypeHolder 
 local ElementTypeButtons = MainFrame.ElementTypeButtons
+local ArmorTypeHolder = MainFrame.ArmorTypeHolder
 
 local ITEM_NAME = "Name: REPLACE"
 local ITEM_AMOUNT = "Amount: REPLACE"
@@ -56,6 +57,7 @@ local CurrentWeaponType
 local CurrentPotionType
 local CurrentEggType
 local CurrentElement 
+local CurrentArmorType
 local EquippedItem
 
 -- This function loads the most updated data in the Configs table
@@ -230,8 +232,6 @@ end
 
 local function CreateEggIcons(eggType)
     eggType = eggType or "Neutral"
-    print(CurrentDirectory)
-    print(eggType)
     local CurrentEggs = {}
     for _, item in CurrentDirectory[eggType] do 
         CurrentEggs[item.UID] = item
@@ -241,8 +241,24 @@ local function CreateEggIcons(eggType)
     end
 end
 
+local function CreateArmorIcons(elementType, armorType)
+    elementType = elementType or "Neutral"
+    armorType = armorType or "Head"
+    local CurrentArmors = {}
+    for _, item in CurrentDirectory[elementType] do 
+        for _, innerItem in item do
+            if innerItem.ArmorType == armorType then 
+                CurrentArmors[innerItem.UID] = innerItem
+            end
+        end
+    end
+    for _, item in CurrentArmors do 
+        CreateIcon(item)
+    end
+end
+
 -- This function is responsible for generating the inventory with the desired ID
-function MainInventory.GenerateInventory(setID, weaponType, elementType, potionType)
+function MainInventory.GenerateInventory(setID, weaponType, elementType, potionType, armorType)
     SetCurrentConfig(setID)
     GetDataFromClient()
     ClearInventory()
@@ -252,6 +268,7 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
     CurrentWeaponType = weaponType or "Sword"
     CurrentPotionType = potionType or "Attack"
     CurrentEggType = elementType or "Neutral"
+    CurrentArmorType = armorType or "Head"
     CurrentInventory = setID
     ChangeColors()
     TOTALITEMS = 0
@@ -266,6 +283,7 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
         WeaponTypeHolder.Visible = true 
         PotionTypeHolder.Visible = false 
         ElementTypeButtons.Visible = true
+        ArmorTypeHolder.Visible = false
         CreateWeaponIcons(elementType, weaponType)
     end
 
@@ -273,6 +291,7 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
         WeaponTypeHolder.Visible = false
         PotionTypeHolder.Visible = true
         ElementTypeButtons.Visible = false
+        ArmorTypeHolder.Visible = false 
         CreatePotionIcons(potionType)
     end
 
@@ -280,7 +299,16 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
         WeaponTypeHolder.Visible = false
         PotionTypeHolder.Visible = false 
         ElementTypeButtons.Visible = true
+        ArmorTypeHolder.Visible = false
         CreateEggIcons(CurrentEggType)
+    end
+
+    if CurrentInventory == "Armors" then 
+        WeaponTypeHolder.Visible = false 
+        PotionTypeHolder.Visible = false 
+        ElementTypeButtons.Visible = true
+        ArmorTypeHolder.Visible = true
+        CreateArmorIcons(elementType, armorType)
     end
 
     if TOTALITEMS == 0 then 
@@ -296,47 +324,52 @@ function MainInventory.GetCurrentInventory(): string
 end
 
 WeaponTypeHolder.Sword.TextButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, "Sword", CurrentElement, CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, "Sword", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
-
 WeaponTypeHolder.Ranged.TextButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, "Ranged", CurrentElement, CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, "Ranged", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
-
 WeaponTypeHolder.Staff.TextButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, "Staff", CurrentElement, CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, "Staff", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
-
 PotionTypeHolder.Attack.TextButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Attack")
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Attack", CurrentArmorType)
 end)
-
 PotionTypeHolder.Defense.TextButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Defense")
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Defense", CurrentArmorType)
 end)
-
 PotionTypeHolder.Health.TextButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Health")
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Health", CurrentArmorType)
 end)
-
 PotionTypeHolder.Pets.TextButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Pets")
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Pets", CurrentArmorType)
 end)
-
 ElementTypeButtons.Air.ImageButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Air", CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Air", CurrentPotionType, CurrentArmorType)
 end)
 ElementTypeButtons.Water.ImageButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Water", CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Water", CurrentPotionType, CurrentArmorType)
 end)
 ElementTypeButtons.Fire.ImageButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Fire", CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Fire", CurrentPotionType, CurrentArmorType)
 end)
 ElementTypeButtons.Geo.ImageButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Geo", CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Geo", CurrentPotionType, CurrentArmorType)
 end)
 ElementTypeButtons.Neutral.ImageButton.MouseButton1Down:Connect(function()
-    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Neutral", CurrentPotionType)
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Neutral", CurrentPotionType, CurrentArmorType)
+end)
+ArmorTypeHolder.Head.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, CurrentPotionType, "Head")
+end)
+ArmorTypeHolder.Legs.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, CurrentPotionType, "Legs")
+end)
+ArmorTypeHolder.Arms.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, CurrentPotionType, "Arms")
+end)
+ArmorTypeHolder.Chest.TextButton.MouseButton1Down:Connect(function()
+    MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, CurrentPotionType, "Chest")
 end)
 
 -- When the Equip button is pressed, the selected item gets equipped if it is not already equipped.

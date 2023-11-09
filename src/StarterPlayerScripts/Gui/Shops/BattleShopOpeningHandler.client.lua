@@ -11,8 +11,9 @@ local function ShopOpener(shopID, hideShop: boolean?)
     local currentWeapon = BattleShopManager.GetCurrentWeaponType()
     local currentPotion = BattleShopManager.GetCurrentPotionType()
     local currentElement = BattleShopManager.GetCurrentElementType()
+    local currentArmor = BattleShopManager.GetCurrentArmorType()
     hideShop = if hideShop == false then hideShop else true
-    BattleShopManager.GenerateShop(shopID, currentWeapon, currentElement, currentPotion, hideShop)
+    BattleShopManager.GenerateShop(shopID, hideShop, currentWeapon, currentElement, currentPotion, currentArmor)
 end
 
 Remotes.OpenBattleShop.OnClientEvent:Connect(ShopOpener)

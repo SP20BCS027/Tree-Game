@@ -166,5 +166,8 @@ local TreeConfig: {[string]: TreeConfigTemp} = {
 		TimeUntilWater = 0,
 	}
 }
+
+export type Tree = typeof(TreeConfig)
+
 return TreeConfig
 
