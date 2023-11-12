@@ -62,6 +62,20 @@ CombatInventoryButton.MouseButton1Down:Connect(function()
     CombatInventoryUI.Enabled = not CombatInventoryUI.Enabled
 end)
 
+ReplicatedStorage.Remotes.ChangeEquippedPets.OnClientEvent:Connect(function()
+    local currentInventory = CombatInventoryManager.GetCurrentInventory()
+    local currentWeapon = CombatInventoryManager.GetCurrentWeaponType()
+    local currentPotion = CombatInventoryManager.GetCurrentPotionType()
+    local currentElement = CombatInventoryManager.GetCurrentElement()
+    local currentArmor = CombatInventoryManager.GetCurrentArmorType()
+
+    if currentInventory then 
+        task.delay(0, function()
+            CombatInventoryManager.GenerateInventory(currentInventory, currentWeapon, currentElement, currentPotion, currentArmor)
+        end)
+    end 
+end)
+
 -- When the data is reset, regenerate the current inventory
 ReplicatedStorage.Remotes.ResetData.OnClientEvent:Connect(function()
     local currentInventory = CombatInventoryManager.GetCurrentInventory()

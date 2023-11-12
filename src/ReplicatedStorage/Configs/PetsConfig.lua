@@ -1,5 +1,5 @@
 export type PetsConfigTemp = {
-	UIID : string, 
+	UID : string, 
 	Name: string,
 	Description: string, 
 	MaxLevel: number,
@@ -15,10 +15,10 @@ export type PetsConfigTemp = {
 }
 
 local Pets = {
-	FirePets = {
+	Fire = {
 		FireBunny = {
-			UIID = "FB__001", 
-			Name = "FireBunny", 
+			UID = "FireBunny", 
+			Name = "Fire Bunny", 
 			Description = "A Bunny that Fires", 
 			MaxLevel= 100, 
 			CurrentLevel = 1, 
@@ -30,11 +30,12 @@ local Pets = {
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
+			ImageID = "rbxassetid://13806908261"
 		}
 	}, 
-	WaterPets = {
+	Water = {
 		WaterBunny = {
-			UIID = "WB__001", 
+			UID = "WaterBunny", 
 			Name = "Water Bunny", 
 			Description = "A Bunny that Waters", 
 			MaxLevel= 100, 
@@ -47,11 +48,12 @@ local Pets = {
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
+			ImageID = "rbxassetid://13806908261"
 		},  
 	}, 
-	AirPets = {
+	Air = {
 		AirBunny = {
-			UIID = "AB__001", 
+			UID = "AirBunny", 
 			Name = "Air Bunny", 
 			Description = "A Bunny that Airs", 
 			MaxLevel= 100, 
@@ -64,11 +66,12 @@ local Pets = {
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
+			ImageID = "rbxassetid://13806908261"
 		},   
 	}, 
-	GeoPets = {
+	Geo = {
 		GeoBunny = {
-			UIID = "GB__001", 
+			UID = "GeoBunny", 
 			Name = "Geo Bunny", 
 			Description = "A Bunny that Geos", 
 			MaxLevel= 100, 
@@ -80,7 +83,8 @@ local Pets = {
 			Rarity = "Basic",
 			CritRate = 0.2, 
 			CritAmount = 2, 
-			Equipped = false,
+			Equipped = false,			
+			ImageID = "rbxassetid://13806908261"
 		},
 	},  
 }

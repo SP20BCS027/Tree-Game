@@ -11,7 +11,7 @@ local WeaponEquipping = {}
 function WeaponEquipping.ChangeInventory()
 end
 
-local function DeleteEquippedTool(player: Player, WeaponID: string)
+local function DeleteEquippedTool(player: Player)
     local Character = player.Character
     print("Weapon Unequipped")
     Character.Humanoid:UnequipTools()
@@ -22,8 +22,7 @@ local function DeleteEquippedTool(player: Player, WeaponID: string)
 end
 
 local function givePlayerWeapon(player: Player, WeaponType, WeaponID: string)
-    print(WeaponID)
-    DeleteEquippedTool(player, WeaponID)
+    DeleteEquippedTool(player)
     local currentWeapon = WeaponsConfig[WeaponType][WeaponID]
     local weaponTool = Weapons[currentWeapon.Type][currentWeapon.WeaponType][currentWeapon.Rarity][currentWeapon.UID]:Clone()
     weaponTool.Name = "weapon"

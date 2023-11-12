@@ -105,6 +105,10 @@ Remotes.UpdateOwnedWeapons.OnClientEvent:Connect(function(OwnedWeapons: {})
 	PlayerData.OwnedWeapons = OwnedWeapons
 end)
 
+Remotes.UpdateOwnedPets.OnClientEvent:Connect(function(OwnedPets: {})
+	PlayerData.OwnedPets = OwnedPets
+end)
+
 -- Delete the tree in a specific plot of the player data
 Remotes.DeleteTree.OnClientEvent:Connect(function(plotID: string)
 	PlayerData.Plots[plotID].Tree = nil 
@@ -132,6 +136,10 @@ end)
 
 Remotes.ChangeEquippedWeapon.OnClientEvent:Connect(function(EquippedWeapon: {})
 	PlayerData.EquippedWeapon = EquippedWeapon
+end)
+
+Remotes.ChangeEquippedPets.OnClientEvent:Connect(function(EquippedPets: {})
+	PlayerData.EquippedPets = EquippedPets
 end)
 
 -- Update the amount of money in the player data

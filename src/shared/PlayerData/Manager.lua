@@ -7,6 +7,7 @@ local TreeConfig = require(ReplicatedStorage.Configs.TreeConfig)
 local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 local WeaponsConfig = require(ReplicatedStorage.Configs.WeaponsConfig)
+local PetsConfig = require(ReplicatedStorage.Configs.PetsConfig)
 local AchievementInfoConfig = require(ReplicatedStorage.Configs.AchievementInfoConfig)
 
 local Manager = {}
@@ -178,7 +179,34 @@ function Manager.EquipWeapon(player: Player, element, weaponID: string)
 
 	profile.Data.EquippedWeapon = WeaponsConfig[element][weaponID]
 	Remotes.ChangeEquippedWeapon:FireClient(player, profile.Data.EquippedWeapon)
+end
 
+function Manager.PurchasePet(player: Player, element, pet: string)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.OwnedPets[element][pet] = PetsConfig[element][pet]
+	Remotes.UpdateOwnedPets:FireClient(player, profile.Data.OwnedPets)
+end
+
+function Manager.EquipPet(player: Player, element, pet: string, petSlot)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.EquippedPets[petSlot] = PetsConfig[element][pet]
+	profile.Data.OwnedPets[element][pet].Equipped = true 
+	Remotes.ChangeEquippedPets:FireClient(player, profile.Data.EquippedPets)
+	Remotes.UpdateOwnedPets:FireClient(player, profile.Data.OwnedPets)
+end
+
+function Manager.UnEquipPet(player: Player, element, pet, petSlot)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	profile.Data.EquippedPets[petSlot] = {}
+	profile.Data.OwnedPets[element][pet].Equipped = false
+	Remotes.ChangeEquippedPets:FireClient(player, profile.Data.EquippedPets)
+	Remotes.UpdateOwnedPets:FireClient(player, profile.Data.OwnedPets)
 end
 
 -- When this function is called, the tree of the plot gets removed

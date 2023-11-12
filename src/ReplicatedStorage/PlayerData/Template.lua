@@ -15,7 +15,7 @@ local WeaponsConfig = require(ReplicatedStorage.Configs.WeaponsConfig)
 local ArmorsConfig = require(ReplicatedStorage.Configs.ArmorConfig)
 local PotionsConfig = require(ReplicatedStorage.Configs.PotionsConfig)
 local EggsConfig = require(ReplicatedStorage.Configs.EggsConfig)
--- local PetsConfig = require(ReplicatedStorage.Configs.PetsConfig)
+local PetsConfig = require(ReplicatedStorage.Configs.PetsConfig)
 
 local Template = {
 	Coins = 0, 
@@ -105,13 +105,18 @@ local Template = {
 
 	MaxEquippedPets = 3, 
 	OwnedPets = {
-		NeutralPets = {},
-		FirePets = {}, 
-		WaterPets = {}, 
-		AirPets = {}, 
-		GeoPets = {}, 
+		Neutral = {},
+		Fire = {		
+			FireBunny = PetsConfig.Fire.FireBunny,
+		}, 
+		Water = {}, 
+		Air = {}, 
+		Geo = {}, 
 	},
 	EquippedPets = {
+		Pet1 = {},
+		Pet2 = {},
+		Pet3 = {}
 	},
 	Eggs = {
 		Neutral = {

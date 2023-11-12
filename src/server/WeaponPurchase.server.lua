@@ -3,7 +3,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
 local WeaponsConfig = require(ReplicatedStorage.Configs.WeaponsConfig)
-local WeaponEquippingHandler = require(ServerScriptService.WeaponEquippingHandler)
 
 local Remotes = ReplicatedStorage.Remotes
 
@@ -30,10 +29,9 @@ local function PurchaseWeapon(player: Player, element, weapon: string)
     Manager.PurchaseWeapon(player, element, weapon)
     Manager.AdjustCoins(player, -WeaponsConfig[element][weapon].Price)
 
-    -- if profile.Data.EquippedBackpack.Capacity < WeaponsConfig[weapon].Capacity then 
-    --     Manager.EquipBackpack(player, weapon)
-    --     WeaponEquippingHandler.UpdatePlayerBackpackLabel(player)
-    -- end
+    if profile.Data.EquippedWeapon.Attack < WeaponsConfig[element][weapon].Attack then 
+         Manager.EquipWeapon(player, element, weapon)
+    end
 end
 
 Remotes.UpdateOwnedWeapons.OnServerEvent:Connect(PurchaseWeapon) 

@@ -29,12 +29,21 @@ local ScrollingFrame = InventoryFrame.ScrollingFrame
 local Template = InventoryFrame.Template
 
 local EquippedFrame = MainFrame.EquippedFrame
-local IconImage = EquippedFrame.IconImage
-local IconName = EquippedFrame.Stats.IconName
-local IconAmount = EquippedFrame.Stats.IconAmount
-local IconDescription = EquippedFrame.Stats.Description.IconDescription
-local DescriptionFrame = EquippedFrame.Stats.Description
-local EquipButton = EquippedFrame.Stats.EquipButton
+
+local PetsFrame = EquippedFrame.Pets
+local PetFrames = {
+    Pet1 = PetsFrame.Pet1, 
+    Pet2 = PetsFrame.Pet2,
+    Pet3 = PetsFrame.Pet3,
+}
+
+local StatsFrame = EquippedFrame.Stats
+local IconImage = StatsFrame.IconImage
+local IconName = StatsFrame.IconName
+local IconAmount = StatsFrame.IconAmount
+local IconDescription = StatsFrame.Description.IconDescription
+local DescriptionFrame = StatsFrame.Description
+local EquipButton = StatsFrame.EquipButton
 
 local PotionTypeHolder = MainFrame.PotionTypeHolder
 local WeaponTypeHolder = MainFrame.WeaponTypeHolder 
@@ -56,6 +65,7 @@ local CurrentInventory
 local CurrentWeaponType
 local CurrentPotionType
 local CurrentEggType
+local CurrentPetType
 local CurrentElement 
 local CurrentArmorType
 local EquippedItem
@@ -81,16 +91,19 @@ end
 
 -- This function hides all the stats of the information frame
 local function HideStats()
-    IconAmount.Visible = false
-    IconName.Visible = false
-    DescriptionFrame.Visible = false
-    EquipButton.Visible = false
-    IconImage.Visible = false
+    StatsFrame.Visible = false
 end
+
+local function HidePets()
+    EquippedFrame.Pets.Visible = false
+end
+
+local function ShowPets()
+    EquippedFrame.Pets.Visible = true
+end 
 
 -- This function makes the Equip Button visible if the inventory is either Backpack or Watering Can
 local function ShowEquipButton()
-
     if CurrentInventory == "Weapons" or CurrentInventory == "Armors" or CurrentInventory == "Pets" then
         EquipButton.Visible = true
         EquipButton.Text = "Equip"
@@ -107,16 +120,11 @@ end
 
 -- This function makes the items in the information frame visible
 local function ShowStats(item)
-    IconAmount.Visible = true
-    IconName.Visible = true
-    DescriptionFrame.Visible = true
-
+    StatsFrame.Visible = true
     ShowEquipButton()
-
     if item.Name == EquippedItem then 
         EquipButton.Text = "Equipped"
     end
-    IconImage.Visible = true
 end
 
 -- This function updates the colors of the inventory UI
@@ -137,6 +145,20 @@ local function ResetTransparency()
     for _, item in ScrollingFrame:GetChildren() do 
         if item.Name == "UIGridLayout" then continue end
         item.BackgroundTransparency = 0
+    end
+end
+
+local function UpdatePetsData()
+    for Pet, item in PetFrames do 
+        if State.GetData().EquippedPets[Pet].UID == nil then 
+            item.PetFrame.ImageLabel.Image = ""
+            item.PetFrame.PetName.Text = "No Pet Equipped"
+            item.EquipButtonFrame.EquipButton.Text = "Equip"
+            continue
+        end
+        item.PetFrame.ImageLabel.Image = State.GetData().EquippedPets[Pet].ImageID
+        item.PetFrame.PetName.Text = State.GetData().EquippedPets[Pet].Name
+        item.EquipButtonFrame.EquipButton.Text = "Unequip"
     end
 end
 
@@ -162,8 +184,8 @@ local function CreateIcon(item)
     icon.Name = item.Name
     icon.ItemName.Text = item.Name
 
-    if item.imageID then
-        icon.ImageLabel.Image = item.imageID
+    if item.ImageID then
+        icon.ImageLabel.Image = item.ImageID
     end
 
     -- Set the layout order if provided
@@ -185,10 +207,15 @@ local function CreateIcon(item)
         SoundsManager.PlayPressSound()
         ResetTransparency()
         SelectedItem = item.UID
+        icon.BackgroundTransparency = 0.5
         if CurrentInventory == "Weapons" then 
             SelectedItemType = item.Type
         end
-        icon.BackgroundTransparency = 0.5
+        if CurrentInventory == "Pets" then 
+            SelectedItemType = item.Type
+            ShowPets()
+            return
+        end
         LoadStats(item)
     end)
 end
@@ -241,6 +268,17 @@ local function CreateEggIcons(eggType)
     end
 end
 
+local function CreatePetIcons(petType)
+    petType = petType or "Neutral"
+    local CurrentPets = {}
+    for _, item in CurrentDirectory[petType] do 
+        CurrentPets[item.UID] = item
+    end
+    for _, item in CurrentPets do
+        CreateIcon(item)
+    end
+end
+
 local function CreateArmorIcons(elementType, armorType)
     elementType = elementType or "Neutral"
     armorType = armorType or "Head"
@@ -262,12 +300,16 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
     SetCurrentConfig(setID)
     GetDataFromClient()
     ClearInventory()
+    UpdatePetsData()
     HideStats()
+    HidePets()
 
+    SelectedItem = nil
     CurrentElement = elementType or "Neutral"
     CurrentWeaponType = weaponType or "Sword"
     CurrentPotionType = potionType or "Attack"
     CurrentEggType = elementType or "Neutral"
+    CurrentPetType = elementType or "Neutral"
     CurrentArmorType = armorType or "Head"
     CurrentInventory = setID
     ChangeColors()
@@ -311,6 +353,15 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
         CreateArmorIcons(elementType, armorType)
     end
 
+    if CurrentInventory == "Pets" then 
+        WeaponTypeHolder.Visible = false
+        PotionTypeHolder.Visible = false 
+        ElementTypeButtons.Visible = true
+        ArmorTypeHolder.Visible = false
+        ShowPets()
+        CreatePetIcons(CurrentPetType)
+    end
+
     if TOTALITEMS == 0 then 
         EmptyFrame.Visible = true
     else
@@ -323,6 +374,21 @@ function MainInventory.GetCurrentInventory(): string
     return CurrentInventory
 end
 
+function MainInventory.GetCurrentWeaponType(): string
+    return CurrentWeaponType
+end
+
+function MainInventory.GetCurrentElement(): string 
+    return CurrentElement
+end 
+
+function MainInventory.GetCurrentPotionType(): string
+    return CurrentPotionType
+end
+function MainInventory.GetCurrentArmorType(): string
+    return CurrentArmorType
+end
+
 WeaponTypeHolder.Sword.TextButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, "Sword", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
@@ -332,6 +398,7 @@ end)
 WeaponTypeHolder.Staff.TextButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, "Staff", CurrentElement, CurrentPotionType, CurrentArmorType)
 end)
+
 PotionTypeHolder.Attack.TextButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Attack", CurrentArmorType)
 end)
@@ -344,6 +411,7 @@ end)
 PotionTypeHolder.Pets.TextButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, "Pets", CurrentArmorType)
 end)
+
 ElementTypeButtons.Air.ImageButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Air", CurrentPotionType, CurrentArmorType)
 end)
@@ -359,6 +427,7 @@ end)
 ElementTypeButtons.Neutral.ImageButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, "Neutral", CurrentPotionType, CurrentArmorType)
 end)
+
 ArmorTypeHolder.Head.TextButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, CurrentPotionType, "Head")
 end)
@@ -372,6 +441,29 @@ ArmorTypeHolder.Chest.TextButton.MouseButton1Down:Connect(function()
     MainInventory.GenerateInventory(CurrentInventory, CurrentWeaponType, CurrentElement, CurrentPotionType, "Chest")
 end)
 
+for Pet, PetFrame in PetFrames do 
+    PetFrame.EquipButtonFrame.EquipButton.MouseButton1Down:Connect(function()
+        if State.GetData().EquippedPets[Pet].UID then 
+            ReplicatedStorage.Remotes.ChangeEquippedPets:FireServer(State.GetData().EquippedPets[Pet].Type, State.GetData().EquippedPets[Pet].UID, Pet)
+            print("Pet Unequipped")
+            return
+        end
+
+        if not SelectedItem then return end 
+        if CurrentInventory ~= "Pets" then return end 
+        if State.GetData().OwnedPets[CurrentElement][SelectedItem].Equipped == true then 
+        SoundsManager.PlayDenialSound()
+        print("The Selected Item is Already Equipped")
+        return
+    end
+
+    EquippedItem = SelectedItem
+    ReplicatedStorage.Remotes.ChangeEquippedPets:FireServer(SelectedItemType, SelectedItem, Pet)
+    print("Pet Equipped")
+    SoundsManager.PlayPressSound()
+    end)
+end
+
 -- When the Equip button is pressed, the selected item gets equipped if it is not already equipped.
 EquipButton.MouseButton1Down:Connect(function()
     if not SelectedItem then return end
@@ -383,7 +475,6 @@ EquipButton.MouseButton1Down:Connect(function()
 
     SoundsManager.PlayPressSound()
     EquippedItem = SelectedItem
-
     if CurrentInventory == "Weapons" then 
         ReplicatedStorage.Remotes.ChangeEquippedWeapon:FireServer(SelectedItemType, SelectedItem)
         ReplicatedStorage.Remotes.GivePlayerWeaponTool:FireServer(SelectedItemType, SelectedItem)

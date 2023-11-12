@@ -23,15 +23,33 @@ local function ChangeEquippedBackpack(player: Player, backpack: string)
 end
 
 local function ChangeEquippedWeapon(player: Player, element, weapon: string)
-    print("Weapon Changed in Data")
     local profile = Manager.Profiles[player]
     if not profile then return end 
-    print(element)
     if profile.Data.OwnedWeapons[element][weapon] then 
         Manager.EquipWeapon(player, element, weapon)
     end
 end
 
+local function ChangeEquippedPet(player: Player, element, pet: string, petSlot: string)
+    local profile = Manager.Profiles[player]
+    if not profile then return end 
+
+    if profile.Data.EquippedPets[petSlot].UID then 
+        Manager.UnEquipPet(player, element, pet, petSlot)
+        return
+    end
+
+    if profile.Data.OwnedPets[element][pet].Equipped == true then 
+        print("The selected Pet is already Equipped by the Player ~Server")
+        return
+    end
+
+    if profile.Data.OwnedPets[element][pet] then 
+        Manager.EquipPet(player, element, pet, petSlot)
+    end
+end
+
+Remotes.ChangeEquippedPets.OnServerEvent:Connect(ChangeEquippedPet)
 Remotes.ChangeEquippedWeapon.OnServerEvent:Connect(ChangeEquippedWeapon)
 Remotes.ChangeEquippedBackpack.OnServerEvent:Connect(ChangeEquippedBackpack)
 Remotes.ChangeEquippedWateringCan.OnServerEvent:Connect(ChangeEquippedWateringCan)
