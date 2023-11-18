@@ -35,6 +35,10 @@ Remotes.UpdateOwnedSeeds.OnClientEvent:Connect(function(amount: number, seedType
 	PlayerData.Seeds[seedType].Amount = amount
 end)
 
+Remotes.UpdateOwnedEggs.OnClientEvent:Connect(function(Eggs: {})
+	PlayerData.Eggs = Eggs
+end)
+
 -- Update the amount of owned fertilizers in the player data
 Remotes.UpdateOwnedFertilizers.OnClientEvent:Connect(function(amount: number, fertilizerType: string)
 	PlayerData.Fertilizers[fertilizerType].Amount = amount 
@@ -103,6 +107,14 @@ end)
 
 Remotes.UpdateOwnedWeapons.OnClientEvent:Connect(function(OwnedWeapons: {})
 	PlayerData.OwnedWeapons = OwnedWeapons
+end)
+
+Remotes.UpdateOwnedPotions.OnClientEvent:Connect(function(OwnedPotions: {})
+	PlayerData.OwnedPotions = OwnedPotions
+end)
+
+Remotes.UpdateOwnedKeys.OnClientEvent:Connect(function(OwnedKeys: {})
+	PlayerData.Keys = OwnedKeys
 end)
 
 Remotes.UpdateOwnedPets.OnClientEvent:Connect(function(OwnedPets: {})

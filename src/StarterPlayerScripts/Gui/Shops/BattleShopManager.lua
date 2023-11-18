@@ -89,6 +89,7 @@ local function LoadDataFromConfigs()
     Shops["Eggs"] = require(Configs.EggsConfig)
     Shops["Pets"] = require(Configs.PetsConfig)
     Shops["Armors"] = require(Configs.ArmorConfig)
+    Shops["Keys"] = require(Configs.KeysConfig)
 end
 
 LoadDataFromConfigs()
@@ -115,7 +116,7 @@ local function CheckForOwnerShip(item)
             return true
         end
     end
-
+    
     return false 
 end
 
@@ -137,6 +138,34 @@ local function BuyWeapon()
     print("Not Enough Money")
 end
 
+local function BuyPotion()
+    if State.GetData().Coins >= SelectedItem.Price * AmountOfItems then 
+        Remotes.UpdateOwnedPotions:FireServer(AmountOfItems, CurrentPotionType, SelectedItem.UID)
+        return
+    end
+    SoundsManager.PlayDenialSound()
+    print("Not Enough Money")
+end
+
+local function BuyEgg()
+    if State.GetData().Coins >= SelectedItem.Price * AmountOfItems then  
+        Remotes.UpdateOwnedEggs:FireServer(AmountOfItems, CurrentElement, SelectedItem.UID)
+        return 
+    end
+    SoundsManager.PlayDenialSound()
+    print("Not Enough Money")
+end
+
+local function BuyKey()
+    if State.GetData().Coins >= SelectedItem.Price * AmountOfItems then
+        Remotes.UpdateOwnedKeys:FireServer(AmountOfItems, SelectedItem.UID)
+        print("Key Bought Event Fired")
+        return
+    end
+    SoundsManager.PlayDenialSound()
+    print("Not Enough Money")
+end
+
 -- This function sets the text of the AmountLabel to the current AmountOfItems value
 local function SetAmountLabelText()
     AmountLabel.Text = AmountOfItems
@@ -152,6 +181,11 @@ local function ShowStats()
     IconImage.Visible = true 
     AmountLabel.Text = 1
     AmountOfItems = 1 
+    if CurrentShop == "Potions"  or CurrentShop == "Eggs" or CurrentShop == "Keys" then 
+        BuyButton.Visible = false
+        BuyFrame.Visible = true 
+        IconAmount.Visible = false        
+    end
 end
 
 -- This function hides all the stats in the Information Frame
@@ -297,6 +331,12 @@ local function GenerateArmorIcons(elementType, armorType)
     end
 end
 
+local function GenerateKeyIcons()
+    for _, item in Shops[CurrentShop] do 
+        CreateIcon(item)
+    end
+end
+
 function ShopsManager.GetCurrentWeaponType(): string 
     return CurrentWeaponType or "Sword"
 end
@@ -337,6 +377,7 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?, weaponType, eleme
         PotionsTypeButtonsFrame.Visible = false
         ArmorsTypeButtonsFrame.Visible = false
         GenerateWeaponIcons(weaponType, elementType)
+        return
     end
     if CurrentShop == "Potions" then 
         WeaponTypeButtonsFrame.Visible = false
@@ -344,6 +385,7 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?, weaponType, eleme
         PotionsTypeButtonsFrame.Visible = true
         ArmorsTypeButtonsFrame.Visible = false
         GeneratePotionIcons(potionType)
+        return
     end
     if CurrentShop == "Eggs" then 
         WeaponTypeButtonsFrame.Visible = false
@@ -351,6 +393,7 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?, weaponType, eleme
         PotionsTypeButtonsFrame.Visible = false
         ArmorsTypeButtonsFrame.Visible = false
         GenerateEggIcons(elementType)
+        return
     end
     if CurrentShop == "Armors" then
         WeaponTypeButtonsFrame.Visible = false
@@ -358,6 +401,15 @@ function ShopsManager.GenerateShop(shopID, hideShop: boolean?, weaponType, eleme
         PotionsTypeButtonsFrame.Visible = false
         ArmorsTypeButtonsFrame.Visible = true
         GenerateArmorIcons(elementType, armorType)
+        return
+    end
+    if CurrentShop  == "Keys" then 
+        WeaponTypeButtonsFrame.Visible = false
+        ElementTypeButtonsFrame.Visible = false
+        PotionsTypeButtonsFrame.Visible = false
+        ArmorsTypeButtonsFrame.Visible = false
+        GenerateKeyIcons()
+
     end
 end
 
@@ -446,7 +498,18 @@ end)
 
 -- When the NumberBuyButton is pressed, it calls the corresponding buy function based on the current shop
 NumberBuyButton.MouseButton1Down:Connect(function()
-
+    if CurrentShop == "Potions" then 
+        BuyPotion()
+        return
+    end
+    if CurrentShop == "Eggs" then 
+        BuyEgg()
+        return
+    end
+    if CurrentShop == "Keys" then 
+        BuyKey()
+        return
+    end
 end)
 
 NumberBuyButton.MouseEnter:Connect(function()

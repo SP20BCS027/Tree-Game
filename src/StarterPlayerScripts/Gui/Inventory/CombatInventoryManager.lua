@@ -77,6 +77,7 @@ local function GetDataFromClient()
     Configs["Pets"] = State.GetData().OwnedPets
     Configs["Potions"] = State.GetData().OwnedPotions
     Configs["Eggs"] = State.GetData().Eggs
+    Configs["Keys"] = State.GetData().Keys
     Configs["EquippedPotions"] = State.GetData().EquippedPotions
     Configs["EquippedWeapons"] = State.GetData().EquippedWeapons
     Configs["EquippedPets"] = State.GetData().EquippedPets
@@ -104,17 +105,18 @@ end
 
 -- This function makes the Equip Button visible if the inventory is either Backpack or Watering Can
 local function ShowEquipButton()
-    if CurrentInventory == "Weapons" or CurrentInventory == "Armors" or CurrentInventory == "Pets" then
+    if CurrentInventory == "Weapons" or CurrentInventory == "Armors" or CurrentInventory == "Pets" or CurrentInventory == "Potions" then
         EquipButton.Visible = true
         EquipButton.Text = "Equip"
-    end
-    if CurrentInventory == "Potions" then 
-        EquipButton.Visible = true
-        EquipButton.Text = "Use"
+        return
     end
     if CurrentInventory == "Eggs" then 
         EquipButton.Visible = true 
         EquipButton.Text = "Hatch"
+        return
+    end
+    if CurrentInventory == "Keys" then 
+        EquipButton.Visible = false
     end
 end
 
@@ -216,6 +218,9 @@ local function CreateIcon(item)
             ShowPets()
             return
         end
+        if CurrentInventory == "Eggs" then 
+            SelectedItemType = item.Type
+        end
         LoadStats(item)
     end)
 end
@@ -295,6 +300,12 @@ local function CreateArmorIcons(elementType, armorType)
     end
 end
 
+local function CreateKeyIcons()
+    for _, item in CurrentDirectory do 
+        CreateIcon(item)
+    end
+end
+
 -- This function is responsible for generating the inventory with the desired ID
 function MainInventory.GenerateInventory(setID, weaponType, elementType, potionType, armorType)
     SetCurrentConfig(setID)
@@ -360,6 +371,14 @@ function MainInventory.GenerateInventory(setID, weaponType, elementType, potionT
         ArmorTypeHolder.Visible = false
         ShowPets()
         CreatePetIcons(CurrentPetType)
+    end
+
+    if CurrentInventory == "Keys" then 
+        WeaponTypeHolder.Visible = false
+        PotionTypeHolder.Visible = false 
+        ElementTypeButtons.Visible = false
+        ArmorTypeHolder.Visible = false
+        CreateKeyIcons()
     end
 
     if TOTALITEMS == 0 then 
@@ -474,6 +493,11 @@ EquipButton.MouseButton1Down:Connect(function()
     end 
 
     SoundsManager.PlayPressSound()
+    if CurrentInventory == "Eggs" then 
+        ReplicatedStorage.Remotes.HatchEgg:FireServer(SelectedItemType, SelectedItem)
+        print("Give Egg")
+        return
+    end
     EquippedItem = SelectedItem
     if CurrentInventory == "Weapons" then 
         ReplicatedStorage.Remotes.ChangeEquippedWeapon:FireServer(SelectedItemType, SelectedItem)

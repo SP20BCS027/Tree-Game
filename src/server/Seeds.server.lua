@@ -45,6 +45,5 @@ local function PlantSeed(player: Player, seedType: string)
 	end
 end
 
-
 Remotes.PlantedSeed.OnServerEvent:Connect(PlantSeed)
 Remotes.UpdateOwnedSeeds.OnServerEvent:Connect(UpdateSeeds)

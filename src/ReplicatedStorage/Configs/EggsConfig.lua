@@ -16,6 +16,7 @@ local Eggs = {
 			Type = "Neutral", 
 			Rarity = "Basic",
 			Price = 100, 
+			Amount = 01,
 			ImageID = "rbxassetid://15217376249",
 		}
 	}, 
@@ -27,6 +28,7 @@ local Eggs = {
 			Type = "Fire", 
 			Rarity = "Basic",
 			Price = 100, 
+			Amount = 01,
 			ImageID = "rbxassetid://15217391614",
 		}
 	}, 
@@ -38,6 +40,7 @@ local Eggs = {
 			Type = "Water", 
 			Rarity = "Basic",
 			Price = 100, 
+			Amount = 01,
 			ImageID = "rbxassetid://15217400528",
 		}
 	}, 
@@ -49,6 +52,7 @@ local Eggs = {
 			Type = "Air", 
 			Rarity = "Basic",
 			Price = 100, 
+			Amount = 01,
 			ImageID = "rbxassetid://15217408485",
 		}  
 	}, 
@@ -60,6 +64,7 @@ local Eggs = {
 			Type = "Geo", 
 			Rarity = "Basic",
 			Price = 100, 
+			Amount = 01,
 			ImageID = "rbxassetid://15217429275",
 		}
 	},  

@@ -16,6 +16,7 @@ local ArmorsConfig = require(ReplicatedStorage.Configs.ArmorConfig)
 local PotionsConfig = require(ReplicatedStorage.Configs.PotionsConfig)
 local EggsConfig = require(ReplicatedStorage.Configs.EggsConfig)
 local PetsConfig = require(ReplicatedStorage.Configs.PetsConfig)
+local KeysConfig = require(ReplicatedStorage.Configs.KeysConfig)
 
 local Template = {
 	Coins = 0, 
@@ -23,6 +24,11 @@ local Template = {
 	Water = 0, 
 	Money = 0, 
 	
+	Health = 100, 
+	MaxHealth = 100, 
+	Defense = 100, 
+	MaxDefense = 100,
+
 	Seeds = SeedsConfig,
 	Fertilizers = FertilizerConfig, 
 	
@@ -50,7 +56,9 @@ local Template = {
 		Neutral = {
 			StarterSword = WeaponsConfig.Neutral.StarterSword,
 		},
-		Fire = {}, 
+		Fire = {
+			FireSword = WeaponsConfig.Fire.FireSword,
+		}, 
 		Water = {},
 		Air = {},  
 		Geo = {}, 
@@ -101,20 +109,23 @@ local Template = {
 	EquippedPotions = {
 		PrimaryPotion = {}, 
 		SecondaryPotion = {},
+		TertiaryPotion = {},
 	},
 
 	MaxEquippedPets = 3, 
 	OwnedPets = {
 		Neutral = {},
-		Fire = {		
-			FireBunny = PetsConfig.Fire.FireBunny,
+		Fire = {
+			FireBunny = PetsConfig.Fire.FireBunny
 		}, 
 		Water = {}, 
 		Air = {}, 
 		Geo = {}, 
 	},
 	EquippedPets = {
-		Pet1 = {},
+		Pet1 = {
+			PetsConfig.Air.AirBunny
+		},
 		Pet2 = {},
 		Pet3 = {}
 	},
@@ -130,6 +141,15 @@ local Template = {
 		Geo = {},
 	},
 	
+	Keys = {
+		Water = KeysConfig.Water,
+		Air = KeysConfig.Air,
+		Neutral = KeysConfig.Neutral,
+		Fire = KeysConfig.Fire,
+		Geo = KeysConfig.Geo
+	},
+
+
 	Achievements = AchievementsConfig,
 	ActiveQuests = QuestsConfig,
 

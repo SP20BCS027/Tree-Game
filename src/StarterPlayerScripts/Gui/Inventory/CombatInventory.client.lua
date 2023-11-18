@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
 
 local player = game.Players.LocalPlayer
 
@@ -20,6 +21,7 @@ local WeaponsButton = BattleButtons.WeaponsButtonFrame.TextButton
 local ArmorsButton = BattleButtons.ArmorButtonFrame.TextButton
 local PotionsButton = BattleButtons.PotionsButtonFrame.TextButton
 local PetsButton = BattleButtons.PetsButtonFrame.TextButton
+local KeysButton = BattleButtons.KeysButtonFrame.TextButton
 
 -- When the Eggs button is pressed, generate the "Eggs" inventory
 EggsButton.MouseButton1Down:Connect(function()
@@ -51,6 +53,11 @@ PetsButton.MouseButton1Down:Connect(function()
     CombatInventoryManager.GenerateInventory("Pets")
 end)
 
+KeysButton.MouseButton1Down:Connect(function()
+    SoundsManager.PlayPressSound()
+    CombatInventoryManager.GenerateInventory("Keys")
+end)
+
 -- When the Inventory button is pressed, toggle the visibility of the MainInventoryUI
 CombatInventoryButton.MouseButton1Down:Connect(function()
     SoundsManager.PlayPressSound()
@@ -63,6 +70,20 @@ CombatInventoryButton.MouseButton1Down:Connect(function()
 end)
 
 ReplicatedStorage.Remotes.ChangeEquippedPets.OnClientEvent:Connect(function()
+    local currentInventory = CombatInventoryManager.GetCurrentInventory()
+    local currentWeapon = CombatInventoryManager.GetCurrentWeaponType()
+    local currentPotion = CombatInventoryManager.GetCurrentPotionType()
+    local currentElement = CombatInventoryManager.GetCurrentElement()
+    local currentArmor = CombatInventoryManager.GetCurrentArmorType()
+
+    if currentInventory then 
+        task.delay(0, function()
+            CombatInventoryManager.GenerateInventory(currentInventory, currentWeapon, currentElement, currentPotion, currentArmor)
+        end)
+    end 
+end)
+
+ReplicatedStorage.Remotes.UpdateOwnedEggs.OnClientEvent:Connect(function()
     local currentInventory = CombatInventoryManager.GetCurrentInventory()
     local currentWeapon = CombatInventoryManager.GetCurrentWeaponType()
     local currentPotion = CombatInventoryManager.GetCurrentPotionType()

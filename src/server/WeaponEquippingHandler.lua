@@ -25,6 +25,7 @@ local function givePlayerWeapon(player: Player, WeaponType, WeaponID: string)
     DeleteEquippedTool(player)
     local currentWeapon = WeaponsConfig[WeaponType][WeaponID]
     local weaponTool = Weapons[currentWeapon.Type][currentWeapon.WeaponType][currentWeapon.Rarity][currentWeapon.UID]:Clone()
+    print(weaponTool.Name)
     weaponTool.Name = "weapon"
     weaponTool.Parent = player.Backpack
 end

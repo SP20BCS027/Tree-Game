@@ -8,6 +8,9 @@ local WaterCanConfig = require(ReplicatedStorage.Configs.WaterCanConfig)
 local BackpacksConfig = require(ReplicatedStorage.Configs.BackpacksConfig)
 local WeaponsConfig = require(ReplicatedStorage.Configs.WeaponsConfig)
 local PetsConfig = require(ReplicatedStorage.Configs.PetsConfig)
+local PotionsConfig = require(ReplicatedStorage.Configs.PotionsConfig)
+local KeysConfig = require(ReplicatedStorage.Configs.KeysConfig)
+
 local AchievementInfoConfig = require(ReplicatedStorage.Configs.AchievementInfoConfig)
 
 local Manager = {}
@@ -80,6 +83,27 @@ function Manager.AdjustPlayerMoney(player: Player, plotID: number): boolean
 		print("Backpack is Full!")
 		return true
 	end
+end
+
+function Manager.AdjustEggs(player: Player, amount: number, eggType: string, eggID)	
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+	
+	profile.Data.Eggs[eggType][eggID].Amount += amount 
+	Remotes.UpdateOwnedEggs:FireClient(player, profile.Data.Eggs)
+end
+
+function Manager.AdjustKeys(player: Player, amount: number, keyID)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	if profile.Data.Keys[keyID] then 
+		profile.Data.Keys[keyID].Amount += amount
+	else 
+		profile.Data.Keys[keyID] = KeysConfig[keyID]
+		profile.Data.Keys[keyID].Amount = amount
+	end
+	Remotes.UpdateOwnedKeys:FireClient(player, profile.Data.Keys)
 end
 
 -- When this function is called, the player's Watering Can gets refilled
@@ -163,6 +187,20 @@ function Manager.EquipBackpack(player: Player, backpackID: string)
 
 	profile.Data.EquippedBackpack = BackpacksConfig[backpackID]
 	Remotes.ChangeEquippedBackpack:FireClient(player, profile.Data.EquippedBackpack)
+end
+
+function Manager.PurchasePotion(player: Player, amount: number, potionType: string, potionID: string)
+	local profile = Manager.Profiles[player]
+	if not profile then return end
+
+	if profile.Data.OwnedPotions[potionType][potionID] then 
+		profile.Data.OwnedPotions[potionType][potionID].Amount += amount
+	else
+		profile.Data.OwnedPotions[potionType][potionID] = PotionsConfig[potionType][potionID]
+		profile.Data.OwnedPotions[potionType][potionID].Amount = amount
+	end
+
+	Remotes.UpdateOwnedPotions:FireClient(player, profile.Data.OwnedPotions)
 end
 
 function Manager.PurchaseWeapon(player: Player, element, weaponID: string)

@@ -1,5 +1,4 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local WorkSpace = game:GetService("Workspace")
 
 local player = game.Players.LocalPlayer
 local Remotes = ReplicatedStorage.Remotes 
@@ -8,15 +7,7 @@ local DungeonsConfig = require(ReplicatedStorage.Configs.DungeonConfig)
 local SoundsManager = require(player:WaitForChild("PlayerScripts").Gui.Sounds.SoundsManager)
 local ScalingUI = require(player:WaitForChild("PlayerScripts").Gui.ScalingUI.ScalingUI)
 local UISettings = require(player:WaitForChild("PlayerScripts").Gui.UISettings.UISettings)
-
-local PhysicalDungeons = WorkSpace:WaitForChild("PhysicalDungeons")
-local Dungeons = {
-    TutorialDungeon = PhysicalDungeons:WaitForChild("TutorialDungeon"),
-    FireDungeon = PhysicalDungeons:WaitForChild("FireDungeon"),
-    WaterDungeon = PhysicalDungeons:WaitForChild("WaterDungeon"),
-    AirDungeon = PhysicalDungeons:WaitForChild("AirDungeon"),
-    GeoDungeon = PhysicalDungeons:WaitForChild("GeoDungeon"),
-}
+local State = require(ReplicatedStorage.Client.State)
 
 local DungeonUI = player.PlayerGui:WaitForChild("DungeonSelectMenu")
 local CloseFrame = DungeonUI.CloseFrame
@@ -120,14 +111,15 @@ CloseButton.MouseLeave:Connect(function()
 end)
 
 BattleButton.MouseButton1Down:Connect(function()
-    if SelectedFloor.LayoutOrder <= DungeonsConfig[CurrentDungeon].UnlockedFloor then 
+    if SelectedFloor.LayoutOrder <= DungeonsConfig[CurrentDungeon].UnlockedFloor and State.GetData().Keys[CurrentDungeon].Amount >= SelectedFloor.LayoutOrder  then 
         SoundsManager.PlayPressSound()
-        local playerModel = player.Character
-        playerModel.HumanoidRootPart.CFrame = Dungeons[CurrentDungeon].SpawnPoint.CFrame + Vector3.new(0, 3, 0)
+        Remotes.UseKeys:FireServer(SelectedFloor.LayoutOrder, CurrentDungeon)
+        Remotes.MovePlayerToDungeon:FireServer(CurrentDungeon)
         DungeonUI.Enabled = false
     else
         SoundsManager.PlayLeaveSound()
         print("This Dungeon is not Unlocked Yet!")
+        print("You don't have enough keys!")
     end
 end)
 
@@ -135,5 +127,4 @@ end)
 -- Calls the GenerateUI function to generate the UI for the received DungeonName.
 Remotes.GenerateDungeons.OnClientEvent:Connect(function(DungeonName)
     GenerateUI(DungeonName)
-
 end)

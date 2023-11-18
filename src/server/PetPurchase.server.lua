@@ -12,6 +12,9 @@ local function PurchasePet(player: Player, element, pet)
     local profile = Manager.Profiles[player]
     if not profile then return end
 
+    print(element)
+    print(pet)
+
     -- Server-side sanity checks
     if not PetsConfig[element][pet] then 
         print("The pet " .. pet .. " does not exist ~~ Server")

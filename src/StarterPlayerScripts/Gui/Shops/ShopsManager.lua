@@ -204,23 +204,6 @@ local function BuyPlot()
     print("Not Enough Money")
 end
 
-local function BuyWeapon()
-    if CheckForOwnerShip() then 
-        SoundsManager.PlayDenialSound()
-        print("Item Already Owned")
-    end
-
-    if State.GetData().Coins >= SelectedItem.Price then 
-        Remotes.UpdateOwnedWeapons:FireServer(SelectedItem.UID)
-        BuyButton.Text = "Owned"
-        SoundsManager.PlayPressSound()
-        print("Item Has been Bought")
-        return
-    end
-    SoundsManager.PlayDenialSound()
-    print("Not Enough Money")
-end
-
 -- This function sets the text of the AmountLabel to the current AmountOfItems value
 local function SetAmountLabelText()
     AmountLabel.Text = AmountOfItems
@@ -299,7 +282,6 @@ end
 
 -- This function creates the icon and hooks up its pressed event
 local function CreateIcon(item)
-    print(item)
     local icon = Template:Clone()
     icon.Parent = ScrollingFrame
     icon.Name = item.Name
@@ -401,12 +383,6 @@ BuyButton.MouseButton1Down:Connect(function()
         BuyWaterCan() 
         return
     end
-   
-    if CurrentShop == "Weapons" then 
-        BuyWeapon()
-        return     
-    end
-
     if CurrentShop == "Plots" then 
         BuyPlot()
         return 

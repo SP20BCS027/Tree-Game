@@ -15,11 +15,78 @@ export type PetsConfigTemp = {
 }
 
 local Pets = {
+	Neutral = {
+		NeutralBunny = {	
+			UID = "NeutralBunny", 
+			Name = "Neutral Bunny", 
+			Description = "A Bunny that has no opinions", 
+			MaxLevel= 100, 
+			CurrentLevel = 1, 
+			Exp = 0, 
+			Health = 100, 
+			Attack = 2, 
+			Type = "Neutral", 
+			Rarity = "Basic",
+			CritRate = 0.2, 
+			CritAmount = 2, 
+			Equipped = false,
+			ImageID = "rbxassetid://13806908261"
+		},  
+		NeutralWolf = {	
+			UID = "NeutralWolf", 
+			Name = "Neutral Wolf", 
+			Description = "A Wolf that has no opinions", 
+			MaxLevel= 100, 
+			CurrentLevel = 1, 
+			Exp = 0, 
+			Health = 100, 
+			Attack = 2, 
+			Type = "Neutral", 
+			Rarity = "Basic",
+			CritRate = 0.2, 
+			CritAmount = 2, 
+			Equipped = false,
+			ImageID = "rbxassetid://13806908261"
+		},  
+		
+	},
 	Fire = {
 		FireBunny = {
 			UID = "FireBunny", 
 			Name = "Fire Bunny", 
 			Description = "A Bunny that Fires", 
+			MaxLevel= 100, 
+			CurrentLevel = 1, 
+			Exp = 0, 
+			Health = 100, 
+			Attack = 2, 
+			Type = "Fire", 
+			Rarity = "Basic",
+			CritRate = 0.2, 
+			CritAmount = 2, 
+			Equipped = false,
+			ImageID = "rbxassetid://13806908261"
+		},
+		FireWolf = {
+			UID = "FireWolf", 
+			Name = "Fire Wolf", 
+			Description = "A Wolf with a firy anger", 
+			MaxLevel= 100, 
+			CurrentLevel = 1, 
+			Exp = 0, 
+			Health = 100, 
+			Attack = 2, 
+			Type = "Fire", 
+			Rarity = "Basic",
+			CritRate = 0.2, 
+			CritAmount = 2, 
+			Equipped = false,
+			ImageID = "rbxassetid://13806908261"
+		},  
+		FireLion = {
+			UID = "FireLion", 
+			Name = "Fire Lion", 
+			Description = "A Lion with its tail on Fire", 
 			MaxLevel= 100, 
 			CurrentLevel = 1, 
 			Exp = 0, 

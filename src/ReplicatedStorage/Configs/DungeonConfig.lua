@@ -16,15 +16,23 @@ local DungeonConfig: {[string]: DungeonConfigTemp} = {
 		UnlockedFloor = 1,  
 		IsUnlocked = true, 
 	}, 
-	FireDungeon = {
-		UID = "Fire", 
-		Name = "Fire Dungeon",
+	Neutral = {
+		UID = "Neutral", 
+		Name = "Neutral Dungeon",
 		Description = "This is the tutorial Dungeon and we will teach you all about combat in these floors. Enjoy!",  
 		MaxFloor = 10,
 		UnlockedFloor = 1, 
 		IsUnlocked = false, 
+	},
+	Fire = {
+		UID = "Fire", 
+		Name = "Fire Dungeon",
+		Description = "This is the tutorial Dungeon and we will teach you all about combat in these floors. Enjoy!",  
+		MaxFloor = 10,
+		UnlockedFloor = 10, 
+		IsUnlocked = false, 
 	}, 
-	WaterDungeon = {
+	Water = {
 		UID = "Water", 
 		Name = "Water Dungeon", 
 		Description = "This is the tutorial Dungeon and we will teach you all about combat in these floors. Enjoy!", 
@@ -32,7 +40,7 @@ local DungeonConfig: {[string]: DungeonConfigTemp} = {
 		UnlockedFloor = 1,
 		IsUnlocked = false,   
 	}, 
-	AirDungeon = {
+	Air = {
 		UID = "Air", 
 		Name = "Air Dungeon", 
 		Description = "This is the tutorial Dungeon and we will teach you all about combat in these floors. Enjoy!", 
@@ -40,7 +48,7 @@ local DungeonConfig: {[string]: DungeonConfigTemp} = {
 		UnlockedFloor = 1,  
 		IsUnlocked = false, 
 	},  
-	GeoDunegon = {
+	Geo = {
 		UID = "Geo", 
 		Name = "Geo Dungeon", 
 		Description = "This is the tutorial Dungeon and we will teach you all about combat in these floors. Enjoy!", 

@@ -18,7 +18,7 @@ local function selectTree(seed)
 			table.insert(sortedTrees, tree)
 		end
 	end
-
+		
 	local randomIndex = math.random(table.maxn(sortedTrees))	
 	return sortedTrees[randomIndex]
 end

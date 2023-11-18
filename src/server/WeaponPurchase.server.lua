@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Manager = require(ServerScriptService.PlayerData.Manager)
 local WeaponsConfig = require(ReplicatedStorage.Configs.WeaponsConfig)
+local WeaponEquipping = require(ServerScriptService.WeaponEquippingHandler)
 
 local Remotes = ReplicatedStorage.Remotes
 

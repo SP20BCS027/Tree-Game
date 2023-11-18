@@ -79,6 +79,19 @@ local Weapons = {
 			CritRate = 0.2, 
 			CritAmount = 2, 
 			Equipped = false,
+		}, 
+		FireBow = {
+			UID = "FireBow", 
+			Name = "Fire Bow", 
+			Description = "A Fire Bow",  
+			Attack = 2, 
+			Price = 100,
+			Type = "Fire", 
+			WeaponType = "Bow", 
+			Rarity = "Basic",
+			CritRate = 0.2, 
+			CritAmount = 2, 
+			Equipped = false,
 		}
 	}, 
 	Water = {
